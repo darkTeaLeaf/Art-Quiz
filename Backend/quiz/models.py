@@ -7,6 +7,9 @@ class Style(models.Model):
     name = models.CharField(max_length=100)
     century = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
+
 
 class Author(models.Model):
     name = models.CharField(max_length=500)
@@ -21,6 +24,9 @@ class Author(models.Model):
             MaxValueValidator(datetime.now().year)],
         help_text="Use the following format: <YYYY>", null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Painting(models.Model):
     name = models.CharField(max_length=200)
@@ -31,4 +37,7 @@ class Painting(models.Model):
         help_text="Use the following format: <YYYY>")
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
     gallery = models.CharField(max_length=500)
-    image = models.ImageField(blank=False, null=False)
+    image = models.ImageField(blank=False, null=False, upload_to="paintings/")
+
+    def __str__(self):
+        return self.name

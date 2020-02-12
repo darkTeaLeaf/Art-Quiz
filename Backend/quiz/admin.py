@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from quiz.models import Painting, Author, Style
+
+admin.site.register(Painting)
+admin.site.register(Author)
+admin.site.register(Style)
