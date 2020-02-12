@@ -1,10 +1,11 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Carousel from "../Carousel";
 
 function App() {
   return (
     <div id="App">
-      <img src={process.env.PUBLIC_URL + "logo512.png"} alt="logo"></img>
+      <Carousel />
     </div>
   );
 }

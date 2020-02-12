@@ -1,0 +1,1 @@
+export const SWITCH_PAINTING = "SWITCH_PAINTING";
