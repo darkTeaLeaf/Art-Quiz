@@ -1,1 +1,2 @@
 export const SWITCH_PAINTING = "SWITCH_PAINTING";
+export const SUBMIT_ANSWER = "SUBMIT_ANSWER";
