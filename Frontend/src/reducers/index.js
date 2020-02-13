@@ -1,4 +1,4 @@
-import { SWITCH_PAINTING, SUBMIT_ANSWER, SET_PAINTING } from "../constants/actionTypes";
+import { SUBMIT_ANSWER, SET_PAINTING } from "../constants/actionTypes";
 
 const initialState = {
   painting: {},
@@ -8,12 +8,6 @@ const initialState = {
 
 function rootReducer(state = initialState, action) {
   switch (action.type) {
-    case SWITCH_PAINTING: {
-      return {
-        ...state,
-        painting: { ...state.newPainting }
-      };
-    }
     case SUBMIT_ANSWER: {
       const { answer } = action.payload;
       if (answer === state.painting.name) {
@@ -32,11 +26,12 @@ function rootReducer(state = initialState, action) {
       }
     }
     case SET_PAINTING: {
-      const { url } = action.payload;
+      const { url, id } = action.payload;
       return {
         ...state,
         painting: {
-          url: "http://127.0.0.1:8000" + url
+          url: "http://127.0.0.1:8000" + url,
+          id: id
         }
       }
     }

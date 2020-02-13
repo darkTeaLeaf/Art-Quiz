@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./Carousel.css";
-import { fetchRandomPainting } from "../../actions";
+import { switchPainting } from "../../actions";
 
 class Carousel extends Component {
   componentDidMount() {
-    this.props.fetchRandomPainting();
+    this.props.switchPainting();
   }
 
   render() {
@@ -24,4 +24,4 @@ const mapStateToProps = state => {
   return { painting: state.painting };
 };
 
-export default connect(mapStateToProps, { fetchRandomPainting })(Carousel);
+export default connect(mapStateToProps, { switchPainting })(Carousel);

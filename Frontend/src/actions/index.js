@@ -1,12 +1,5 @@
-import { SWITCH_PAINTING, SUBMIT_ANSWER, SET_PAINTING, SET_ANSWERS, SET_CORRECT_ANSWER } from "../constants/actionTypes";
+import { SUBMIT_ANSWER, SET_PAINTING, SET_ANSWERS, SET_CORRECT_ANSWER } from "../constants/actionTypes";
 import axios from "axios";
-
-export function switchPainting() {
-  return {
-    type: SWITCH_PAINTING,
-    payload: {}
-  };
-}
 
 export function submitAnswer(ans) {
   return {
@@ -15,11 +8,11 @@ export function submitAnswer(ans) {
   }
 }
 
-export function fetchRandomPainting() {
+export function switchPainting() {
   return function(dispatch) {
     return axios.get("http://127.0.0.1:8000/paintings/random/")
       .then(({ data }) => {
-      dispatch(setPainting(data.image));
+      dispatch(setPainting(data));
       dispatch(fetchCorrectAnswer(data.id));
       dispatch(fetchAnswers(data.id))
     });
@@ -44,10 +37,10 @@ function fetchAnswers(id) {
   }
 }
 
-function setPainting(url) {
+function setPainting(data) {
   return {
     type: SET_PAINTING,
-    payload: {url: url}
+    payload: {url: data.image, id: data.id}
   };
 }
 
