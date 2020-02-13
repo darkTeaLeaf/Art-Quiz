@@ -1,7 +1,3 @@
-#App {
-
-}
-
 #App section {
   height: 100vh;
   display: flex;
@@ -57,11 +53,3 @@
   position: relative;
 }
 
-#App .quiz .rope {
-  position: absolute;
-  bottom: 100%;
-  align-self: center;
-  width: 0.6vw;
-  height: 100vh;
-  background-color: black;
-}

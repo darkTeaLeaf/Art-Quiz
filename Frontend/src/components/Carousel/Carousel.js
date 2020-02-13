@@ -5,7 +5,10 @@ import "./Carousel.css";
 const Carousel = ({ painting }) => {
   return (
     <div id="Carousel">
-      <img src={painting.url} alt="painting"></img>
+      {Object.keys(painting).length !== 0
+      ? [<div className="rope"></div>, <img src={painting.url} alt="painting"></img>]
+      : ""
+      }
     </div>
   );
 };

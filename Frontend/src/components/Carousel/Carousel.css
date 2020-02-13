@@ -1,3 +1,9 @@
+#Carousel {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
 #Carousel img {
   max-height: 70vh;
   max-width: 60vw;
@@ -8,5 +14,14 @@
   content: "";
   height: 100vh;
   width: 2vw;
+  background-color: black;
+}
+
+#Carousel .rope {
+  position: absolute;
+  bottom: 100%;
+  align-self: center;
+  width: 0.6vw;
+  height: 100vh;
   background-color: black;
 }

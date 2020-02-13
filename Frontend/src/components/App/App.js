@@ -16,7 +16,6 @@ function App({winsCounter, switchPainting}) {
           </div>
 
           <div className="quiz">
-            <div className="rope"></div>
             <Carousel />
             <AnswerOptions />
           </div>
