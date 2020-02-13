@@ -30,7 +30,7 @@ class Author(models.Model):
 
 class Painting(models.Model):
     name = models.CharField(max_length=200)
-    author = models.ManyToManyField(Author)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
     year = models.PositiveIntegerField(
         validators=[
             MaxValueValidator(datetime.now().year)],
