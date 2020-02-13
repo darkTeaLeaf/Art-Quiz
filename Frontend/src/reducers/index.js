@@ -33,7 +33,6 @@ function rootReducer(state = initialState, action) {
         alert("CORRECT!");
         return {
           ...state,
-          painting: { ...state.newPainting },
           winsCounter: state.winsCounter + 1
         };
       }
@@ -41,7 +40,6 @@ function rootReducer(state = initialState, action) {
         alert("WRONG!");
         return {
           ...state,
-          painting: { ...state.newPainting },
           winsCounter: 0
         };
       }

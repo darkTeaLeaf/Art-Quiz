@@ -7,7 +7,7 @@ const Carousel = ({ ansOptions, name, submitAnswer }) => {
   return (
     <div id="AnswerOptions">
       {ansOptions.concat(name).map(ans => (
-        <button onClick={() => submitAnswer(ans)}>{ans}</button>
+        <button key={ans} onClick={() => submitAnswer(ans)}>{ans}</button>
       ))}
     </div>
   );
