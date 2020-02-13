@@ -3,8 +3,20 @@
   margin: 0;
   border: 0;
   outline: 0;
+  box-sizing: border-box;
 }
 
-body {
-  
+button {
+  background-color: transparent;
+  cursor: pointer;
+}
+
+img {
+  user-select: none;
+  pointer-events: none
+}
+
+.container {
+  width: 95%;
+  margin: auto;
 }
