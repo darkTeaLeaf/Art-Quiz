@@ -10,6 +10,6 @@ export function switchPainting() {
 export function submitAnswer(ans) {
   return {
     type: SUBMIT_ANSWER,
-    payload: { answer: ans}
+    payload: { answer: ans }
   }
 }
