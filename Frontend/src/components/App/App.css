@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   font-size: 3vw;
-  font-family: 'Judson', serif;
+  font-family: "Judson", serif;
 }
 
 #App .wins-counter img {
@@ -34,7 +34,7 @@
 }
 
 #App .arrow-next:hover {
-  background-color: rgba(1,1,1,0.05);
+  background-color: rgba(1, 1, 1, 0.05);
 }
 
 #App .arrow-next img {
@@ -52,4 +52,3 @@
   align-items: center;
   position: relative;
 }
-
