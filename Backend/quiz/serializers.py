@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from quiz.models import Painting, Author
+from quiz.models import Painting, Author, Style
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -35,4 +35,10 @@ class PaintingSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializ
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
+        fields = "__all__"
+
+
+class StyleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Style
         fields = "__all__"
