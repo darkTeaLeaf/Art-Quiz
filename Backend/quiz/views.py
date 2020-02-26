@@ -20,7 +20,7 @@ class PaintingViewSet(viewsets.ModelViewSet):
     serializer_style = StyleSerializer
 
     @action(detail=False, methods=['get'])
-    def random(self, request, pk=None):
+    def random(self, request):
         count = Painting.objects.aggregate(count=Count('id'))['count']
         random_index = randint(0, count - 1)
         random_painting = self.queryset[random_index]
