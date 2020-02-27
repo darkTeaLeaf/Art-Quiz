@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   SUBMIT_ANSWER,
   SET_PAINTING,
@@ -5,7 +6,6 @@ import {
   SET_CORRECT_ANSWER,
   BACKEND_ADDRESS
 } from "../constants";
-import axios from "axios";
 
 export function submitAnswer(ans) {
   return {

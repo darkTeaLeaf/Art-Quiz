@@ -3,7 +3,7 @@ import "./App.css";
 import { connect } from "react-redux";
 import Carousel from "../Carousel";
 import AnswerOptions from "../AnswerOptions";
-import { switchPainting } from "../../actions";
+import { switchPainting } from "../../actions/paintingActions";
 
 const App = ({ winsCounter, switchPainting }) => {
   return (
@@ -20,7 +20,7 @@ const App = ({ winsCounter, switchPainting }) => {
             <AnswerOptions />
           </div>
 
-          <button className="arrow-next" onClick={() => switchPainting()}>
+          <button className="arrow-next" onClick={switchPainting}>
             <img
               src={process.env.PUBLIC_URL + "/img/arrow-next.svg"}
               alt="arrow-next"
