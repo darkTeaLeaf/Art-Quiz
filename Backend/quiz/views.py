@@ -9,7 +9,7 @@ from quiz.models import Painting, Author, Style
 from quiz.serializers import PaintingSerializer, AuthorSerializer, StyleSerializer
 
 
-class PaintingViewSet(viewsets.ModelViewSet):
+class PaintingViewSet(viewsets.GenericViewSet):
     """
         API endpoint that allows paintings to be viewed or edited.
 
