@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import "./Carousel.css";
 import { switchPainting } from "../../actions";
 
-const Carousel = ({painting, switchPainting}) => {
+const Carousel = ({ painting, switchPainting }) => {
+  useEffect(() => {
+    switchPainting();
+  }, []);
+
   return (
     <div id="Carousel">
       {Object.keys(painting).length !== 0
