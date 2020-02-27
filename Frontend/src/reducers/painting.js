@@ -1,6 +1,14 @@
 import { SET_PAINTING, BACKEND_ADDRESS } from "../constants";
 
-const initialState = {};
+const initialState = {
+  id: null,
+  year: null,
+  url: "",
+  name: "",
+  author: "",
+  style: "",
+  place: ""
+};
 
 export function paintingReducer(state = initialState, action) {
   switch (action.type) {

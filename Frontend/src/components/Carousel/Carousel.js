@@ -10,19 +10,22 @@ const Carousel = ({ painting, switchPainting }) => {
 
   return (
     <div id="Carousel">
-      {Object.keys(painting).length !== 0
+      {painting.id !== null
         ? [
-            <div className="rope"></div>,
-            <img src={painting.url} alt="painting"></img>
+            <div key="rope" className="rope"></div>,
+            <img key="painting_image" src={painting.url} alt="painting"></img>
           ]
         : ""}
     </div>
   );
 };
 
-const mapStateToProps = store => {
-  console.log(store);
-  return { painting: store.painting };
-};
+const mapStateToProps = store => ({
+  painting: store.painting
+});
 
-export default connect(mapStateToProps, { switchPainting })(Carousel);
+const mapDispatchToProps = dispatch => ({
+  switchPainting: () => dispatch(switchPainting())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Carousel);

@@ -32,8 +32,12 @@ const App = ({ winsCounter, switchPainting }) => {
   );
 };
 
-const mapStateToProps = store => {
-  return { winsCounter: store.carousel.winsCounter };
-};
+const mapStateToProps = store => ({
+  winsCounter: store.carousel.winsCounter
+});
 
-export default connect(mapStateToProps, { switchPainting })(App);
+const mapDispatchToProps = dispatch => ({
+  switchPainting: () => dispatch(switchPainting())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
