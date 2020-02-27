@@ -2,8 +2,9 @@ import {
   SUBMIT_ANSWER,
   SET_PAINTING,
   SET_ANSWERS,
-  SET_CORRECT_ANSWER
-} from "../constants/actionTypes";
+  SET_CORRECT_ANSWER,
+  BACKEND_ADDRESS
+} from "../constants";
 import axios from "axios";
 
 export function submitAnswer(ans) {
@@ -15,7 +16,7 @@ export function submitAnswer(ans) {
 
 export function switchPainting() {
   return async function(dispatch) {
-    const { data } = await axios.get("http://127.0.0.1:8000/paintings/random/");
+    const { data } = await axios.get(`${BACKEND_ADDRESS}/paintings/random/`);
     dispatch(setPainting(data));
     dispatch(fetchAnswers(data.id));
     // dispatch(fetchCorrectAnswer(data.id));
@@ -25,15 +26,15 @@ export function switchPainting() {
 function fetchAnswers(id) {
   return async function(dispatch) {
     const authors = await axios.get(
-      "http://127.0.0.1:8000/paintings/" + id + "/variants/"
+      `${BACKEND_ADDRESS}/paintings/${id}/variants_author/`
     );
     const author = await axios.get(
-      "http://127.0.0.1:8000/paintings/" + id + "/author/"
+      `${BACKEND_ADDRESS}/paintings/${id}/author/`
     );
     let i = Math.floor(
       Math.random() * Math.floor(authors.data.variants_author.length + 1)
     );
-    console.log(i);
+
     dispatch(
       setAnswers(
         authors.data.variants_author
@@ -47,7 +48,7 @@ function fetchAnswers(id) {
 
 // function fetchCorrectAnswer(id) {
 //   return async function(dispatch) {
-//     const { data } = await axios.get("http://127.0.0.1:8000/paintings/" + id + "/author/");
+//     const { data } = await axios.get(`${BACKEND_ADDRESS}/paintings/${id}/author/`);
 //     dispatch(setCorrectAnswer(data.author));
 //   }
 // }
@@ -66,7 +67,7 @@ function setPainting(data) {
 //   };
 // }
 
-function setAnswers(answers, author) {
+export function setAnswers(answers, author) {
   return {
     type: SET_ANSWERS,
     payload: { answers: answers.map(a => a.name), author: author }

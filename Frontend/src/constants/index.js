@@ -3,3 +3,4 @@ export const SUBMIT_ANSWER = "SUBMIT_ANSWER";
 export const SET_PAINTING = "SET_PAINTING";
 export const SET_CORRECT_ANSWER = "SET_CORRECT_ANSWER";
 export const SET_ANSWERS = "SET_ANSWERS";
+export const BACKEND_ADDRESS = "http://127.0.0.1:8000";

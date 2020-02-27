@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import "./AnswerOptions.css";
 import { submitAnswer } from "../../actions";
 
-const Carousel = ({ ansOptions, answered, realAuthor, submitAnswer }) => {
+const AnswerOptions = ({ ansOptions, answered, realAuthor, submitAnswer }) => {
   return (
     <div id="AnswerOptions" className={answered ? "answered" : ""}>
       {ansOptions.length !== 0
@@ -21,12 +21,12 @@ const Carousel = ({ ansOptions, answered, realAuthor, submitAnswer }) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = store => {
   return {
-    ansOptions: state.ansOptions,
-    answered: state.answered,
-    realAuthor: state.painting.author
+    ansOptions: store.carousel.ansOptions,
+    answered: store.carousel.answered,
+    realAuthor: store.painting.author
   };
 };
 
-export default connect(mapStateToProps, { submitAnswer })(Carousel);
+export default connect(mapStateToProps, { submitAnswer })(AnswerOptions);

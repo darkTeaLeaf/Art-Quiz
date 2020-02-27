@@ -5,7 +5,7 @@ import Carousel from "../Carousel";
 import AnswerOptions from "../AnswerOptions";
 import { switchPainting } from "../../actions";
 
-function App({ winsCounter, switchPainting }) {
+const App = ({ winsCounter, switchPainting }) => {
   return (
     <div id="App">
       <section>
@@ -30,10 +30,10 @@ function App({ winsCounter, switchPainting }) {
       </section>
     </div>
   );
-}
+};
 
-const mapStateToProps = state => {
-  return { winsCounter: state.winsCounter };
+const mapStateToProps = store => {
+  return { winsCounter: store.carousel.winsCounter };
 };
 
 export default connect(mapStateToProps, { switchPainting })(App);
