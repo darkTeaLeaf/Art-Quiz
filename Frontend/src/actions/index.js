@@ -15,7 +15,7 @@ export function submitAnswer(ans) {
 
 export function switchPainting() {
   return async function(dispatch) {
-    const { data } = await axios.get("http://127.0.0.1:8000/paintings/random/");
+    const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/random/`);
     dispatch(setPainting(data));
     dispatch(fetchAnswers(data.id));
     // dispatch(fetchCorrectAnswer(data.id));
@@ -25,10 +25,10 @@ export function switchPainting() {
 function fetchAnswers(id) {
   return async function(dispatch) {
     const authors = await axios.get(
-      "http://127.0.0.1:8000/paintings/" + id + "/variants/"
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/variants/`
     );
     const author = await axios.get(
-      "http://127.0.0.1:8000/paintings/" + id + "/author/"
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/author/`
     );
     let i = Math.floor(
       Math.random() * Math.floor(authors.data.variants_author.length + 1)

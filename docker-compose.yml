@@ -1,0 +1,33 @@
+version: "3"
+services:
+  database:
+    container_name: postgres
+    image: "postgres:latest"
+    environment:
+      POSTGRES_DB: "artquiz"
+      POSTGRES_PASSWORD: "irekarina"
+
+  backend:
+    container_name: django
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./Backend:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+
+  frontend:
+    container_name: react
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./Frontend:/app
+    ports:
+      - "3000:3000"
+    restart: on-failure

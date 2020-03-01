@@ -40,7 +40,7 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         painting: {
-          url: "http://127.0.0.1:8000" + url,
+          url: `${process.env.REACT_APP_BACKEND_ADDRESS}${url}`,
           id: id
         },
         answered: false
