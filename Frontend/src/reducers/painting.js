@@ -1,4 +1,4 @@
-import { SET_PAINTING, BACKEND_ADDRESS } from "../constants";
+import { SET_PAINTING, BACKEND_ADDRESS, SET_PAINTING_FAIL } from "../constants";
 
 const initialState = {
   id: null,
@@ -7,7 +7,7 @@ const initialState = {
   name: "",
   author: "",
   style: "",
-  place: ""
+  location: ""
 };
 
 export function paintingReducer(state = initialState, action) {
@@ -20,6 +20,12 @@ export function paintingReducer(state = initialState, action) {
         id: id
       };
     }
+
+    case SET_PAINTING_FAIL: {
+      console.log(`${SET_PAINTING_FAIL} ERROR: ${action.payload}`);
+      return state;
+    }
+
     default:
       return state;
   }
