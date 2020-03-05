@@ -1,7 +1,7 @@
 from random import randint
 
 from django.db.models import Count
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -9,7 +9,9 @@ from quiz.models import Painting, Author, Style
 from quiz.serializers import PaintingSerializer, AuthorSerializer, StyleSerializer
 
 
-class PaintingViewSet(viewsets.GenericViewSet):
+class PaintingViewSet(mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
+                      viewsets.GenericViewSet):
     """
         API endpoint that allows paintings to be viewed or edited.
 
@@ -28,41 +30,6 @@ class PaintingViewSet(viewsets.GenericViewSet):
         if random_painting is not None:
             serializer = self.serializer_paint(random_painting, fields=('id', 'image'))
             return Response(serializer.data)
-        else:
-            return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=['get'])
-    def author(self, request, pk=None):
-        painting = Painting.objects.get(id=pk)
-
-        if painting is not None:
-            result = {'id': self.serializer_paint(painting).data['id'],
-                      'author': self.serializer_author(
-                          Author.objects.get(id=self.serializer_paint(painting).data['author'])).data}
-            return Response(result)
-        else:
-            return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=['get'])
-    def name(self, request, pk=None):
-        painting = Painting.objects.get(id=pk)
-
-        if painting is not None:
-            result = {'id': self.serializer_paint(painting).data['id'],
-                      'name': self.serializer_paint(painting).data['name']}
-            return Response(result)
-        else:
-            return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=['get'])
-    def style(self, request, pk=None):
-        painting = Painting.objects.get(id=pk)
-
-        if painting is not None:
-            result = {'id': self.serializer_paint(painting).data['id'],
-                      'style': self.serializer_style(
-                          Style.objects.get(id=self.serializer_paint(painting).data['style'])).data}
-            return Response(result)
         else:
             return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
 
