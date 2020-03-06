@@ -30,15 +30,18 @@ class PaintingSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializ
     class Meta:
         model = Painting
         fields = "__all__"
+        read_only_fields = ('id',)
 
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = "__all__"
+        read_only_fields = ('id',)
 
 
 class StyleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Style
         fields = "__all__"
+        read_only_fields = ('id',)

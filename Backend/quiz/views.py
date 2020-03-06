@@ -37,9 +37,9 @@ class PaintingViewSet(mixins.ListModelMixin,
     def variants(self, request, pk=None):
         variants = {'variants': []}
         paint = self.serializer_paint(Painting.objects.get(id=pk), context={'request': request})
-        type = self.request.query_params.get('type')
+        type_ = self.request.query_params.get('type')
 
-        if type == 'author':
+        if type_ == 'author':
             count = Author.objects.aggregate(count=Count('id'))['count']
             used_id = [paint.data['author']]
             i = 0
@@ -54,7 +54,7 @@ class PaintingViewSet(mixins.ListModelMixin,
                     used_id.append(random_id)
                     i += 1
 
-        if type == 'name':
+        if type_ == 'name':
             count = Painting.objects.aggregate(count=Count('id'))['count']
             used_id = [paint.data['name']]
             i = 0
@@ -62,7 +62,7 @@ class PaintingViewSet(mixins.ListModelMixin,
             while i != 3:
                 random_index = randint(0, count - 1)
                 random_id = \
-                self.serializer_paint(Painting.objects.all()[random_index], context={'request': request}).data['id']
+                    self.serializer_paint(Painting.objects.all()[random_index], context={'request': request}).data['id']
 
                 if random_id not in used_id:
                     variants.get('variants').append(self.serializer_paint(
@@ -70,7 +70,7 @@ class PaintingViewSet(mixins.ListModelMixin,
                     used_id.append(random_id)
                     i += 1
 
-        if type == 'style':
+        if type_ == 'style':
             count = Style.objects.aggregate(count=Count('id'))['count']
             used_id = [paint.data['style']]
             i = 0

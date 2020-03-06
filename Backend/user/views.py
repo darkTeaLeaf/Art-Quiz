@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework import viewsets, status, mixins
+from rest_framework.decorators import action, permission_classes
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 
 from user.models import Statistic
-from user.serializers import UserSerializer, StatisticSerializer
+from user.serializers import StatisticSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -14,26 +14,37 @@ class UserViewSet(viewsets.ModelViewSet):
 
     """
     queryset = User.objects.all()
-    serializer_paint = UserSerializer
+    serializer_user = UserSerializer
     serializer_stat = StatisticSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
-    @action(detail=True, methods=['get'])
-    def statistic(self, request, pk=None):
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAdminUser]
+
+    def get_serializer_class(self):
+        return self.serializer_user
+
+    @action(detail=True, methods=['patch'], url_path='statistic/victory')
+    # @permission_classes([IsAdminUser])
+    def win(self, request, pk=None):
         user = User.objects.get(id=pk)
 
         if user is not None:
-            serializer = self.serializer_stat(user.statistic)
-            return Response(serializer.data)
-        else:
-            return Response(self.serializer_stat.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=['post'])
-    def post_statistic(self, request, pk=None):
-        user = User.objects.get(id=pk)
-
-        if user is not None:
-            # TODO
+            user.statistic.games_total += 1
+            user.statistic.wins_total += 1
+            user.statistic.win_rate = user.statistic.wins_total / user.statistic.games_total
+            user.save()
             return Response()
         else:
-            return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(self.serializer_user.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['patch'], url_path='statistic/fail')
+    # @permission_classes([IsAdminUser])
+    def lose(self, request, pk=None):
+        user = User.objects.get(id=pk)
+
+        if user is not None:
+            user.statistic.games_total += 1
+            user.statistic.win_rate = user.statistic.wins_total / user.statistic.games_total
+            user.save()
+            return Response()
+        else:
+            return Response(self.serializer_user.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -6,11 +6,11 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     """
-    Extra data for user. (Adding new filed here make sure that you added its
-    name to USER_PROFILE_DATA)
+    Extra data for user.
+
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default="default.png")
+    avatar = models.ImageField(default="default.png", null=True, blank=True)
 
     def __str__(self):
         return self.user.username + "Profile"
@@ -23,11 +23,14 @@ class Profile(models.Model):
 
 
 class Statistic(models.Model):
+    """
+        Statistics for user.
+
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     win_rate = models.FloatField(default=0, null=False)
     games_total = models.PositiveIntegerField(default=0, null=False)
     wins_total = models.PositiveIntegerField(default=0, null=False)
-    pictures_seen = models.PositiveIntegerField(default=0, null=False)
 
     def __str__(self):
         return self.user.username + "Statistic"
