@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import "./AnswerOptions.css";
-import { submitAnswer } from "../../actions";
+import { submitAnswer } from "../../actions/carouselActions";
 
 const AnswerOptions = ({ ansOptions, answered, correctAnswer, submitAnswer }) => {
   return (
@@ -10,8 +10,8 @@ const AnswerOptions = ({ ansOptions, answered, correctAnswer, submitAnswer }) =>
         ? ansOptions.map(option => (
             <button
               key={`${option.id}`}
-              className={answered && option.answer === correctAnswer ? "correct" : ""}
-              //onClick={() => submitAnswer(option)}
+              className={answered && option.answer === correctAnswer.answer ? "correct" : ""}
+              onClick={() => submitAnswer(option.answer)}
             >
               {option.answer}
             </button>
@@ -25,7 +25,7 @@ const mapStateToProps = store => {
   return {
     ansOptions: store.carousel.ansOptions,
     answered: store.carousel.answered,
-    correctAnswer: store.painting.correctAnswer
+    correctAnswer: store.carousel.correctAnswer
   };
 };
 

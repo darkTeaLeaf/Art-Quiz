@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SET_ANSWERS, SET_CORRECT_ANSWER } from "../constants";
+import { SET_ANSWERS, SET_CORRECT_ANSWER, SUBMIT_ANSWER } from "../constants";
 
 const setAnswers = answers => ({
   type: SET_ANSWERS,
@@ -10,6 +10,11 @@ const setCorrectAnswer = correctAnswer => ({
   type: SET_CORRECT_ANSWER,
   payload: correctAnswer
 });
+
+export const submitAnswer = answer => ({
+  type: SUBMIT_ANSWER,
+  payload: answer
+})
 
 export const getAnswers = () => {
   return async (dispatch, getState) => {

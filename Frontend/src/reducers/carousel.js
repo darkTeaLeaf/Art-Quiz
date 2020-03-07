@@ -5,15 +5,15 @@ const initialState = {
   ansOptions: [],
   winsCounter: 0,
   answered: false,
-  correctAnswer: "",
+  correctAnswer: null,
 };
 
 export function carouselReducer(state = initialState, action) {
   switch (action.type) {
     case SUBMIT_ANSWER: {
       if (!state.answered) {
-        const { answer } = action.payload;
-        if (answer === state.painting.author) {
+        const answer  = action.payload;
+        if (answer === state.correctAnswer.answer) {
           alert("CORRECT!");
           return {
             ...state,
