@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { connect } from "react-redux";
 import Carousel from "../Carousel";
@@ -6,6 +6,10 @@ import AnswerOptions from "../AnswerOptions";
 import { switchPainting } from "../../actions/paintingActions";
 
 const App = ({ winsCounter, switchPainting }) => {
+  useEffect(() => {
+    switchPainting();
+  }, []);
+
   return (
     <div id="App">
       <section>

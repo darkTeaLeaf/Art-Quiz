@@ -1,5 +1,3 @@
-export const BACKEND_ADDRESS = "http://127.0.0.1:8000";
-
 export const SET_PAINTING = "SET_PAINTING";
 export const SET_PAINTING_FAIL = "SET_PAINTING_FAIL";
 

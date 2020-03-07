@@ -4,7 +4,6 @@ import {
   SET_PAINTING,
   SET_ANSWERS,
   SET_CORRECT_ANSWER,
-  BACKEND_ADDRESS
 } from "../constants";
 
 export function submitAnswer(ans) {
@@ -16,7 +15,7 @@ export function submitAnswer(ans) {
 
 export function switchPainting() {
   return async function(dispatch) {
-    const { data } = await axios.get(`${BACKEND_ADDRESS}/paintings/random/`);
+    const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/random/`);
     dispatch(setPainting(data));
     dispatch(fetchAnswers(data.id));
     // dispatch(fetchCorrectAnswer(data.id));
@@ -26,10 +25,10 @@ export function switchPainting() {
 function fetchAnswers(id) {
   return async function(dispatch) {
     const authors = await axios.get(
-      `${BACKEND_ADDRESS}/paintings/${id}/variants_author/`
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/variants_author/`
     );
     const author = await axios.get(
-      `${BACKEND_ADDRESS}/paintings/${id}/author/`
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/author/`
     );
     let i = Math.floor(
       Math.random() * Math.floor(authors.data.variants_author.length + 1)
@@ -48,7 +47,7 @@ function fetchAnswers(id) {
 
 // function fetchCorrectAnswer(id) {
 //   return async function(dispatch) {
-//     const { data } = await axios.get(`${BACKEND_ADDRESS}/paintings/${id}/author/`);
+//     const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/author/`);
 //     dispatch(setCorrectAnswer(data.author));
 //   }
 // }

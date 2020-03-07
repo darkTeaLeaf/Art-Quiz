@@ -1,4 +1,4 @@
-import { SET_PAINTING, BACKEND_ADDRESS, SET_PAINTING_FAIL } from "../constants";
+import { SET_PAINTING, SET_PAINTING_FAIL } from "../constants";
 
 const initialState = {
   id: null,
@@ -16,7 +16,7 @@ export function paintingReducer(state = initialState, action) {
       const { url, id } = action.payload;
       return {
         ...state,
-        url: BACKEND_ADDRESS + url,
+        url: process.env.REACT_APP_BACKEND_ADDRESS + url,
         id: id
       };
     }

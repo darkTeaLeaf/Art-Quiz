@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BACKEND_ADDRESS, SET_PAINTING, SET_PAINTING_FAIL } from "../constants";
+import { SET_PAINTING, SET_PAINTING_FAIL } from "../constants";
 import { getAnswers } from "./carouselActions";
 
 const setPainting = (id, url) => ({
@@ -23,7 +23,9 @@ export const switchPainting = () => {
 const getRandomPainting = () => {
   return async dispatch => {
     try {
-      const { data: {id, image} } = await axios.get(`${BACKEND_ADDRESS}/paintings/random/`);
+      const {
+        data: { id, image }
+      } = await axios.get(`${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/random/`);
       dispatch(setPainting(id, image));
     } catch (error) {
       dispatch(setPaintingFail(error));
