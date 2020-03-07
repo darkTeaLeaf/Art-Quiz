@@ -2,12 +2,7 @@ import { SET_PAINTING, SET_PAINTING_FAIL } from "../constants";
 
 const initialState = {
   id: null,
-  year: null,
   url: "",
-  name: "",
-  author: "",
-  style: "",
-  location: ""
 };
 
 export function paintingReducer(state = initialState, action) {

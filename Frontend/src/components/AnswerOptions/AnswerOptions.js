@@ -3,17 +3,17 @@ import { connect } from "react-redux";
 import "./AnswerOptions.css";
 import { submitAnswer } from "../../actions";
 
-const AnswerOptions = ({ ansOptions, answered, realAuthor, submitAnswer }) => {
+const AnswerOptions = ({ ansOptions, answered, correctAnswer, submitAnswer }) => {
   return (
     <div id="AnswerOptions" className={answered ? "answered" : ""}>
       {ansOptions.length !== 0
-        ? ansOptions.map(author => (
+        ? ansOptions.map(option => (
             <button
-              key={author}
-              className={answered && author === realAuthor ? "correct" : ""}
-              onClick={() => submitAnswer(author)}
+              key={`${option.id}`}
+              className={answered && option.answer === correctAnswer ? "correct" : ""}
+              //onClick={() => submitAnswer(option)}
             >
-              {author}
+              {option.answer}
             </button>
           ))
         : ""}
@@ -25,7 +25,7 @@ const mapStateToProps = store => {
   return {
     ansOptions: store.carousel.ansOptions,
     answered: store.carousel.answered,
-    realAuthor: store.painting.author
+    correctAnswer: store.painting.correctAnswer
   };
 };
 

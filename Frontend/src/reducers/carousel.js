@@ -1,9 +1,11 @@
-import { SUBMIT_ANSWER, SET_ANSWERS } from "../constants";
+import { SUBMIT_ANSWER, SET_ANSWERS, SET_CORRECT_ANSWER } from "../constants";
+import { shuffle } from "../helpers";
 
 const initialState = {
   ansOptions: [],
   winsCounter: 0,
-  answered: false
+  answered: false,
+  correctAnswer: "",
 };
 
 export function carouselReducer(state = initialState, action) {
@@ -29,17 +31,21 @@ export function carouselReducer(state = initialState, action) {
       }
       return state;
     }
+
     case SET_ANSWERS: {
-      const { answers, author } = action.payload;
       return {
         ...state,
-        ansOptions: answers,
-        painting: {
-          ...state.painting,
-          author: author.name
-        }
+        ansOptions: shuffle(action.payload)
       };
     }
+
+    case SET_CORRECT_ANSWER: {
+      return {
+        ...state,
+        correctAnswer: action.payload
+      };
+    }
+
     default: {
       return state;
     }
