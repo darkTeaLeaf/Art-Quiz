@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SET_PAINTING, SET_PAINTING_FAIL } from "../constants";
-import { getAnswers } from "./carouselActions";
+import { getAnswers, setAnswered } from "./carouselActions";
 
 const setPainting = (id, url) => ({
   type: SET_PAINTING,
@@ -17,6 +17,7 @@ export const switchPainting = () => {
   return async dispatch => {
     await dispatch(getRandomPainting());
     await dispatch(getAnswers());
+    dispatch(setAnswered(false))
   };
 };
 

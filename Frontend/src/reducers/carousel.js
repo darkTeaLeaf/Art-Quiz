@@ -1,4 +1,4 @@
-import { SUBMIT_ANSWER, SET_ANSWERS, SET_CORRECT_ANSWER } from "../constants";
+import { SUBMIT_ANSWER, SET_ANSWERS, SET_CORRECT_ANSWER, SET_ANSWERED } from "../constants";
 import { shuffle } from "../helpers";
 
 const initialState = {
@@ -44,6 +44,13 @@ export function carouselReducer(state = initialState, action) {
         ...state,
         correctAnswer: action.payload
       };
+    }
+
+    case SET_ANSWERED: {
+      return {
+        ...state,
+        answered: action.payload
+      }
     }
 
     default: {
