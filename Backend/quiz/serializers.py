@@ -10,16 +10,16 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
     """
 
     def __init__(self, *args, **kwargs):
-        # Don't pass the 'fields' arg up to the superclass
-        fields = kwargs.pop('fields', None)
-
         # Instantiate the superclass normally
         super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
 
-        if fields is not None:
+        fields = self.context['request'].query_params.get('fields')
+
+        if fields:
+            fields = fields.split(',')
             # Drop any fields that are not specified in the `fields` argument.
             allowed = set(fields)
-            existing = set(self.fields)
+            existing = set(self.fields.keys())
             for field_name in existing - allowed:
                 self.fields.pop(field_name)
 
@@ -30,15 +30,18 @@ class PaintingSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializ
     class Meta:
         model = Painting
         fields = "__all__"
+        read_only_fields = ('id',)
 
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = "__all__"
+        read_only_fields = ('id',)
 
 
 class StyleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Style
         fields = "__all__"
+        read_only_fields = ('id',)

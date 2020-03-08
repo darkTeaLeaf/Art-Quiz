@@ -1,10 +1,12 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets
-from rest_framework.decorators import action
+from rest_framework import viewsets, status, mixins
+from rest_framework.decorators import action, permission_classes
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.response import Response
 
-from user.models import Profile, Statistic
-from user.serializers import UserSerializer, StatisticSerializer
+from user.models import Statistic
+from user.permissions import UserPermission
+from user.serializers import StatisticSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -13,15 +15,34 @@ class UserViewSet(viewsets.ModelViewSet):
 
     """
     queryset = User.objects.all()
-    serializer_paint = UserSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_user = UserSerializer
+    serializer_stat = StatisticSerializer
+    permission_classes = (UserPermission,)
 
+    def get_serializer_class(self):
+        return self.serializer_user
 
-class StatisticViewSet(viewsets.ModelViewSet):
-    """
-        API endpoint that allows statistics to be viewed or edited.
+    @action(detail=True, methods=['patch'], url_path='statistic/victory')
+    def win(self, request, pk=None):
+        user = User.objects.get(id=pk)
 
-    """
-    queryset = Statistic.objects.all()
-    serializer_paint = StatisticSerializer
-    permission_classes = [IsAdminUser]
+        if user is not None:
+            user.statistic.games_total += 1
+            user.statistic.wins_total += 1
+            user.statistic.win_rate = user.statistic.wins_total / user.statistic.games_total
+            user.save()
+            return Response()
+        else:
+            return Response(self.serializer_user.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['patch'], url_path='statistic/fail')
+    def lose(self, request, pk=None):
+        user = User.objects.get(id=pk)
+
+        if user is not None:
+            user.statistic.games_total += 1
+            user.statistic.win_rate = user.statistic.wins_total / user.statistic.games_total
+            user.save()
+            return Response()
+        else:
+            return Response(self.serializer_user.errors, status=status.HTTP_400_BAD_REQUEST)

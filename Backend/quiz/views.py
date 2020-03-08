@@ -1,7 +1,7 @@
 from random import randint
 
 from django.db.models import Count
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -9,7 +9,9 @@ from quiz.models import Painting, Author, Style
 from quiz.serializers import PaintingSerializer, AuthorSerializer, StyleSerializer
 
 
-class PaintingViewSet(viewsets.GenericViewSet):
+class PaintingViewSet(mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
+                      viewsets.GenericViewSet):
     """
         API endpoint that allows paintings to be viewed or edited.
 
@@ -32,100 +34,56 @@ class PaintingViewSet(viewsets.GenericViewSet):
             return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['get'])
-    def author(self, request, pk=None):
-        painting = Painting.objects.get(id=pk)
+    def variants(self, request, pk=None):
+        variants = {'variants': []}
+        paint = self.serializer_paint(Painting.objects.get(id=pk), context={'request': request})
+        type_ = self.request.query_params.get('type')
 
-        if painting is not None:
-            result = {'id': self.serializer_paint(painting).data['id'],
-                      'author': self.serializer_author(
-                          Author.objects.get(id=self.serializer_paint(painting).data['author'])).data}
-            return Response(result)
-        else:
-            return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
+        if type_ == 'author':
+            count = Author.objects.aggregate(count=Count('id'))['count']
+            used_id = [paint.data['author']]
+            i = 0
 
-    @action(detail=True, methods=['get'])
-    def name(self, request, pk=None):
-        painting = Painting.objects.get(id=pk)
+            while i != 3:
+                random_index = randint(0, count - 1)
+                random_id = self.serializer_author(Author.objects.all()[random_index]).data['id']
 
-        if painting is not None:
-            result = {'id': self.serializer_paint(painting).data['id'],
-                      'name': self.serializer_paint(painting).data['name']}
-            return Response(result)
-        else:
-            return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
+                if random_id not in used_id:
+                    variants.get('variants').append(self.serializer_author(
+                        Author.objects.all()[random_index]).data['name'])
+                    used_id.append(random_id)
+                    i += 1
 
-    @action(detail=True, methods=['get'])
-    def style(self, request, pk=None):
-        painting = Painting.objects.get(id=pk)
+        if type_ == 'name':
+            count = Painting.objects.aggregate(count=Count('id'))['count']
+            used_id = [paint.data['name']]
+            i = 0
 
-        if painting is not None:
-            result = {'id': self.serializer_paint(painting).data['id'],
-                      'style': self.serializer_style(
-                          Style.objects.get(id=self.serializer_paint(painting).data['style'])).data}
-            return Response(result)
-        else:
-            return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
+            while i != 3:
+                random_index = randint(0, count - 1)
+                random_id = \
+                    self.serializer_paint(Painting.objects.all()[random_index], context={'request': request}).data['id']
 
-    @action(detail=True, methods=['get'])
-    def variants_author(self, request, pk=None):
-        count = Author.objects.aggregate(count=Count('id'))['count']
-        used_id = [self.serializer_paint(Painting.objects.get(id=pk)).data['author']]
-        i = 0
-        variants = {'variants_author': []}
+                if random_id not in used_id:
+                    variants.get('variants').append(self.serializer_paint(
+                        Painting.objects.all()[random_index], context={'request': request}).data['name'])
+                    used_id.append(random_id)
+                    i += 1
 
-        while i != 3:
-            random_index = randint(0, count - 1)
-            random_id = self.serializer_author(Author.objects.all()[random_index]).data['id']
+        if type_ == 'style':
+            count = Style.objects.aggregate(count=Count('id'))['count']
+            used_id = [paint.data['style']]
+            i = 0
 
-            if random_id not in used_id:
-                variants.get('variants_author').append(self.serializer_author(
-                    Author.objects.all()[random_index]).data)
-                used_id.append(random_id)
-                i += 1
+            while i != 3:
+                random_index = randint(0, count - 1)
+                random_id = self.serializer_style(Style.objects.all()[random_index]).data['id']
 
-        if variants is not None:
-            return Response(variants)
-        else:
-            return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=['get'])
-    def variants_name(self, request, pk=None):
-        count = Painting.objects.aggregate(count=Count('id'))['count']
-        used_id = [self.serializer_paint(Painting.objects.get(id=pk)).data['name']]
-        i = 0
-        variants = {'variants_name': []}
-
-        while i != 3:
-            random_index = randint(0, count - 1)
-            random_id = self.serializer_paint(Painting.objects.all()[random_index]).data['id']
-
-            if random_id not in used_id:
-                variants.get('variants_name').append(self.serializer_paint(
-                    Painting.objects.all()[random_index]).data['name'])
-                used_id.append(random_id)
-                i += 1
-
-        if variants is not None:
-            return Response(variants)
-        else:
-            return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=['get'])
-    def variants_style(self, request, pk=None):
-        count = Style.objects.aggregate(count=Count('id'))['count']
-        used_id = [self.serializer_paint(Painting.objects.get(id=pk)).data['style']]
-        i = 0
-        variants = {'variants_style': []}
-
-        while i != 3:
-            random_index = randint(0, count - 1)
-            random_id = self.serializer_style(Style.objects.all()[random_index]).data['id']
-
-            if random_id not in used_id:
-                variants.get('variants_style').append(self.serializer_style(
-                    Style.objects.all()[random_index]).data)
-                used_id.append(random_id)
-                i += 1
+                if random_id not in used_id:
+                    variants.get('variants').append(self.serializer_style(
+                        Style.objects.all()[random_index]).data['name'])
+                    used_id.append(random_id)
+                    i += 1
 
         if variants is not None:
             return Response(variants)
