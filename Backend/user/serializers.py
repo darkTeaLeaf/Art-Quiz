@@ -73,7 +73,7 @@ class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.first_name = validated_data.get('first_name', instance.first_name)
 
-        profile_data = validated_data.pop('profile')
+        profile_data = validated_data.get('profile')
         if profile_data:
             instance.profile.avatar = profile_data['avatar']
 

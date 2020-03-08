@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 
 from user.models import Statistic
+from user.permissions import UserPermission
 from user.serializers import StatisticSerializer, UserSerializer
 
 
@@ -16,14 +17,12 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_user = UserSerializer
     serializer_stat = StatisticSerializer
-
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAdminUser]
+    permission_classes = (UserPermission,)
 
     def get_serializer_class(self):
         return self.serializer_user
 
     @action(detail=True, methods=['patch'], url_path='statistic/victory')
-    # @permission_classes([IsAdminUser])
     def win(self, request, pk=None):
         user = User.objects.get(id=pk)
 
@@ -37,7 +36,6 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(self.serializer_user.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['patch'], url_path='statistic/fail')
-    # @permission_classes([IsAdminUser])
     def lose(self, request, pk=None):
         user = User.objects.get(id=pk)
 
