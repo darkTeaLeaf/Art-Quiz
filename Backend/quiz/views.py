@@ -28,7 +28,7 @@ class PaintingViewSet(mixins.ListModelMixin,
         random_painting = self.queryset[random_index]
 
         if random_painting is not None:
-            serializer = self.serializer_paint(random_painting, fields=('id', 'image'))
+            serializer = self.serializer_paint(random_painting, context={'request': request})
             return Response(serializer.data)
         else:
             return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
