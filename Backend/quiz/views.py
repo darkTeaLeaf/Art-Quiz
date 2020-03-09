@@ -44,7 +44,7 @@ class PaintingViewSet(mixins.ListModelMixin,
 
         if type_ == 'author':
             count = Author.objects.aggregate(count=Count('id'))['count']
-            used_id = [paint.data['author']]
+            used_id = [paint.data['author']['id']]
             i = 0
 
             while i != 3:
@@ -57,9 +57,12 @@ class PaintingViewSet(mixins.ListModelMixin,
                     used_id.append(random_id)
                     i += 1
 
+            print(used_id)
+            print(variants)
+
         if type_ == 'name':
             count = Painting.objects.aggregate(count=Count('id'))['count']
-            used_id = [paint.data['name']]
+            used_id = [paint.data['id']]
             i = 0
 
             while i != 3:
@@ -75,7 +78,7 @@ class PaintingViewSet(mixins.ListModelMixin,
 
         if type_ == 'style':
             count = Style.objects.aggregate(count=Count('id'))['count']
-            used_id = [paint.data['style']]
+            used_id = [paint.data['style']['id']]
             i = 0
 
             while i != 3:
