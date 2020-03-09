@@ -21,6 +21,9 @@ class PaintingViewSet(mixins.ListModelMixin,
     serializer_author = AuthorSerializer
     serializer_style = StyleSerializer
 
+    def get_serializer_class(self):
+        return self.serializer_paint
+
     @action(detail=False, methods=['get'])
     def random(self, request):
         count = Painting.objects.aggregate(count=Count('id'))['count']
