@@ -1,0 +1,7 @@
+export const SET_PAINTING = "SET_PAINTING";
+export const SET_PAINTING_FAIL = "SET_PAINTING_FAIL";
+
+export const SUBMIT_ANSWER = "SUBMIT_ANSWER";
+export const SET_CORRECT_ANSWER = "SET_CORRECT_ANSWER";
+export const SET_ANSWERS = "SET_ANSWERS";
+export const SET_ANSWERED = "SET_ANSWERED";

@@ -1,19 +1,19 @@
 import React from "react";
 import { connect } from "react-redux";
 import "./AnswerOptions.css";
-import { submitAnswer } from "../../actions";
+import { submitAnswer } from "../../actions/carouselActions";
 
-const Carousel = ({ ansOptions, answered, realAuthor, submitAnswer }) => {
+const AnswerOptions = ({ ansOptions, answered, correctAnswer, submitAnswer }) => {
   return (
     <div id="AnswerOptions" className={answered ? "answered" : ""}>
       {ansOptions.length !== 0
-        ? ansOptions.map(author => (
+        ? ansOptions.map(option => (
             <button
-              key={author}
-              className={answered && author === realAuthor ? "correct" : ""}
-              onClick={() => submitAnswer(author)}
+              key={`${option.id}`}
+              className={answered && option.answer === correctAnswer.answer ? "correct" : ""}
+              onClick={() => submitAnswer(option.answer)}
             >
-              {author}
+              {option.answer}
             </button>
           ))
         : ""}
@@ -21,12 +21,12 @@ const Carousel = ({ ansOptions, answered, realAuthor, submitAnswer }) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = store => {
   return {
-    ansOptions: state.ansOptions,
-    answered: state.answered,
-    realAuthor: state.painting.author
+    ansOptions: store.carousel.ansOptions,
+    answered: store.carousel.answered,
+    correctAnswer: store.carousel.correctAnswer
   };
 };
 
-export default connect(mapStateToProps, { submitAnswer })(Carousel);
+export default connect(mapStateToProps, { submitAnswer })(AnswerOptions);

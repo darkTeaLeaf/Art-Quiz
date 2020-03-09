@@ -5,6 +5,7 @@
 }
 
 #Carousel img {
+  background-color: black;
   max-height: 70vh;
   max-width: 60vw;
   border: 1vw solid black;

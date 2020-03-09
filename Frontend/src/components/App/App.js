@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { connect } from "react-redux";
 import Carousel from "../Carousel";
 import AnswerOptions from "../AnswerOptions";
-import { switchPainting } from "../../actions";
+import { switchPainting } from "../../actions/paintingActions";
 
-function App({ winsCounter, switchPainting }) {
+const App = ({ winsCounter, switchPainting }) => {
+  useEffect(() => {
+    switchPainting();
+  }, []);
+
   return (
     <div id="App">
       <section>
@@ -20,7 +24,7 @@ function App({ winsCounter, switchPainting }) {
             <AnswerOptions />
           </div>
 
-          <button className="arrow-next" onClick={() => switchPainting()}>
+          <button className="arrow-next" onClick={switchPainting}>
             <img
               src={process.env.PUBLIC_URL + "/img/arrow-next.svg"}
               alt="arrow-next"
@@ -30,10 +34,14 @@ function App({ winsCounter, switchPainting }) {
       </section>
     </div>
   );
-}
-
-const mapStateToProps = state => {
-  return { winsCounter: state.winsCounter };
 };
 
-export default connect(mapStateToProps, { switchPainting })(App);
+const mapStateToProps = store => ({
+  winsCounter: store.carousel.winsCounter
+});
+
+const mapDispatchToProps = dispatch => ({
+  switchPainting: () => dispatch(switchPainting())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
