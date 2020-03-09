@@ -44,7 +44,7 @@ class PaintingSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializ
 
     class Meta:
         model = Painting
-        fields = ('name', 'author', 'year', 'style', 'gallery', 'image')
+        fields = ('id', 'name', 'author', 'year', 'style', 'gallery', 'image')
         read_only_fields = ('id',)
 
     def to_representation(self, instance):
