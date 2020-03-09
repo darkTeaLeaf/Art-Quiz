@@ -29,15 +29,13 @@ export const setAnswered = answered => ({
 export const getAnswers = () => {
   return async (dispatch, getState) => {
     const { id } = getState().painting;
-    const {
-      data: { variants_author: answers }
-    } = await axios.get(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/variants_author/`
+    const { data: answers } = await axios.get(
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/variants/?type=author`
     );
     const {
       data: { author: correctAnswer }
     } = await axios.get(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/author/`
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/?fields=author`
     );
 
     dispatch(
@@ -45,7 +43,7 @@ export const getAnswers = () => {
     );
     dispatch(
       setAnswers([
-        ...answers.map(ans => ({ id: ans.id, answer: ans.name })),
+        ...answers.map((ans, i) => ({ id: "0" + i, answer: ans })), // TO BE REMOVED
         { id: correctAnswer.id, answer: correctAnswer.name }
       ])
     );

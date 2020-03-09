@@ -12,7 +12,7 @@ export function paintingReducer(state = initialState, action) {
       return {
         ...state,
         url: process.env.REACT_APP_BACKEND_ADDRESS + url,
-        id: id
+        id,
       };
     }
 
