@@ -38,7 +38,7 @@ class PaintingViewSet(mixins.ListModelMixin,
 
     @action(detail=True, methods=['get'])
     def variants(self, request, pk=None):
-        variants = {'variants': []}
+        variants = []
         paint = self.serializer_paint(Painting.objects.get(id=pk), context={'request': request})
         type_ = self.request.query_params.get('type')
 
@@ -52,7 +52,7 @@ class PaintingViewSet(mixins.ListModelMixin,
                 random_id = self.serializer_author(Author.objects.all()[random_index]).data['id']
 
                 if random_id not in used_id:
-                    variants.get('variants').append(self.serializer_author(
+                    variants.append(self.serializer_author(
                         Author.objects.all()[random_index]).data['name'])
                     used_id.append(random_id)
                     i += 1
@@ -68,7 +68,7 @@ class PaintingViewSet(mixins.ListModelMixin,
                     self.serializer_paint(Painting.objects.all()[random_index], context={'request': request}).data['id']
 
                 if random_id not in used_id:
-                    variants.get('variants').append(self.serializer_paint(
+                    variants.append(self.serializer_paint(
                         Painting.objects.all()[random_index], context={'request': request}).data['name'])
                     used_id.append(random_id)
                     i += 1
@@ -83,7 +83,7 @@ class PaintingViewSet(mixins.ListModelMixin,
                 random_id = self.serializer_style(Style.objects.all()[random_index]).data['id']
 
                 if random_id not in used_id:
-                    variants.get('variants').append(self.serializer_style(
+                    variants.append(self.serializer_style(
                         Style.objects.all()[random_index]).data['name'])
                     used_id.append(random_id)
                     i += 1
