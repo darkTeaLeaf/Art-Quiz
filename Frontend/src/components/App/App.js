@@ -9,8 +9,8 @@ const App = () => {
   return (
     <BrowserRouter>
       <div id="App">
-        <Link to="/">home</Link>
-        <Link to="/account">account</Link>
+        <Link to="/">Home</Link>
+        <Link to="/account">Account</Link>
 
         <Switch>
           <Route path="/account">
