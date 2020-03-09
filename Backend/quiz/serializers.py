@@ -24,15 +24,6 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                 self.fields.pop(field_name)
 
 
-class PaintingSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
-    image = serializers.ImageField(max_length=None, use_url=True)
-
-    class Meta:
-        model = Painting
-        fields = "__all__"
-        read_only_fields = ('id',)
-
-
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
@@ -45,3 +36,19 @@ class StyleSerializer(serializers.ModelSerializer):
         model = Style
         fields = "__all__"
         read_only_fields = ('id',)
+
+
+class PaintingSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
+    author = AuthorSerializer()
+    style = StyleSerializer()
+
+    class Meta:
+        model = Painting
+        fields = ('name', 'author', 'year', 'style', 'gallery', 'image')
+        read_only_fields = ('id',)
+
+    def to_representation(self, instance):
+        response = super(PaintingSerializer, self).to_representation(instance)
+        if instance.image:
+            response['image'] = instance.image.url
+        return response
