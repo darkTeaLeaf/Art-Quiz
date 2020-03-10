@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import { connect } from "react-redux";
-import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Link, Switch, Redirect } from "react-router-dom";
 import Home from "../../routes/home";
 import Account from "../../routes/account";
 import AuthForm from "../AuthForm";
@@ -28,7 +28,7 @@ const App = ({ isAuthenticated }) => {
 
         <Switch>
           <Route path="/account">
-            <Account />
+            {isAuthenticated ? <Account /> : <Redirect to="/" />}
           </Route>
 
           <Route path="/">
