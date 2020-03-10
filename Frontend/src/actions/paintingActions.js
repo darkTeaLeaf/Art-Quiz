@@ -17,7 +17,7 @@ export const switchPainting = () => {
   return async dispatch => {
     await dispatch(getRandomPainting());
     await dispatch(getAnswers());
-    dispatch(setAnswered(false))
+    dispatch(setAnswered(false));
   };
 };
 
@@ -26,7 +26,9 @@ const getRandomPainting = () => {
     try {
       const {
         data: { id, image }
-      } = await axios.get(`${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/random/`);
+      } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/random/`
+      );
       dispatch(setPainting(id, image));
     } catch (error) {
       dispatch(setPaintingFail(error));

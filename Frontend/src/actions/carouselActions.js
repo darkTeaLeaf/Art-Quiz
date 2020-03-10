@@ -3,7 +3,8 @@ import {
   SET_ANSWERS,
   SET_CORRECT_ANSWER,
   SUBMIT_ANSWER,
-  SET_ANSWERED
+  SET_ANSWERED,
+  SET_WINS_COUNTER,
 } from "../constants";
 
 const setAnswers = answers => ({
@@ -14,6 +15,11 @@ const setAnswers = answers => ({
 const setCorrectAnswer = correctAnswer => ({
   type: SET_CORRECT_ANSWER,
   payload: correctAnswer
+});
+
+export const setWinsCounter = winsCounter => ({
+  type: SET_WINS_COUNTER,
+  payload: winsCounter
 });
 
 export const submitAnswer = answer => ({

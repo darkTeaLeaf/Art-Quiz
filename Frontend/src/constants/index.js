@@ -5,3 +5,4 @@ export const SUBMIT_ANSWER = "SUBMIT_ANSWER";
 export const SET_CORRECT_ANSWER = "SET_CORRECT_ANSWER";
 export const SET_ANSWERS = "SET_ANSWERS";
 export const SET_ANSWERED = "SET_ANSWERED";
+export const SET_WINS_COUNTER = "SET_WINS_COUNTER";
