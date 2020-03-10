@@ -4,7 +4,7 @@ import {
   SET_CORRECT_ANSWER,
   SUBMIT_ANSWER,
   SET_ANSWERED,
-  SET_WINS_COUNTER,
+  SET_WINS_COUNTER
 } from "../constants";
 
 const setAnswers = answers => ({
