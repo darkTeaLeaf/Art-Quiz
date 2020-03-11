@@ -24,7 +24,9 @@ const App = ({ isAuthenticated }) => {
           Account
         </Link>
 
-        {isAuthFormActive && <AuthForm />}
+        {isAuthFormActive && (
+          <AuthForm setIsAuthFormActive={setIsAuthFormActive} />
+        )}
 
         <Switch>
           <Route path="/account">

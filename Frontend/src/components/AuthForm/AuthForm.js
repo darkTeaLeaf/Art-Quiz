@@ -1,14 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import {signIn} from "../../actions/accountActions";
+import { signIn } from "../../actions/accountActions";
 import "./AuthForm.css";
 
-const SignIn = () => {
+const SignIn = ({ signIn, setIsAuthFormActive }) => {
   const { register, handleSubmit, errors } = useForm();
+  const history = useHistory();
 
-  const onSubmit = data => {
-    signIn(data);
+  const onSubmit = async credentials => {
+    const status = await signIn(credentials);
+    if (status === "success") {
+      history.push("/account");
+      setIsAuthFormActive(false);
+    }
   };
 
   return (
@@ -31,17 +37,17 @@ const SignUp = () => {
   return <div className="sign-up"></div>;
 };
 
-const AuthForm = () => {
+const AuthForm = ({ signIn, setIsAuthFormActive }) => {
   return (
     <div id="AuthForm">
-      <SignIn />
+      <SignIn signIn={signIn} setIsAuthFormActive={setIsAuthFormActive} />
       <SignUp />
     </div>
   );
 };
 
 const mapDispatchToProps = dispatch => ({
-  signIn: () => dispatch(signIn()),
+  signIn: credentials => dispatch(signIn(credentials))
 });
 
 export default connect(null, mapDispatchToProps)(AuthForm);
