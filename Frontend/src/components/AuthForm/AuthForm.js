@@ -19,6 +19,7 @@ const SignIn = ({ signIn, toggleAuthFormActive }) => {
 
   return (
     <div className="sign-in">
+      <button className="close" onClick={() => {toggleAuthFormActive(false)}}>✕</button>
       <h2>Sign in</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input name="username" ref={register({ required: true })} />
