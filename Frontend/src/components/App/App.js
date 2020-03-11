@@ -5,8 +5,9 @@ import { BrowserRouter, Route, Link, Switch, Redirect } from "react-router-dom";
 import Home from "../../routes/home";
 import Account from "../../routes/account";
 import AuthForm from "../AuthForm";
+import { signOut } from "../../actions/accountActions";
 
-const App = ({ isAuthenticated }) => {
+const App = ({ isAuthenticated, signOut }) => {
   const [isAuthFormActive, toggleAuthFormActive] = useState(false);
 
   const checkAuth = e => {
@@ -19,10 +20,13 @@ const App = ({ isAuthenticated }) => {
   return (
     <BrowserRouter>
       <div id="App">
-        <Link to="/">Home</Link>
-        <Link to="/account" onClick={checkAuth}>
-          Account
-        </Link>
+        <nav>
+          <Link to="/">Home</Link>
+          <Link to="/account" onClick={checkAuth}>
+            Account
+          </Link>
+          {isAuthenticated && <Link to="/" onClick={signOut}>Sign out</Link>}
+        </nav>
 
         {isAuthFormActive && (
           <AuthForm toggleAuthFormActive={toggleAuthFormActive} />
@@ -46,4 +50,8 @@ const mapStateToProps = store => ({
   isAuthenticated: store.account.isAuthenticated
 });
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => ({
+  signOut: () => dispatch(signOut())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
