@@ -1,7 +1,7 @@
 import { SIGN_IN_SUCCESS } from "../constants";
 
 const initialState = {
-  isAuthenticated: false
+  isAuthenticated: localStorage.getItem("token") !== null ? true : false
 };
 
 export function accountReducer(state = initialState, action) {

@@ -7,12 +7,12 @@ import Account from "../../routes/account";
 import AuthForm from "../AuthForm";
 
 const App = ({ isAuthenticated }) => {
-  const [isAuthFormActive, setIsAuthFormActive] = useState(false);
+  const [isAuthFormActive, toggleAuthFormActive] = useState(false);
 
   const checkAuth = e => {
     if (!isAuthenticated) {
       e.preventDefault();
-      setIsAuthFormActive(true);
+      toggleAuthFormActive(true);
     }
   };
 
@@ -25,17 +25,17 @@ const App = ({ isAuthenticated }) => {
         </Link>
 
         {isAuthFormActive && (
-          <AuthForm setIsAuthFormActive={setIsAuthFormActive} />
+          <AuthForm toggleAuthFormActive={toggleAuthFormActive} />
         )}
 
         <Switch>
-          <Route path="/account">
-            {isAuthenticated ? <Account /> : <Redirect to="/" />}
-          </Route>
+          <Route exact path="/" component={Home} />
 
-          <Route path="/">
-            <Home />
-          </Route>
+          {isAuthenticated ? (
+            <Route exact path="/account" component={Account} />
+          ) : (
+            <Redirect to="/" />
+          )}
         </Switch>
       </div>
     </BrowserRouter>

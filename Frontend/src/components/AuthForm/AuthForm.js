@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { signIn } from "../../actions/accountActions";
 import "./AuthForm.css";
 
-const SignIn = ({ signIn, setIsAuthFormActive }) => {
+const SignIn = ({ signIn, toggleAuthFormActive }) => {
   const { register, handleSubmit, errors } = useForm();
   const history = useHistory();
 
@@ -13,7 +13,7 @@ const SignIn = ({ signIn, setIsAuthFormActive }) => {
     const status = await signIn(credentials);
     if (status === "success") {
       history.push("/account");
-      setIsAuthFormActive(false);
+      toggleAuthFormActive(false);
     }
   };
 
@@ -37,10 +37,10 @@ const SignUp = () => {
   return <div className="sign-up"></div>;
 };
 
-const AuthForm = ({ signIn, setIsAuthFormActive }) => {
+const AuthForm = ({ signIn, toggleAuthFormActive }) => {
   return (
     <div id="AuthForm">
-      <SignIn signIn={signIn} setIsAuthFormActive={setIsAuthFormActive} />
+      <SignIn signIn={signIn} toggleAuthFormActive={toggleAuthFormActive} />
       <SignUp />
     </div>
   );

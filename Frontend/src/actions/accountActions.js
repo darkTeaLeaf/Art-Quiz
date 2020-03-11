@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SIGN_IN_SUCCESS, SIGN_IN_FAILURE } from "../constants";
 
-const signInSuccess = () => ({
+export const signInSuccess = () => ({
   type: SIGN_IN_SUCCESS,
   payload: {
     isAuthenticated: true
