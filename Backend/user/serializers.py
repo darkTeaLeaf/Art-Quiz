@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from user.models import Profile, Statistic
+from user.models import Profile, Statistic, Progress
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -25,11 +25,23 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                 self.fields.pop(field_name)
 
 
+class ProgressSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField(source='achievement.id')
+    achievement_name = serializers.ReadOnlyField(source='achievement.name')
+    image = serializers.ImageField(source='achievement.image')
+
+    class Meta:
+        model = Progress
+        fields = ('id', 'achievement_name', 'image')
+
+
 class ProfileSerializer(serializers.ModelSerializer):
+    achievements = ProgressSerializer(source='progress_set', many=True, read_only=True)
+
     class Meta:
         model = Profile
-        fields = ('id', 'avatar')
-        read_only_fields = ('id',)
+        fields = ('id', 'avatar', 'achievements')
+        read_only_fields = ('id', 'achievements')
 
 
 class StatisticSerializer(serializers.ModelSerializer):
@@ -45,7 +57,8 @@ class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name', 'profile', 'statistic')
+        fields = (
+            'id', 'username', 'password', 'email', 'first_name', 'last_name', 'profile', 'statistic')
         write_only_fields = ('password',)
         read_only_fields = ('id', 'statistic',)
 

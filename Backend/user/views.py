@@ -1,10 +1,8 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets, status, mixins
-from rest_framework.decorators import action, permission_classes
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from user.models import Statistic
 from user.permissions import UserPermission
 from user.serializers import StatisticSerializer, UserSerializer
 
