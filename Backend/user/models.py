@@ -36,7 +36,7 @@ class Profile(models.Model):
 
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default="default.png", null=True, blank=True, upload_to="users/")
+    avatar = models.ImageField(null=True, blank=True, upload_to="users/")
     achievements = models.ManyToManyField(Achievement, through='Progress')
 
     def __str__(self):
@@ -61,6 +61,24 @@ class Progress(models.Model):
     def __str__(self):
         return self.profile.user.username + ' ' + self.achievement.name
 
+    @receiver(post_save, sender=Profile)
+    def create_or_update_user_achievements(sender, instance, created, **kwargs):
+        if created:
+            achievements = Achievement.objects.all()
+            Progress.objects.bulk_create([Progress(profile=instance, achievement=n) for n in achievements])
+
+    @receiver(post_save, sender=Achievement)
+    def create_or_update_user_achievements(sender, instance, created, **kwargs):
+        if created:
+            if instance.type is not 0:
+                profiles = Profile.objects.all()
+                Progress.objects.bulk_create([Progress(profile=n, achievement=instance) for n in profiles])
+            else:
+                profiles = Profile.objects.all()
+                Progress.objects.bulk_create(
+                    [Progress(profile=n, achievement=instance, progress=n.user.statistic.games_total) for n in
+                     profiles])
+
     @property
     def reached(self):
         if self.progress == self.achievement.max_score:
@@ -81,7 +99,7 @@ class Statistic(models.Model):
         return self.user.username + "Statistic"
 
     @receiver(post_save, sender=User)
-    def create_or_update_user_profile(sender, instance, created, **kwargs):
+    def create_or_update_user_statistic(sender, instance, created, **kwargs):
         if created:
             Statistic.objects.create(user=instance)
         instance.statistic.save()
