@@ -1,6 +1,5 @@
-from random import randint
+import random
 
-from django.db.models import Count
 from rest_framework import viewsets, status, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -23,67 +22,32 @@ class PaintingViewSet(mixins.ListModelMixin,
 
     @action(detail=False, methods=['get'])
     def random(self, request):
-        count = Painting.objects.aggregate(count=Count('id'))['count']
-        random_index = randint(0, count - 1)
-        random_painting = self.queryset[random_index]
-
-        if random_painting is not None:
-            serializer = self.serializer_paint(random_painting, fields=('id', 'image'))
-            return Response(serializer.data)
-        else:
-            return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
+        paint = Painting.objects.order_by('?').first()
+        serializer = self.serializer_paint(paint, context={'request': request})
+        return Response(serializer.data)
 
     @action(detail=True, methods=['get'])
     def variants(self, request, pk=None):
-        variants = {'variants': []}
-        paint = self.serializer_paint(Painting.objects.get(id=pk), context={'request': request})
+        variants = []
         type_ = self.request.query_params.get('type')
 
         if type_ == 'author':
-            count = Author.objects.aggregate(count=Count('id'))['count']
-            used_id = [paint.data['author']]
-            i = 0
+            paint_author_id = Painting.objects.get(id=pk).author.id
 
-            while i != 3:
-                random_index = randint(0, count - 1)
-                random_id = self.serializer_author(Author.objects.all()[random_index]).data['id']
-
-                if random_id not in used_id:
-                    variants.get('variants').append(self.serializer_author(
-                        Author.objects.all()[random_index]).data['name'])
-                    used_id.append(random_id)
-                    i += 1
+            author_names = list(Author.objects.exclude(id=paint_author_id).values_list('id', flat=True))
+            variants = list(Author.objects.filter(pk__in=random.sample(author_names, 3)).values_list('name', flat=True))
 
         if type_ == 'name':
-            count = Painting.objects.aggregate(count=Count('id'))['count']
-            used_id = [paint.data['name']]
-            i = 0
+            paint_id = Painting.objects.get(id=pk).id
 
-            while i != 3:
-                random_index = randint(0, count - 1)
-                random_id = \
-                    self.serializer_paint(Painting.objects.all()[random_index], context={'request': request}).data['id']
-
-                if random_id not in used_id:
-                    variants.get('variants').append(self.serializer_paint(
-                        Painting.objects.all()[random_index], context={'request': request}).data['name'])
-                    used_id.append(random_id)
-                    i += 1
+            paint_names = list(Painting.objects.exclude(id=paint_id).values_list('id', flat=True))
+            variants = list(Painting.objects.filter(pk__in=random.sample(paint_names, 3)).values_list('name', flat=True))
 
         if type_ == 'style':
-            count = Style.objects.aggregate(count=Count('id'))['count']
-            used_id = [paint.data['style']]
-            i = 0
+            paint_style_id = Painting.objects.get(id=pk).style.id
 
-            while i != 3:
-                random_index = randint(0, count - 1)
-                random_id = self.serializer_style(Style.objects.all()[random_index]).data['id']
-
-                if random_id not in used_id:
-                    variants.get('variants').append(self.serializer_style(
-                        Style.objects.all()[random_index]).data['name'])
-                    used_id.append(random_id)
-                    i += 1
+            style_names = list(Style.objects.exclude(id=paint_style_id).values_list('id', flat=True))
+            variants = list(Style.objects.filter(pk__in=random.sample(style_names, 3)).values_list('name', flat=True))
 
         if variants is not None:
             return Response(variants)

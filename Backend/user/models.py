@@ -51,10 +51,16 @@ class Progress(models.Model):
     """
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     achievement = models.ForeignKey(Achievement, on_delete=models.CASCADE)
-    reached = models.BooleanField(default=False, null=False)
+    progress = models.PositiveIntegerField(default=0, null=False)
 
     def __str__(self):
         return self.profile.user.username + ' ' + self.achievement.name
+
+    @property
+    def reached(self):
+        if self.progress == self.achievement.max_score:
+            return True
+        return False
 
 
 class Statistic(models.Model):
@@ -63,7 +69,6 @@ class Statistic(models.Model):
 
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    win_rate = models.FloatField(default=0, null=False)
     games_total = models.PositiveIntegerField(default=0, null=False)
     wins_total = models.PositiveIntegerField(default=0, null=False)
 
@@ -75,3 +80,9 @@ class Statistic(models.Model):
         if created:
             Statistic.objects.create(user=instance)
         instance.statistic.save()
+
+    @property
+    def win_rate(self):
+        if self.games_total == 0:
+            return 0
+        return self.wins_total / self.games_total

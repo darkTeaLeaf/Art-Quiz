@@ -27,12 +27,13 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 
 class ProgressSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField(source='achievement.id')
-    achievement_name = serializers.ReadOnlyField(source='achievement.name')
+    name = serializers.ReadOnlyField(source='achievement.name')
+    max_score = serializers.ReadOnlyField(source='achievement.max_score')
     image = serializers.ImageField(source='achievement.image')
 
     class Meta:
         model = Progress
-        fields = ('id', 'achievement_name', 'image')
+        fields = ('id', 'name', 'max_score', 'image', 'progress', 'reached')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -58,7 +59,7 @@ class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'id', 'username', 'password', 'email', 'first_name', 'last_name', 'profile', 'statistic')
+            'id', 'username', 'email', 'first_name', 'last_name', 'profile', 'statistic')
         write_only_fields = ('password',)
         read_only_fields = ('id', 'statistic',)
 

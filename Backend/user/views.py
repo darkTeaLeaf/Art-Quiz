@@ -27,7 +27,6 @@ class UserViewSet(viewsets.ModelViewSet):
         if user is not None:
             user.statistic.games_total += 1
             user.statistic.wins_total += 1
-            user.statistic.win_rate = user.statistic.wins_total / user.statistic.games_total
             user.save()
             return Response()
         else:
@@ -39,7 +38,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
         if user is not None:
             user.statistic.games_total += 1
-            user.statistic.win_rate = user.statistic.wins_total / user.statistic.games_total
             user.save()
             return Response()
         else:
