@@ -16,8 +16,13 @@ class Achievement(models.Model):
     """
         Achievements to earn by users.
 
+        Achievement types:
+        0 - direct to count amount of victories
+        1 - others (counting number of days in a row when login)
+
     """
     name = models.CharField(max_length=200)
+    type = models.PositiveIntegerField(null=False, default=0)
     max_score = models.PositiveIntegerField(null=False)
     image = models.ImageField(blank=False, null=False, upload_to="achievements/")
 
