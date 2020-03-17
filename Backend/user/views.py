@@ -11,7 +11,23 @@ from user.serializers import StatisticSerializer, UserSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     """
-        API endpoint that allows users to be viewed or edited.
+        retrieve:
+        Return the user specified by id.
+
+        list:
+        Return a list of all the existing users.
+
+        create:
+        Create a new user.
+
+        update:
+        Update of all user fields. Request should contain all user parameters.
+
+        partial_update:
+        Update of all or some of user fields. There is no requirement to contain all the parameters.
+
+        delete:
+        Delete the user specified by id.
 
     """
     queryset = User.objects.all()
@@ -24,6 +40,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['patch'], url_path='statistic/victory')
     def win(self, request, pk=None):
+        """
+            patch:
+            Automatic update of user statistic and achievements in case of right answer.
+
+        """
         user = User.objects.get(id=pk)
 
         if user is not None:
@@ -40,6 +61,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['patch'], url_path='statistic/fail')
     def lose(self, request, pk=None):
+        """
+            patch:
+            Automatic update of user statistic and achievements in case of wrong answer.
+
+        """
         user = User.objects.get(id=pk)
 
         if user is not None:
