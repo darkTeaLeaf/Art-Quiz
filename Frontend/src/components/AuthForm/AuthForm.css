@@ -14,7 +14,8 @@
   z-index: 99;
 }
 
-#AuthForm .sign-in form {
+#AuthForm .sign-in form,
+#AuthForm .sign-up form {
   display: flex;
   flex-direction: column;
 }
