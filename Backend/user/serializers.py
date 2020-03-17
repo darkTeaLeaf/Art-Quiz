@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from user.models import Profile, Statistic
+from user.models import Profile, Statistic, Progress
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -14,22 +14,37 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
         # Instantiate the superclass normally
         super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
 
-        fields = self.context['request'].query_params.get('fields')
+        request = self.context['request']
 
-        if fields:
-            fields = fields.split(',')
-            # Drop any fields that are not specified in the `fields` argument.
-            allowed = set(fields)
-            existing = set(self.fields.keys())
-            for field_name in existing - allowed:
-                self.fields.pop(field_name)
+        if hasattr(request, 'query_params'):
+            fields = request.query_params.get('fields')
+
+            if fields:
+                fields = fields.split(',')
+                # Drop any fields that are not specified in the `fields` argument.
+                allowed = set(fields)
+                existing = set(self.fields.keys())
+                for field_name in existing - allowed:
+                    self.fields.pop(field_name)
+
+
+class ProgressSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField(source='achievement.id')
+    name = serializers.ReadOnlyField(source='achievement.name')
+    max_score = serializers.ReadOnlyField(source='achievement.max_score')
+
+    class Meta:
+        model = Progress
+        fields = ('id', 'name', 'max_score', 'progress', 'reached')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    achievements = ProgressSerializer(source='progress_set', many=True, read_only=True)
+
     class Meta:
         model = Profile
-        fields = ('id', 'avatar')
-        read_only_fields = ('id',)
+        fields = ('id', 'avatar', 'achievements')
+        read_only_fields = ('id', 'achievements')
 
 
 class StatisticSerializer(serializers.ModelSerializer):
@@ -45,7 +60,8 @@ class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name', 'profile', 'statistic')
+        fields = (
+            'id', 'username', 'email', 'first_name', 'last_name', 'profile', 'statistic')
         write_only_fields = ('password',)
         read_only_fields = ('id', 'statistic',)
 

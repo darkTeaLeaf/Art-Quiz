@@ -15,12 +15,16 @@ class UserPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         # Deny actions on objects if the user is not authenticated
+
+        if view.action in ['retrieve']:
+            return True
+
         if not request.user.is_authenticated:
             return False
 
         if view.action in ['update', 'partial_update']:
             return obj == request.user or request.user.is_staff
         elif view.action in ['destroy']:
-            return request.user.is_admin
+            return request.user.is_staff
         else:
             return False
