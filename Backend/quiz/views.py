@@ -24,6 +24,9 @@ class PaintingViewSet(mixins.ListModelMixin,
     serializer_author = AuthorSerializer
     serializer_style = StyleSerializer
 
+    def get_serializer_class(self):
+        return self.serializer_paint
+
     @action(detail=False, methods=['get'])
     def random(self, request):
         """
@@ -62,6 +65,10 @@ class PaintingViewSet(mixins.ListModelMixin,
 
             author_names = list(Author.objects.exclude(id=paint_author_id).values_list('id', flat=True))
             variants = list(Author.objects.filter(pk__in=random.sample(author_names, 3)).values_list('name', flat=True))
+
+
+            print(used_id)
+            print(variants)
 
         if type_ == 'name':
             paint_id = Painting.objects.get(id=pk).id

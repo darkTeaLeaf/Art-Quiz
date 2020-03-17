@@ -1,29 +1,22 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import "./Carousel.css";
-import { switchPainting } from "../../actions";
 
-class Carousel extends Component {
-  componentDidMount() {
-    this.props.switchPainting();
-  }
-
-  render() {
-    return (
-      <div id="Carousel">
-        {Object.keys(this.props.painting).length !== 0
-          ? [
-              <div className="rope"></div>,
-              <img src={this.props.painting.url} alt="painting"></img>
-            ]
-          : ""}
-      </div>
-    );
-  }
-}
-
-const mapStateToProps = state => {
-  return { painting: state.painting };
+const Carousel = ({ painting }) => {
+  return (
+    <div id="Carousel">
+      {painting.id !== null
+        ? [
+            <div key="rope" className="rope"></div>,
+            <img key="painting_image" src={painting.url} alt="painting"></img>
+          ]
+        : ""}
+    </div>
+  );
 };
 
-export default connect(mapStateToProps, { switchPainting })(Carousel);
+const mapStateToProps = store => ({
+  painting: store.painting
+});
+
+export default connect(mapStateToProps)(Carousel);
