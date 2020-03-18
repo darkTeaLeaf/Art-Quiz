@@ -2,8 +2,18 @@ import React from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { signIn, /*signUp*/ } from "../../actions/accountActions";
+import { signIn, signUp } from "../../actions/accountActions";
 import "./AuthForm.css";
+
+const Input = ({ label, type, name, required, register, errors }) => {
+  return (
+    <label>
+      {label}
+      <input type={type} name={name} ref={register({ required })} />
+      {errors[name] && <span>The {label} field is required</span>}
+    </label>
+  );
+};
 
 const SignIn = ({ signIn, toggleAuthFormActive }) => {
   const { register, handleSubmit, errors } = useForm();
@@ -21,15 +31,23 @@ const SignIn = ({ signIn, toggleAuthFormActive }) => {
     <div className="sign-in">
       <h2>Sign in</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" name="username" ref={register({ required: true })} />
-        {errors.username && <span>This field is required</span>}
+        <Input
+          label="Username"
+          type="text"
+          name="username"
+          register={register}
+          errors={errors}
+          required
+        />
 
-        <input
+        <Input
+          label="Password"
           type="password"
           name="password"
-          ref={register({ required: true })}
+          register={register}
+          errors={errors}
+          required
         />
-        {errors.password && <span>This field is required</span>}
 
         <input type="submit" />
       </form>
@@ -37,47 +55,81 @@ const SignIn = ({ signIn, toggleAuthFormActive }) => {
   );
 };
 
-const SignUp = ({ /*signUp,*/ toggleAuthFormActive }) => {
+const SignUp = ({ signUp, toggleAuthFormActive }) => {
   const { register, handleSubmit, errors } = useForm();
   const history = useHistory();
 
   const onSubmit = async credentials => {
-    // const status = await signUp(credentials);
-    // if (status === "success") {
-    //   history.push("/account");
-    //   toggleAuthFormActive(false);
-    // }
+    let formData = new FormData();
+    for (let key in credentials) {
+      formData.append(key, credentials[key]);
+    }
+    formData.set("avatar", credentials.avatar[0]);
+
+    const status = await signUp(formData);
+    if (status === "success") {
+      history.push("/account");
+      toggleAuthFormActive(false);
+    }
   };
 
   return (
     <div className="sign-up">
       <h2>Sign up</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="file" name="username" ref={register({ required: true })} />
-        {errors.username && <span>This field is required</span>}
-
-        <input type="text" name="username" ref={register({ required: true })} />
-        {errors.username && <span>This field is required</span>}
-
-        <input
-          type="text"
-          name="firstName"
-          ref={register({ required: true })}
+        <Input
+          label="Avatar"
+          type="file"
+          name="avatar"
+          register={register}
+          errors={errors}
+          required
         />
-        {errors.firstName && <span>This field is required</span>}
 
-        <input type="text" name="lastName" ref={register({ required: true })} />
-        {errors.lastName && <span>This field is required</span>}
+        <Input
+          label="Username"
+          type="text"
+          name="username"
+          register={register}
+          errors={errors}
+          required
+        />
 
-        <input type="email" name="email" ref={register({ required: true })} />
-        {errors.email && <span>This field is required</span>}
+        <Input
+          label="First name"
+          type="text"
+          name="first_name"
+          register={register}
+          errors={errors}
+          required
+        />
 
-        <input
+        <Input
+          label="Last name"
+          type="text"
+          name="last_name"
+          register={register}
+          errors={errors}
+          required
+        />
+
+        <Input
+          label="Email"
+          type="email"
+          name="email"
+          register={register}
+          errors={errors}
+          required
+        />
+
+        <Input
+          label="Password"
           type="password"
           name="password"
-          ref={register({ required: true })}
+          register={register}
+          errors={errors}
+          required
         />
-        {errors.password && <span>This field is required</span>}
 
         <input type="submit" />
       </form>
@@ -85,7 +137,7 @@ const SignUp = ({ /*signUp,*/ toggleAuthFormActive }) => {
   );
 };
 
-const AuthForm = ({ signIn, toggleAuthFormActive }) => {
+const AuthForm = ({ signIn, signUp, toggleAuthFormActive }) => {
   return (
     <div id="AuthForm">
       <button
@@ -98,14 +150,14 @@ const AuthForm = ({ signIn, toggleAuthFormActive }) => {
       </button>
 
       <SignIn signIn={signIn} toggleAuthFormActive={toggleAuthFormActive} />
-      <SignUp />
+      <SignUp signUp={signUp} toggleAuthFormActive={toggleAuthFormActive} />
     </div>
   );
 };
 
 const mapDispatchToProps = dispatch => ({
   signIn: credentials => dispatch(signIn(credentials)),
-  // signUp: credentials => dispatch(signUp(credentials))
+  signUp: credentials => dispatch(signUp(credentials))
 });
 
 export default connect(null, mapDispatchToProps)(AuthForm);
