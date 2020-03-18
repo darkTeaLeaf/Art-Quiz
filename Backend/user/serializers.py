@@ -38,13 +38,13 @@ class ProgressSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'max_score', 'progress', 'reached')
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    achievements = ProgressSerializer(source='progress_set', many=True, read_only=True)
-
-    class Meta:
-        model = Profile
-        fields = ('id', 'avatar', 'achievements')
-        read_only_fields = ('id', 'achievements')
+# class ProfileSerializer(serializers.ModelSerializer):
+#     achievements = ProgressSerializer(source='progress_set', many=True, read_only=True)
+#
+#     class Meta:
+#         model = Profile
+#         fields = ('id', 'avatar', 'achievements')
+#         read_only_fields = ('id', 'achievements')
 
 
 class StatisticSerializer(serializers.ModelSerializer):
@@ -55,17 +55,19 @@ class StatisticSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
-    profile = ProfileSerializer()
+    avatar = serializers.ImageField(source="profile.avatar")
+    achievements = ProgressSerializer(source='profile.progress_set', many=True, read_only=True)
     statistic = StatisticSerializer(read_only=True)
 
     class Meta:
         model = User
         fields = (
-            'id', 'username', 'email', 'first_name', 'last_name', 'profile', 'statistic')
+            'id', 'username', 'password', 'email', 'first_name', 'last_name', 'avatar', 'achievements', 'statistic')
         write_only_fields = ('password',)
         read_only_fields = ('id', 'statistic',)
 
     def create(self, validated_data):
+        print(validated_data)
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -75,7 +77,7 @@ class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
 
         user.set_password(validated_data['password'])
 
-        profile_data = validated_data.pop('profile')
+        profile_data = validated_data.get('profile')
 
         if profile_data:
             user.profile.avatar = profile_data['avatar']
