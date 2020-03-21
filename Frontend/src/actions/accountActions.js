@@ -56,25 +56,18 @@ export const signIn = credentials => {
 export const signUp = credentials => {
   return async dispatch => {
     try {
-      await axios.post(
+      const {
+        data: { token, id }
+      } = await axios.post(
         `${process.env.REACT_APP_BACKEND_ADDRESS}/users/`,
         credentials,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      const signInStatus = await dispatch(
-        signIn({
-          username: credentials.get("username"),
-          password: credentials.get("password")
-        })
-      );
+      localStorage.setItem("token", token);
+      localStorage.setItem("id", id);
 
-      if (signInStatus === "success") {
-        dispatch(signUpSuccess());
-      } else {
-        throw new Error(signInStatus);
-      }
-
+      dispatch(signUpSuccess());
       return "success";
     } catch (error) {
       dispatch(signUpFailure());
