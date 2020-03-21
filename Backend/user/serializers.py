@@ -67,7 +67,6 @@ class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
         read_only_fields = ('id', 'statistic',)
 
     def create(self, validated_data):
-        print(validated_data)
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],

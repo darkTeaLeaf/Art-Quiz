@@ -40,6 +40,15 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_user
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        token = Token.objects.get(user_id=serializer.data['id'])
+
+        return Response({'id': token.user_id, 'token': token.key}, status=status.HTTP_201_CREATED, headers=headers)
+
     @action(detail=True, methods=['patch'], url_path='statistic/victory')
     def win(self, request, pk=None):
         """
