@@ -109,25 +109,10 @@ const getUserDataFailure = () => ({
 export const getUserData = () => {
   return async (dispatch, getState) => {
     try {
-      // const id = getState().account.id;
-      // const userData = await axios.get(
-      //   `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}`
-      // );
-
-      // TODO: replace by real data from request to backend
-      const userData = {
-        id: 3,
-        username: "irek",
-        password:
-          "pbkdf2_sha256$180000$1yVyW9K5i6pa$/2i0uU8+LahweS2bCj7XSUXwpjiVQXXVVLeXtwSTQoQ=",
-        email: "irek_nazmiev@mail.ru",
-        first_name: "Irek",
-        last_name: "Nazmiev",
-        avatar:
-          "http://localhost:8000/media/users/%D0%B1%D0%BE%D0%B1%D1%803.jpg",
-        achievements: [],
-        statistic: { id: 1, win_rate: 0, games_total: 0, wins_total: 0 }
-      };
+      const id = getState().account.id;
+      const {data: userData} = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/`
+      );
 
       dispatch(updateUserData(userData));
       return "success";
