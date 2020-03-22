@@ -97,7 +97,7 @@ const updateUserData = ({
     achievements,
     statistic,
     firstName: first_name,
-    lastName: last_name,
+    lastName: last_name
   }
 });
 
@@ -110,8 +110,14 @@ export const getUserData = () => {
   return async (dispatch, getState) => {
     try {
       const id = getState().account.id;
-      const {data: userData} = await axios.get(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/`
+      const token = localStorage.getItem("token");
+      const { data: userData } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/`,
+        {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        }
       );
 
       dispatch(updateUserData(userData));
