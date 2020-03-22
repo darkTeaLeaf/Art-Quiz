@@ -4,14 +4,15 @@ import {
   SIGN_IN_FAILURE,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-  GET_USER_DATA_SUCCESS,
+  UPDATE_USER_DATA,
   GET_USER_DATA_FAILURE,
   SIGN_OUT
 } from "../constants";
 
-const signInSuccess = () => ({
+const signInSuccess = id => ({
   type: SIGN_IN_SUCCESS,
   payload: {
+    id,
     isAuthenticated: true
   }
 });
@@ -34,7 +35,7 @@ export const signIn = credentials => {
       localStorage.setItem("token", token);
       localStorage.setItem("id", id);
 
-      dispatch(signInSuccess());
+      dispatch(signInSuccess(id));
       return "success";
     } catch (error) {
       dispatch(signInFailure());
@@ -43,9 +44,10 @@ export const signIn = credentials => {
   };
 };
 
-const signUpSuccess = () => ({
+const signUpSuccess = id => ({
   type: SIGN_UP_SUCCESS,
   payload: {
+    id,
     isAuthenticated: true
   }
 });
@@ -69,7 +71,7 @@ export const signUp = credentials => {
       localStorage.setItem("token", token);
       localStorage.setItem("id", id);
 
-      dispatch(signUpSuccess());
+      dispatch(signUpSuccess(id));
       return "success";
     } catch (error) {
       dispatch(signUpFailure());
@@ -78,10 +80,28 @@ export const signUp = credentials => {
   };
 };
 
-const getUserDataSuccess = () => ({
-  type: GET_USER_DATA_SUCCESS,
+const updateUserData = ({
+  username,
+  email,
+  first_name,
+  last_name,
+  avatar,
+  achievements,
+  statistic: { win_rate, games_total, wins_total }
+}) => ({
+  type: UPDATE_USER_DATA,
   payload: {
-    isAuthenticated: true
+    username,
+    email,
+    avatar,
+    achievements,
+    statistic: {
+      winRate: win_rate,
+      gamesTotal: games_total,
+      winsTotal: wins_total
+    },
+    firstName: first_name,
+    lastName: last_name
   }
 });
 
@@ -91,9 +111,20 @@ const getUserDataFailure = () => ({
 });
 
 export const getUserData = () => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     try {
-      dispatch(getUserDataSuccess());
+      const id = getState().account.id;
+      const token = localStorage.getItem("token");
+      const { data: userData } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/`,
+        {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        }
+      );
+
+      dispatch(updateUserData(userData));
       return "success";
     } catch (error) {
       dispatch(getUserDataFailure());
@@ -102,10 +133,9 @@ export const getUserData = () => {
   };
 };
 
-
 export const signOut = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("id");
 
-  return { type: SIGN_OUT, payload: { isAuthenticated: false } };
+  return { type: SIGN_OUT, payload: { id: null, isAuthenticated: false } };
 };

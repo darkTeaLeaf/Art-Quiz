@@ -3,22 +3,76 @@ import "./Account.css";
 import { connect } from "react-redux";
 import { Redirect, withRouter } from "react-router-dom";
 import { getUserData } from "../../actions/accountActions";
+import Avatar from "../../components/UI/Avatar";
+import Button from "../../components/UI/Button";
 
-const Account = ({ isAuthenticated, getUserData }) => {
+const Account = ({ isAuthenticated, userData, getUserData }) => {
   useEffect(() => {
     if (isAuthenticated) {
       getUserData();
     }
   }, []);
 
+  const {
+    username,
+    firstName,
+    lastName,
+    avatar,
+    statistic: { winRate, winsTotal, gamesTotal }
+  } = userData;
+
   return isAuthenticated ? (
-    <div id="Account">Account page :)</div>
+    <div id="Account">
+      <aside className="profile-info">
+        <Avatar
+          className="user-pic"
+          src={avatar}
+          width="315px"
+          height="315px"
+          rounded
+          borderWidth="15px"
+        />
+
+        <span className="first-name">{firstName}</span>
+        <span className="last-name">{lastName}</span>
+
+        <Button>Edit account data</Button>
+      </aside>
+
+      <main className="user-data">
+        <div className="welcome-msg-wrapper">
+          <h1 className="welcome-msg">
+            Welcome, <span>{username}!</span>
+          </h1>
+        </div>
+
+        <section className="achievements">
+          <h2>Your achievements</h2>
+          <div className="wrapper"></div>
+        </section>
+
+        <section className="statistics">
+          <h2>Your statistics</h2>
+          <div className="wrapper">
+            <div className="title">Win rate:</div>
+            <div className="stat">{winRate}%</div>
+
+            <div className="title">Wins total:</div>
+            <div className="stat">{winsTotal}</div>
+
+            <div className="title">Games total:</div>
+            <div className="stat">{gamesTotal}</div>
+          </div>
+        </section>
+      </main>
+    </div>
   ) : (
     <Redirect to="/" />
   );
 };
 
 const mapStateToProps = store => ({
+  userData: store.account.userData,
   isAuthenticated: store.account.isAuthenticated
 });
 

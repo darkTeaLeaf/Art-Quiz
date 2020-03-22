@@ -31,26 +31,24 @@ const Home = ({ winsCounter, answered, switchPainting, setWinsCounter }) => {
 
   return (
     <div id="Home">
-      <section>
-        <div className="container">
-          <div className="wins-counter">
-            <img src={process.env.PUBLIC_URL + "/img/flag.svg"} alt="flag" />
-            {winsCounter}
-          </div>
-
-          <div className="quiz">
-            <Carousel />
-            <AnswerOptions />
-          </div>
-
-          <button className="arrow-next" onClick={nextPainting}>
-            <img
-              src={process.env.PUBLIC_URL + "/img/arrow-next.svg"}
-              alt="arrow-next"
-            />
-          </button>
+      <div className="container">
+        <div className="wins-counter">
+          <img src={process.env.PUBLIC_URL + "/img/flag.svg"} alt="flag" />
+          {winsCounter}
         </div>
-      </section>
+
+        <div className="quiz">
+          <Carousel />
+          <AnswerOptions />
+        </div>
+
+        <button className="arrow-next" onClick={nextPainting}>
+          <img
+            src={process.env.PUBLIC_URL + "/img/arrow-next.svg"}
+            alt="arrow-next"
+          />
+        </button>
+      </div>
     </div>
   );
 };
