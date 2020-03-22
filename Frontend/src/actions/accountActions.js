@@ -4,10 +4,12 @@ import {
   SIGN_IN_FAILURE,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
+  GET_USER_DATA_SUCCESS,
+  GET_USER_DATA_FAILURE,
   SIGN_OUT
 } from "../constants";
 
-export const signInSuccess = () => ({
+const signInSuccess = () => ({
   type: SIGN_IN_SUCCESS,
   payload: {
     isAuthenticated: true
@@ -16,18 +18,6 @@ export const signInSuccess = () => ({
 
 const signInFailure = () => ({
   type: SIGN_IN_FAILURE,
-  payload: {}
-});
-
-const signUpSuccess = () => ({
-  type: SIGN_UP_SUCCESS,
-  payload: {
-    isAuthenticated: true
-  }
-});
-
-const signUpFailure = () => ({
-  type: SIGN_UP_FAILURE,
   payload: {}
 });
 
@@ -53,6 +43,18 @@ export const signIn = credentials => {
   };
 };
 
+const signUpSuccess = () => ({
+  type: SIGN_UP_SUCCESS,
+  payload: {
+    isAuthenticated: true
+  }
+});
+
+const signUpFailure = () => ({
+  type: SIGN_UP_FAILURE,
+  payload: {}
+});
+
 export const signUp = credentials => {
   return async dispatch => {
     try {
@@ -75,6 +77,31 @@ export const signUp = credentials => {
     }
   };
 };
+
+const getUserDataSuccess = () => ({
+  type: GET_USER_DATA_SUCCESS,
+  payload: {
+    isAuthenticated: true
+  }
+});
+
+const getUserDataFailure = () => ({
+  type: GET_USER_DATA_FAILURE,
+  payload: {}
+});
+
+export const getUserData = () => {
+  return async dispatch => {
+    try {
+      dispatch(getUserDataSuccess());
+      return "success";
+    } catch (error) {
+      dispatch(getUserDataFailure());
+      return error.message;
+    }
+  };
+};
+
 
 export const signOut = () => {
   localStorage.removeItem("token");
