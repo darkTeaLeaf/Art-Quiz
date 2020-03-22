@@ -5,16 +5,16 @@ const Button = styled.button`
   flex: 1 0;
   justify-content: center;
   min-width: 40%;
-  padding: 0.8vw 0;
-  border: 0.3vw solid black;
-  font-size: 1.5vw;
+  padding: 10px 0;
+  border: 5px solid black;
+  font-size: 20px;
   font-family: "Judson", serif;
   transition: box-shadow 0.3s ease;
   position: relative;
   box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
 
   &:hover {
-    box-shadow: 0.4vw -0.4vw 0 0 rgba(0, 0, 0, 1);
+    box-shadow: 5px -5px 0 0 rgba(0, 0, 0, 1);
   }
 
   ${props =>
@@ -38,9 +38,9 @@ const Button = styled.button`
         background-size: contain;
         background-repeat: no-repeat;
         position: absolute;
-        width: 2vw;
-        height: 2vw;
-        top: -1.2vw;
+        width: 26px;
+        height: 26px;
+        top: -16px;
       }
     `}
 `;
