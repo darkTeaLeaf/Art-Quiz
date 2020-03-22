@@ -1,6 +1,10 @@
 #Account {
-  height: 100%;
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
+}
+
+#Account .profile-info {
+  display: flex;
+  flex-direction: column;
 }
