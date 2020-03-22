@@ -20,14 +20,14 @@ export function carouselReducer(state = initialState, action) {
       if (!state.answered) {
         const answer = action.payload;
         if (answer === state.correctAnswer.answer) {
-          alert("CORRECT!");
+          alert("CORRECT!");   // TODO: move alerts to actions
           return {
             ...state,
             winsCounter: state.winsCounter + 1,
             answered: true
           };
         } else {
-          alert("WRONG!");
+          alert("WRONG!");    // TODO: move alerts to actions
           return {
             ...state,
             winsCounter: 0,

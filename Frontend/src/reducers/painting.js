@@ -2,7 +2,7 @@ import { SET_PAINTING, SET_PAINTING_FAIL } from "../constants";
 
 const initialState = {
   id: null,
-  url: "",
+  url: ""
 };
 
 export function paintingReducer(state = initialState, action) {
@@ -12,7 +12,7 @@ export function paintingReducer(state = initialState, action) {
       return {
         ...state,
         url: process.env.REACT_APP_BACKEND_ADDRESS + url,
-        id,
+        id
       };
     }
 

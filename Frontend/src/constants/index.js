@@ -6,3 +6,9 @@ export const SET_CORRECT_ANSWER = "SET_CORRECT_ANSWER";
 export const SET_ANSWERS = "SET_ANSWERS";
 export const SET_ANSWERED = "SET_ANSWERED";
 export const SET_WINS_COUNTER = "SET_WINS_COUNTER";
+
+export const SIGN_IN_SUCCESS = "SIGN_IN_SUCCESS";
+export const SIGN_IN_FAILURE = "SIGN_IN_FAILURE";
+export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
+export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
+export const SIGN_OUT = "SIGN_OUT";
