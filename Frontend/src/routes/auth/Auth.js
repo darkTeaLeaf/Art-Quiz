@@ -59,6 +59,10 @@ const SignUp = ({ signUp }) => {
   const history = useHistory();
 
   const onSubmit = async credentials => {
+    const [first_name, last_name] = credentials.full_name.trim().split(/\s+/);
+    credentials = { ...credentials, first_name, last_name };
+    delete credentials.full_name;
+
     let formData = new FormData();
     for (let key in credentials) {
       formData.append(key, credentials[key]);
@@ -85,27 +89,18 @@ const SignUp = ({ signUp }) => {
         />
 
         <Input
+          label="Full name"
+          type="text"
+          name="full_name"
+          register={register}
+          errors={errors}
+          required
+        />
+
+        <Input
           label="Username"
           type="text"
           name="username"
-          register={register}
-          errors={errors}
-          required
-        />
-
-        <Input
-          label="First name"
-          type="text"
-          name="first_name"
-          register={register}
-          errors={errors}
-          required
-        />
-
-        <Input
-          label="Last name"
-          type="text"
-          name="last_name"
           register={register}
           errors={errors}
           required
@@ -139,7 +134,7 @@ const AuthForm = ({ isAuthenticated, signIn, signUp }) => {
   return isAuthenticated ? (
     <Redirect to="/account" />
   ) : (
-    <div id="AuthForm">
+    <div id="Auth">
       <SignIn signIn={signIn} />
       <SignUp signUp={signUp} />
     </div>
