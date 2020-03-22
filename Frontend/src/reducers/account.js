@@ -9,13 +9,15 @@ import {
 const initialState = {
   id: localStorage.getItem("id"),
   isAuthenticated: localStorage.getItem("token") !== null ? true : false,
-  username: "",
-  email: "",
-  firstName: "",
-  lastName: "",
-  avatar: "",
-  achievements: [],
-  statistic: {}
+  userData: {
+    username: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    avatar: "",
+    achievements: [],
+    statistic: {}
+  }
 };
 
 export function accountReducer(state = initialState, action) {
@@ -44,7 +46,7 @@ export function accountReducer(state = initialState, action) {
     case UPDATE_USER_DATA: {
       return {
         ...state,
-        ...action.payload
+        userData: { ...state.userData, ...action.payload }
       };
     }
 

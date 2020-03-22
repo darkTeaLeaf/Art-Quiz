@@ -4,21 +4,31 @@ import { connect } from "react-redux";
 import { Redirect, withRouter } from "react-router-dom";
 import { getUserData } from "../../actions/accountActions";
 
-const Account = ({ isAuthenticated, getUserData }) => {
+const Account = ({ isAuthenticated, userData, getUserData }) => {
   useEffect(() => {
     if (isAuthenticated) {
       getUserData();
     }
   }, []);
 
+  const { username, firstName, lastName, avatar } = userData;
+
   return isAuthenticated ? (
-    <div id="Account">Account page :)</div>
+    <div id="Account">
+      <ul>
+        <li><img src={avatar} alt="user profile" width="200px" /></li>
+        <li>{username}</li>
+        <li>{firstName}</li>
+        <li>{lastName}</li>
+      </ul>
+    </div>
   ) : (
     <Redirect to="/" />
   );
 };
 
 const mapStateToProps = store => ({
+  userData: store.account.userData,
   isAuthenticated: store.account.isAuthenticated
 });
 
