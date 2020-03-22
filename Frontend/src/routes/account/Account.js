@@ -13,7 +13,13 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
     }
   }, []);
 
-  const { username, firstName, lastName, avatar } = userData;
+  const {
+    username,
+    firstName,
+    lastName,
+    avatar,
+    statistic: { winRate, winsTotal, gamesTotal }
+  } = userData;
 
   return isAuthenticated ? (
     <div id="Account">
@@ -47,7 +53,16 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
 
         <section className="statistics">
           <h2>Your statistics</h2>
-          <div className="wrapper"></div>
+          <div className="wrapper">
+            <div className="title">Win rate:</div>
+            <div className="stat">{winRate}%</div>
+
+            <div className="title">Wins total:</div>
+            <div className="stat">{winsTotal}</div>
+
+            <div className="title">Games total:</div>
+            <div className="stat">{gamesTotal}</div>
+          </div>
         </section>
       </main>
     </div>

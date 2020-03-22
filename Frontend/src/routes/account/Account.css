@@ -60,8 +60,30 @@
   font-size: 35px;
   line-height: 35px;
   text-decoration: underline;
+  margin-bottom: 40px;
 }
 
 #Account .user-data .achievements {
   margin-bottom: 115px;
+}
+
+#Account .user-data .statistics .wrapper {
+  font-family: Raleway;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  line-height: 35px;
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#Account .user-data .statistics .title,
+#Account .user-data .statistics .stat {
+  width: 50%;
+}
+
+#Account .user-data .statistics .stat {
+  font-weight: bold;
+  padding-left: 15px;
 }

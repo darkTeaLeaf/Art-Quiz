@@ -87,7 +87,7 @@ const updateUserData = ({
   last_name,
   avatar,
   achievements,
-  statistic
+  statistic: { win_rate, games_total, wins_total }
 }) => ({
   type: UPDATE_USER_DATA,
   payload: {
@@ -95,7 +95,11 @@ const updateUserData = ({
     email,
     avatar,
     achievements,
-    statistic,
+    statistic: {
+      winRate: win_rate,
+      gamesTotal: games_total,
+      winsTotal: wins_total
+    },
     firstName: first_name,
     lastName: last_name
   }
