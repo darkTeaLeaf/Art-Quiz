@@ -1,45 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 import { connect } from "react-redux";
-import { BrowserRouter, Route, Link, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import Home from "../../routes/home";
+import Auth from "../../routes/auth";
 import Account from "../../routes/account";
-import AuthForm from "../AuthForm";
 import { signOut } from "../../actions/accountActions";
 
 const App = ({ isAuthenticated, signOut }) => {
-  const [isAuthFormActive, toggleAuthFormActive] = useState(false);
-
-  const checkAuth = e => {
-    if (!isAuthenticated) {
-      e.preventDefault();
-      toggleAuthFormActive(true);
-    }
-  };
-
   return (
     <BrowserRouter>
       <div id="App">
         <nav>
           <Link to="/">Home</Link>
-          <Link to="/account" onClick={checkAuth}>
-            Account
-          </Link>
-          {isAuthenticated && <Link to="/" onClick={signOut}>Sign out</Link>}
+          {isAuthenticated ? (
+            <Link to="/account">Account</Link>
+          ) : (
+            <Link to="/auth">Log in</Link>
+          )}
+          {isAuthenticated && (
+            <Link to="/" onClick={signOut}>
+              Sign out
+            </Link>
+          )}
         </nav>
-
-        {isAuthFormActive && (
-          <AuthForm toggleAuthFormActive={toggleAuthFormActive} />
-        )}
 
         <Switch>
           <Route exact path="/" component={Home} />
-
-          {isAuthenticated ? (
-            <Route exact path="/account" component={Account} />
-          ) : (
-            <Redirect to="/" />
-          )}
+          <Route exact path="/auth" component={Auth} />
+          <Route exact path="/account" component={Account} />
         </Switch>
       </div>
     </BrowserRouter>

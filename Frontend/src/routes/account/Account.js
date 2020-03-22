@@ -1,10 +1,18 @@
 import React from "react";
 import "./Account.css";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 
-const Account = () => {
-  return <div id="Account">Account page :)</div>;
+const Account = ({ isAuthenticated }) => {
+  return isAuthenticated ? (
+    <div id="Account">Account page :)</div>
+  ) : (
+    <Redirect to="/" />
+  );
 };
 
-export default withRouter(connect()(Account));
+const mapStateToProps = store => ({
+  isAuthenticated: store.account.isAuthenticated
+});
+
+export default withRouter(connect(mapStateToProps)(Account));

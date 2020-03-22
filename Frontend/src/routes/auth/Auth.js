@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { signIn, signUp } from "../../actions/accountActions";
-import "./AuthForm.css";
+import "./Auth.css";
 
 const Input = ({ label, type, name, required, register, errors }) => {
   return (
@@ -15,7 +15,7 @@ const Input = ({ label, type, name, required, register, errors }) => {
   );
 };
 
-const SignIn = ({ signIn, toggleAuthFormActive }) => {
+const SignIn = ({ signIn }) => {
   const { register, handleSubmit, errors } = useForm();
   const history = useHistory();
 
@@ -23,7 +23,6 @@ const SignIn = ({ signIn, toggleAuthFormActive }) => {
     const status = await signIn(credentials);
     if (status === "success") {
       history.push("/account");
-      toggleAuthFormActive(false);
     }
   };
 
@@ -55,7 +54,7 @@ const SignIn = ({ signIn, toggleAuthFormActive }) => {
   );
 };
 
-const SignUp = ({ signUp, toggleAuthFormActive }) => {
+const SignUp = ({ signUp }) => {
   const { register, handleSubmit, errors } = useForm();
   const history = useHistory();
 
@@ -69,7 +68,6 @@ const SignUp = ({ signUp, toggleAuthFormActive }) => {
     const status = await signUp(formData);
     if (status === "success") {
       history.push("/account");
-      toggleAuthFormActive(false);
     }
   };
 
@@ -137,27 +135,24 @@ const SignUp = ({ signUp, toggleAuthFormActive }) => {
   );
 };
 
-const AuthForm = ({ signIn, signUp, toggleAuthFormActive }) => {
-  return (
+const AuthForm = ({ isAuthenticated, signIn, signUp }) => {
+  return isAuthenticated ? (
+    <Redirect to="/account" />
+  ) : (
     <div id="AuthForm">
-      <button
-        className="close"
-        onClick={() => {
-          toggleAuthFormActive(false);
-        }}
-      >
-        ✕
-      </button>
-
-      <SignIn signIn={signIn} toggleAuthFormActive={toggleAuthFormActive} />
-      <SignUp signUp={signUp} toggleAuthFormActive={toggleAuthFormActive} />
+      <SignIn signIn={signIn} />
+      <SignUp signUp={signUp} />
     </div>
   );
 };
+
+const mapStateToProps = store => ({
+  isAuthenticated: store.account.isAuthenticated
+});
 
 const mapDispatchToProps = dispatch => ({
   signIn: credentials => dispatch(signIn(credentials)),
   signUp: credentials => dispatch(signUp(credentials))
 });
 
-export default connect(null, mapDispatchToProps)(AuthForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AuthForm);
