@@ -55,7 +55,7 @@ class StatisticSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
-    avatar = serializers.ImageField(source="profile.avatar")
+    avatar = serializers.ImageField(source="profile.avatar", allow_empty_file=True, required=False)
     achievements = ProgressSerializer(source='profile.progress_set', many=True, read_only=True)
     statistic = StatisticSerializer(read_only=True)
 
