@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Redirect, withRouter } from "react-router-dom";
 import { getUserData } from "../../actions/accountActions";
 import Avatar from "../../components/UI/Avatar";
+import Button from "../../components/UI/Button";
 
 const Account = ({ isAuthenticated, userData, getUserData }) => {
   useEffect(() => {
@@ -17,9 +18,19 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
   return isAuthenticated ? (
     <div id="Account">
       <aside className="profile-info">
-        <Avatar src={avatar} width="315px" height="315px" rounded borderWidth="15px" />
+        <Avatar
+          className="user-pic"
+          src={avatar}
+          width="315px"
+          height="315px"
+          rounded
+          borderWidth="15px"
+        />
+
         <span className="first-name">{firstName}</span>
         <span className="last-name">{lastName}</span>
+
+        <Button>Edit account data</Button>
       </aside>
 
       <main className="user-data">

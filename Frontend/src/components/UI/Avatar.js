@@ -1,19 +1,15 @@
-import React from "react";
+import styled from "styled-components";
 
-const Avatar = ({ src, width, height, rounded=false, borderWidth=0 }) => {
-  const style = {
-    width,
-    height,
-    overflow: "hidden",
-    backgroundImage: `url(${src})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center center",
-    backgroundRepeat: "no-repeat",
-    borderRadius: rounded ? "50%" : "",
-    border: `${borderWidth} solid black`,
-  };
-
-  return <div style={style}></div>;
-};
+const Avatar = styled.div`
+  width: ${props => props.width};
+  height: ${props => props.height};
+  overflow: hidden;
+  background-image: url(${props => props.src});
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-radius: ${props => (props.rounded ? "50%" : "")};
+  border: ${props => props.borderWidth || "0"} solid black;
+`;
 
 export default Avatar;

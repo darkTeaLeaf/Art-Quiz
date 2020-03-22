@@ -8,3 +8,19 @@
   display: flex;
   flex-direction: column;
 }
+
+#Account .profile-info .user-pic {
+  margin-bottom: 55px;
+}
+
+#Account .profile-info .first-name,
+#Account .profile-info .last-name {
+  font-family: "Judson", serif;
+  font-weight: 700;
+  font-size: 45px;
+  line-height: 50px;
+}
+
+#Account .profile-info button {
+  margin-top: 35px;
+}

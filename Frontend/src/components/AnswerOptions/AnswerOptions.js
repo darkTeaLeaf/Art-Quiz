@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import "./AnswerOptions.css";
+import Button from '../UI/Button';
 import { submitAnswer } from "../../actions/carouselActions";
 
 const AnswerOptions = ({ ansOptions, answered, correctAnswer, submitAnswer }) => {
@@ -8,13 +9,15 @@ const AnswerOptions = ({ ansOptions, answered, correctAnswer, submitAnswer }) =>
     <div id="AnswerOptions" className={answered ? "answered" : ""}>
       {ansOptions.length !== 0
         ? ansOptions.map(option => (
-            <button
+            <Button
               key={`${option.id}`}
-              className={answered && option.answer === correctAnswer.answer ? "correct" : ""}
+              pin
+              answered={answered}
+              correct={option.answer === correctAnswer.answer}
               onClick={() => submitAnswer(option.answer)}
             >
               {option.answer}
-            </button>
+            </Button>
           ))
         : ""}
     </div>
