@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { signIn, signUp } from "../../actions/accountActions";
 import "./Auth.css";
 
-const Input = ({ label, type, name, required, register, errors }) => {
+const Input = ({ label, type, name, required = false, register, errors }) => {
   return (
     <label>
       {label}
@@ -60,14 +60,19 @@ const SignUp = ({ signUp }) => {
 
   const onSubmit = async credentials => {
     const [first_name, last_name] = credentials.full_name.trim().split(/\s+/);
-    credentials = { ...credentials, first_name, last_name };
+    credentials = {
+      ...credentials,
+      first_name: first_name || "",
+      last_name: last_name || "",
+      avatar: credentials.avatar[0]
+    };
     delete credentials.full_name;
+    if (!credentials.avatar) delete credentials.avatar;
 
     let formData = new FormData();
     for (let key in credentials) {
       formData.append(key, credentials[key]);
     }
-    formData.set("avatar", credentials.avatar[0]);
 
     const status = await signUp(formData);
     if (status === "success") {
@@ -85,7 +90,6 @@ const SignUp = ({ signUp }) => {
           name="avatar"
           register={register}
           errors={errors}
-          required
         />
 
         <Input
@@ -94,7 +98,6 @@ const SignUp = ({ signUp }) => {
           name="full_name"
           register={register}
           errors={errors}
-          required
         />
 
         <Input
@@ -112,7 +115,6 @@ const SignUp = ({ signUp }) => {
           name="email"
           register={register}
           errors={errors}
-          required
         />
 
         <Input
