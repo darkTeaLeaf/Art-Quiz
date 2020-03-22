@@ -1,4 +1,10 @@
-import { SIGN_IN_SUCCESS, SIGN_UP_SUCCESS, SIGN_OUT } from "../constants";
+import {
+  SIGN_IN_SUCCESS,
+  SIGN_UP_SUCCESS,
+  GET_USER_DATA_SUCCESS,
+  GET_USER_DATA_FAILURE,
+  SIGN_OUT
+} from "../constants";
 
 const initialState = {
   isAuthenticated: localStorage.getItem("token") !== null ? true : false
@@ -28,6 +34,14 @@ export function accountReducer(state = initialState, action) {
         ...state,
         isAuthenticated
       };
+    }
+
+    case GET_USER_DATA_SUCCESS: {
+      return { ...state };
+    }
+
+    case GET_USER_DATA_FAILURE: {
+      return { ...state };
     }
 
     default:
