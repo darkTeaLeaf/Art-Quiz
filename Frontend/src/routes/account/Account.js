@@ -34,9 +34,21 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
       </aside>
 
       <main className="user-data">
-        <section className="welcome-msg">Welcome, {username}!</section>
-        <section className="achievements">Achievements</section>
-        <section className="stats">Statistics</section>
+        <div className="welcome-msg-wrapper">
+          <h1 className="welcome-msg">
+            Welcome, <span>{username}!</span>
+          </h1>
+        </div>
+
+        <section className="achievements">
+          <h2>Your achievements</h2>
+          <div className="wrapper"></div>
+        </section>
+
+        <section className="statistics">
+          <h2>Your statistics</h2>
+          <div className="wrapper"></div>
+        </section>
       </main>
     </div>
   ) : (
