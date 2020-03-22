@@ -1,43 +1,51 @@
 import {
   SIGN_IN_SUCCESS,
   SIGN_UP_SUCCESS,
-  GET_USER_DATA_SUCCESS,
+  UPDATE_USER_DATA,
   GET_USER_DATA_FAILURE,
   SIGN_OUT
 } from "../constants";
 
 const initialState = {
-  isAuthenticated: localStorage.getItem("token") !== null ? true : false
+  id: localStorage.getItem("id"),
+  isAuthenticated: localStorage.getItem("token") !== null ? true : false,
+  username: "",
+  email: "",
+  firstName: "",
+  lastName: "",
+  avatar: "",
+  achievements: [],
+  statistic: {}
 };
 
 export function accountReducer(state = initialState, action) {
   switch (action.type) {
     case SIGN_IN_SUCCESS: {
-      const { isAuthenticated } = action.payload;
       return {
         ...state,
-        isAuthenticated
+        ...action.payload
       };
     }
 
     case SIGN_UP_SUCCESS: {
-      const { isAuthenticated } = action.payload;
       return {
         ...state,
-        isAuthenticated
+        ...action.payload
       };
     }
 
     case SIGN_OUT: {
-      const { isAuthenticated } = action.payload;
       return {
         ...state,
-        isAuthenticated
+        ...action.payload
       };
     }
 
-    case GET_USER_DATA_SUCCESS: {
-      return { ...state };
+    case UPDATE_USER_DATA: {
+      return {
+        ...state,
+        ...action.payload
+      };
     }
 
     case GET_USER_DATA_FAILURE: {
