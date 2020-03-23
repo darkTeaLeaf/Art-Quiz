@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import styled from "styled-components";
 import { signIn, signUp } from "../../actions/accountActions";
+import Button from "../../components/UI/Button";
 import "./Auth.css";
 
 const Input = ({ label, type, name, required = false, register, errors }) => {
@@ -27,8 +29,9 @@ const SignIn = ({ signIn }) => {
   };
 
   return (
-    <div className="sign-in">
-      <h2>Sign in</h2>
+    <div className="sign in">
+      <h1>Welcome!</h1>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           label="Username"
@@ -48,7 +51,7 @@ const SignIn = ({ signIn }) => {
           required
         />
 
-        <input type="submit" />
+        <Button type="submit">Sign in</Button>
       </form>
     </div>
   );
@@ -81,8 +84,8 @@ const SignUp = ({ signUp }) => {
   };
 
   return (
-    <div className="sign-up">
-      <h2>Sign up</h2>
+    <div className="sign up">
+      <h1>Sign up</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           label="Avatar"
@@ -126,19 +129,58 @@ const SignUp = ({ signUp }) => {
           required
         />
 
-        <input type="submit" />
+        <Button type="submit">Sign up</Button>
       </form>
     </div>
   );
 };
 
+const BackPanel = styled.div`
+  padding: 0 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 450px;
+  width: 1000px;
+  background-color: black;
+}`;
+
 const AuthForm = ({ isAuthenticated, signIn, signUp }) => {
+  const [formState, toggleFormState] = useState(true);
+
   return isAuthenticated ? (
     <Redirect to="/account" />
   ) : (
     <div id="Auth">
-      <SignIn signIn={signIn} />
-      <SignUp signUp={signUp} />
+      <BackPanel>
+        {formState ? <SignIn signIn={signIn} /> : <SignUp signUp={signUp} />}
+        {formState ? (
+          <div className="to-sign-up">
+            <h2>Don't have an account?</h2>
+            <Button
+              onClick={() => {
+                toggleFormState(false);
+              }}
+              inverse
+            >
+              Sign up
+            </Button>
+          </div>
+        ) : (
+          <div className="to-sign-in">
+            <h2>Already have an account?</h2>
+            <Button
+              onClick={() => {
+                toggleFormState(true);
+              }}
+              inverse
+            >
+              Sign in
+            </Button>
+          </div>
+        )}
+      </BackPanel>
     </div>
   );
 };

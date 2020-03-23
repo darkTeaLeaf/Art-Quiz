@@ -26,6 +26,7 @@ const Header = ({ isAuthenticated, avatar, signOut }) => {
         </Link>
 
         {location.pathname !== "/account" &&
+          location.pathname !== "/auth" &&
           (isAuthenticated ? (
             <Link to="/account">
               <Avatar

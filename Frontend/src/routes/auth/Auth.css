@@ -7,8 +7,21 @@
   align-items: center;
 }
 
-#Auth .sign-in form,
-#Auth .sign-up form {
+#Auth .sign {
+  width: 480px;
+  border: 12px solid black;
+  padding: 60px 50px;
+  background-color: #fff;
+}
+
+#Auth .sign h1 {
+  font-family: "Judson", serif;
+  font-weight: 700;
+  font-size: 45px;
+  line-height: 50px;
+}
+
+#Auth .sign form {
   display: flex;
   flex-direction: column;
 }
