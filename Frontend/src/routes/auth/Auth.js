@@ -20,7 +20,7 @@ const SignIn = ({ signIn }) => {
   };
 
   return (
-    <div className="sign in">
+    <div className="sign">
       <h1>Welcome!</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -75,7 +75,7 @@ const SignUp = ({ signUp }) => {
   };
 
   return (
-    <div className="sign up">
+    <div className="sign">
       <h1>Sign up</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
@@ -129,11 +129,11 @@ const SignUp = ({ signUp }) => {
 const BackPanel = styled.div`
   padding: 0 50px;
   display: flex;
-  flex-direction: row;
+  flex-direction: ${props => (props.formState ? "row" : "row-reverse")};
   align-items: center;
   justify-content: space-between;
   height: 400px;
-  width: 900px;
+  width: 850px;
   background-color: black;
 }`;
 
@@ -144,10 +144,10 @@ const AuthForm = ({ isAuthenticated, signIn, signUp }) => {
     <Redirect to="/account" />
   ) : (
     <div id="Auth">
-      <BackPanel>
+      <BackPanel formState={formState}>
         {formState ? <SignIn signIn={signIn} /> : <SignUp signUp={signUp} />}
         {formState ? (
-          <div className="to-sign-up">
+          <div className="to-sign">
             <h2>Don't have an account?</h2>
             <Button
               onClick={() => {
@@ -159,7 +159,7 @@ const AuthForm = ({ isAuthenticated, signIn, signUp }) => {
             </Button>
           </div>
         ) : (
-          <div className="to-sign-in">
+          <div className="to-sign">
             <h2>Already have an account?</h2>
             <Button
               onClick={() => {

@@ -36,3 +36,20 @@
 #Auth .sign form button{
   margin-top: 60px;
 }
+
+#Auth .to-sign {
+  width: 280px;
+}
+
+#Auth .to-sign h2 {
+  font-family: "Judson", serif;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 45px;
+  color: white;
+  margin-bottom: 30px;
+}
+
+#Auth .to-sign button {
+  width: 100%;
+}
