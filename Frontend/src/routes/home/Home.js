@@ -33,7 +33,7 @@ const Home = ({ winsCounter, answered, switchPainting, setWinsCounter }) => {
     <div id="Home">
       <div className="container">
         <div className="wins-counter">
-          <img src={process.env.PUBLIC_URL + "/img/flag.svg"} alt="flag" />
+          <img src={process.env.PUBLIC_URL + "/img/flag.svg"} alt="wins counter" />
           {winsCounter}
         </div>
 
@@ -45,7 +45,7 @@ const Home = ({ winsCounter, answered, switchPainting, setWinsCounter }) => {
         <button className="arrow-next" onClick={nextPainting}>
           <img
             src={process.env.PUBLIC_URL + "/img/arrow-next.svg"}
-            alt="arrow-next"
+            alt="next painting"
           />
         </button>
       </div>
