@@ -6,16 +6,31 @@ const Button = styled.button`
   justify-content: center;
   min-width: 40%;
   padding: 10px 0;
-  border: 5px solid black;
   font-size: 20px;
   font-family: "Judson", serif;
   transition: box-shadow 0.3s ease;
   position: relative;
-  box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
 
-  &:hover {
-    box-shadow: 5px -5px 0 0 rgba(0, 0, 0, 1);
-  }
+  ${props =>
+    props.inverse
+      ? css`
+          color: white;
+          border: 5px solid white;
+          background-color: black;
+          box-shadow: 0 0 0 0 white;
+          &:hover {
+            box-shadow: 5px -5px 0 0 white;
+          }
+        `
+      : css`
+          color: black;
+          border: 5px solid black;
+          background-color: white;
+          box-shadow: 0 0 0 0 black;
+          &:hover {
+            box-shadow: 5px -5px 0 0 black;
+          }
+        `}
 
   ${props =>
     props.answered &&

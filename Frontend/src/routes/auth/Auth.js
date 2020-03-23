@@ -1,19 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import styled from "styled-components";
 import { signIn, signUp } from "../../actions/accountActions";
+import Avatar from "../../components/UI/Avatar";
+import Input from "../../components/UI/Input";
+import Button from "../../components/UI/Button";
 import "./Auth.css";
-
-const Input = ({ label, type, name, required = false, register, errors }) => {
-  return (
-    <label>
-      {label}
-      <input type={type} name={name} ref={register({ required })} />
-      {errors[name] && <span>The {label} field is required</span>}
-    </label>
-  );
-};
 
 const SignIn = ({ signIn }) => {
   const { register, handleSubmit, errors } = useForm();
@@ -27,11 +21,12 @@ const SignIn = ({ signIn }) => {
   };
 
   return (
-    <div className="sign-in">
-      <h2>Sign in</h2>
+    <div className="sign">
+      <h1>Welcome!</h1>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
-          label="Username"
+          placeholder="Username"
           type="text"
           name="username"
           register={register}
@@ -40,7 +35,7 @@ const SignIn = ({ signIn }) => {
         />
 
         <Input
-          label="Password"
+          placeholder="Password"
           type="password"
           name="password"
           register={register}
@@ -48,7 +43,7 @@ const SignIn = ({ signIn }) => {
           required
         />
 
-        <input type="submit" />
+        <Button type="submit">Sign in</Button>
       </form>
     </div>
   );
@@ -59,6 +54,7 @@ const SignUp = ({ signUp }) => {
   const history = useHistory();
 
   const onSubmit = async credentials => {
+    console.log(credentials);
     const [first_name, last_name] = credentials.full_name.trim().split(/\s+/);
     credentials = {
       ...credentials,
@@ -80,20 +76,32 @@ const SignUp = ({ signUp }) => {
     }
   };
 
+  const [url, setUrl] = useState(undefined);
+
   return (
-    <div className="sign-up">
-      <h2>Sign up</h2>
+    <div className="sign up">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          label="Avatar"
-          type="file"
-          name="avatar"
-          register={register}
-          errors={errors}
-        />
+        <label className="img-upload">
+          <Avatar
+            className="user-pic"
+            src={url}
+            width="150px"
+            height="150px"
+            rounded
+            borderWidth="12px"
+          />
+          <input
+            type="file"
+            name="avatar"
+            ref={register({ required: false })}
+            onChange={e => {
+              setUrl(URL.createObjectURL(e.target.files[0]));
+            }}
+          />
+        </label>
 
         <Input
-          label="Full name"
+          placeholder="Full name"
           type="text"
           name="full_name"
           register={register}
@@ -101,7 +109,7 @@ const SignUp = ({ signUp }) => {
         />
 
         <Input
-          label="Username"
+          placeholder="Username"
           type="text"
           name="username"
           register={register}
@@ -110,7 +118,7 @@ const SignUp = ({ signUp }) => {
         />
 
         <Input
-          label="Email"
+          placeholder="Email"
           type="email"
           name="email"
           register={register}
@@ -118,7 +126,7 @@ const SignUp = ({ signUp }) => {
         />
 
         <Input
-          label="Password"
+          placeholder="Password"
           type="password"
           name="password"
           register={register}
@@ -126,19 +134,58 @@ const SignUp = ({ signUp }) => {
           required
         />
 
-        <input type="submit" />
+        <Button type="submit">Sign up</Button>
       </form>
     </div>
   );
 };
 
+const BackPanel = styled.div`
+  padding: 0 50px;
+  display: flex;
+  flex-direction: ${props => (props.formState ? "row" : "row-reverse")};
+  align-items: center;
+  justify-content: space-between;
+  height: 400px;
+  width: 850px;
+  background-color: black;
+}`;
+
 const AuthForm = ({ isAuthenticated, signIn, signUp }) => {
+  const [formState, toggleFormState] = useState(true);
+
   return isAuthenticated ? (
     <Redirect to="/account" />
   ) : (
     <div id="Auth">
-      <SignIn signIn={signIn} />
-      <SignUp signUp={signUp} />
+      <BackPanel formState={formState}>
+        {formState ? <SignIn signIn={signIn} /> : <SignUp signUp={signUp} />}
+        {formState ? (
+          <div className="to-sign">
+            <h2>Don't have an account?</h2>
+            <Button
+              onClick={() => {
+                toggleFormState(false);
+              }}
+              inverse
+            >
+              Sign up
+            </Button>
+          </div>
+        ) : (
+          <div className="to-sign">
+            <h2>Already have an account?</h2>
+            <Button
+              onClick={() => {
+                toggleFormState(true);
+              }}
+              inverse
+            >
+              Sign in
+            </Button>
+          </div>
+        )}
+      </BackPanel>
     </div>
   );
 };
