@@ -16,7 +16,11 @@ const initialState = {
     lastName: "",
     avatar: "",
     achievements: [],
-    statistic: {}
+    statistic: {
+      winRate: 0,
+      gamesTotal: 0,
+      winsTotal: 0
+    }
   }
 };
 
