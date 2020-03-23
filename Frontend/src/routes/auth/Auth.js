@@ -4,18 +4,9 @@ import { Redirect, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { signIn, signUp } from "../../actions/accountActions";
+import Input from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
 import "./Auth.css";
-
-const Input = ({ label, type, name, required = false, register, errors }) => {
-  return (
-    <label>
-      {label}
-      <input type={type} name={name} ref={register({ required })} />
-      {errors[name] && <span>The {label} field is required</span>}
-    </label>
-  );
-};
 
 const SignIn = ({ signIn }) => {
   const { register, handleSubmit, errors } = useForm();
@@ -34,7 +25,7 @@ const SignIn = ({ signIn }) => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
-          label="Username"
+          placeholder="Username"
           type="text"
           name="username"
           register={register}
@@ -43,7 +34,7 @@ const SignIn = ({ signIn }) => {
         />
 
         <Input
-          label="Password"
+          placeholder="Password"
           type="password"
           name="password"
           register={register}
@@ -88,7 +79,7 @@ const SignUp = ({ signUp }) => {
       <h1>Sign up</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
-          label="Avatar"
+          placeholder="Avatar"
           type="file"
           name="avatar"
           register={register}
@@ -96,7 +87,7 @@ const SignUp = ({ signUp }) => {
         />
 
         <Input
-          label="Full name"
+          placeholder="Full name"
           type="text"
           name="full_name"
           register={register}
@@ -104,7 +95,7 @@ const SignUp = ({ signUp }) => {
         />
 
         <Input
-          label="Username"
+          placeholder="Username"
           type="text"
           name="username"
           register={register}
@@ -113,7 +104,7 @@ const SignUp = ({ signUp }) => {
         />
 
         <Input
-          label="Email"
+          placeholder="Email"
           type="email"
           name="email"
           register={register}
@@ -121,7 +112,7 @@ const SignUp = ({ signUp }) => {
         />
 
         <Input
-          label="Password"
+          placeholder="Password"
           type="password"
           name="password"
           register={register}
@@ -141,8 +132,8 @@ const BackPanel = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 450px;
-  width: 1000px;
+  height: 400px;
+  width: 900px;
   background-color: black;
 }`;
 
