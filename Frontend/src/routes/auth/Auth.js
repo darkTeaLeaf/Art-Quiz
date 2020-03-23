@@ -4,6 +4,7 @@ import { Redirect, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { signIn, signUp } from "../../actions/accountActions";
+import Avatar from "../../components/UI/Avatar";
 import Input from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
 import "./Auth.css";
@@ -53,6 +54,7 @@ const SignUp = ({ signUp }) => {
   const history = useHistory();
 
   const onSubmit = async credentials => {
+    console.log(credentials);
     const [first_name, last_name] = credentials.full_name.trim().split(/\s+/);
     credentials = {
       ...credentials,
@@ -74,17 +76,29 @@ const SignUp = ({ signUp }) => {
     }
   };
 
+  const [url, setUrl] = useState(undefined);
+
   return (
-    <div className="sign">
-      <h1>Sign up</h1>
+    <div className="sign up">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          placeholder="Avatar"
-          type="file"
-          name="avatar"
-          register={register}
-          errors={errors}
-        />
+        <label className="img-upload">
+          <Avatar
+            className="user-pic"
+            src={url}
+            width="150px"
+            height="150px"
+            rounded
+            borderWidth="12px"
+          />
+          <input
+            type="file"
+            name="avatar"
+            ref={register({ required: false })}
+            onChange={e => {
+              setUrl(URL.createObjectURL(e.target.files[0]));
+            }}
+          />
+        </label>
 
         <Input
           placeholder="Full name"
