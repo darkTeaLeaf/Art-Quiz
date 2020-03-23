@@ -5,25 +5,30 @@ import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import Home from "../../routes/home";
 import Auth from "../../routes/auth";
 import Account from "../../routes/account";
+import Logo from "../UI/Logo";
 import { signOut } from "../../actions/accountActions";
 
 const App = ({ isAuthenticated, signOut }) => {
   return (
     <BrowserRouter>
       <div id="App">
-        <nav>
-          <Link to="/">Home</Link>
-          {isAuthenticated ? (
-            <Link to="/account">Account</Link>
-          ) : (
-            <Link to="/auth">Log in</Link>
-          )}
-          {isAuthenticated && (
-            <Link to="/" onClick={signOut}>
-              Sign out
+        <header>
+          <div className="container">
+            <Link to="/">
+              <Logo fontSize="45px" />
             </Link>
-          )}
-        </nav>
+            {isAuthenticated ? (
+              <Link to="/account">Account</Link>
+            ) : (
+              <Link to="/auth">Log in</Link>
+            )}
+            {isAuthenticated && (
+              <Link to="/" onClick={signOut}>
+                Sign out
+              </Link>
+            )}
+          </div>
+        </header>
 
         <Switch>
           <Route exact path="/" component={Home} />

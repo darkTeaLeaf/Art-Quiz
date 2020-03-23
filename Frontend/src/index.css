@@ -25,5 +25,6 @@ img {
 
 .container {
   width: 95%;
+  max-width: 1800px;
   margin: auto;
 }
