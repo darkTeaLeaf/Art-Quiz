@@ -35,34 +35,40 @@ const submitIncorrectAnswer = () => ({
 
 export const submitAnswer = answer => {
   return (dispatch, getState) => {
-    const { id } = getState().account;
+    const { id, isAuthenticated } = getState().account;
     const { answered, correctAnswer } = getState().carousel;
 
     if (!answered) {
       if (answer === correctAnswer.answer) {
         alert("CORRECT!");
         dispatch(submitCorrectAnswer());
-        axios.patch(
-          `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/statistic/victory/`,
-          {},
-          {
-            headers: {
-              Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`
+
+        if (isAuthenticated) {
+          axios.patch(
+            `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/statistic/victory/`,
+            {},
+            {
+              headers: {
+                Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`
+              }
             }
-          }
-        );
+          );
+        }
       } else {
         alert("WRONG!");
         dispatch(submitIncorrectAnswer());
-        axios.patch(
-          `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/statistic/fail/`,
-          {},
-          {
-            headers: {
-              Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`
+
+        if (isAuthenticated) {
+          axios.patch(
+            `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/statistic/fail/`,
+            {},
+            {
+              headers: {
+                Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`
+              }
             }
-          }
-        );
+          );
+        }
       }
     }
   };

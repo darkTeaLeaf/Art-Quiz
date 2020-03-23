@@ -29,6 +29,7 @@
 
 #Account .profile-info button {
   margin-top: 35px;
+  cursor: not-allowed;
 }
 
 #Account .user-data {
