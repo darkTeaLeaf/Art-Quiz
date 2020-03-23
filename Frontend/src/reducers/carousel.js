@@ -1,7 +1,8 @@
 import {
-  SUBMIT_ANSWER,
   SET_ANSWERS,
   SET_CORRECT_ANSWER,
+  SUBMIT_CORRECT_ANSWER,
+  SUBMIT_INCORRECT_ANSWER,
   SET_ANSWERED,
   SET_WINS_COUNTER
 } from "../constants";
@@ -16,26 +17,19 @@ const initialState = {
 
 export function carouselReducer(state = initialState, action) {
   switch (action.type) {
-    case SUBMIT_ANSWER: {
-      if (!state.answered) {
-        const answer = action.payload;
-        if (answer === state.correctAnswer.answer) {
-          alert("CORRECT!");   // TODO: move alerts to actions
-          return {
-            ...state,
-            winsCounter: state.winsCounter + 1,
-            answered: true
-          };
-        } else {
-          alert("WRONG!");    // TODO: move alerts to actions
-          return {
-            ...state,
-            winsCounter: 0,
-            answered: true
-          };
-        }
-      }
-      return state;
+    case SUBMIT_CORRECT_ANSWER: {
+      return {
+        ...state,
+        winsCounter: state.winsCounter + 1,
+        answered: true
+      };
+    }
+    case SUBMIT_INCORRECT_ANSWER: {
+      return {
+        ...state,
+        winsCounter: 0,
+        answered: true
+      };
     }
 
     case SET_ANSWERS: {

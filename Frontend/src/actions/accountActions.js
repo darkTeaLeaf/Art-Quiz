@@ -96,7 +96,7 @@ const updateUserData = ({
     avatar,
     achievements,
     statistic: {
-      winRate: win_rate,
+      winRate: win_rate.toFixed(4)*100,
       gamesTotal: games_total,
       winsTotal: wins_total
     },

@@ -1,10 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import "./AnswerOptions.css";
-import Button from '../UI/Button';
+import Button from "../UI/Button";
 import { submitAnswer } from "../../actions/carouselActions";
 
-const AnswerOptions = ({ ansOptions, answered, correctAnswer, submitAnswer }) => {
+const AnswerOptions = ({
+  ansOptions,
+  answered,
+  correctAnswer,
+  submitAnswer
+}) => {
   return (
     <div id="AnswerOptions" className={answered ? "answered" : ""}>
       {ansOptions.length !== 0
@@ -14,7 +19,9 @@ const AnswerOptions = ({ ansOptions, answered, correctAnswer, submitAnswer }) =>
               pin
               answered={answered}
               correct={option.answer === correctAnswer.answer}
-              onClick={() => submitAnswer(option.answer)}
+              onClick={() => {
+                submitAnswer(option.answer);
+              }}
             >
               {option.answer}
             </Button>
@@ -32,4 +39,8 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(mapStateToProps, { submitAnswer })(AnswerOptions);
+const mapDispatchToProps = dispatch => ({
+  submitAnswer: answer => dispatch(submitAnswer(answer))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnswerOptions);
