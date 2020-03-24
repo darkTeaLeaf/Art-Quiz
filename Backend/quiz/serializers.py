@@ -24,28 +24,30 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                 self.fields.pop(field_name)
 
 
-class AuthorSerializer(serializers.ModelSerializer):
+class AuthorSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = "__all__"
+        fields = ('id', 'name', 'country', 'style', 'birth_date', 'dead_day')
         read_only_fields = ('id',)
 
 
-class StyleSerializer(serializers.ModelSerializer):
+class StyleSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
     class Meta:
         model = Style
-        fields = "__all__"
+        fields = ('id', 'name', 'century')
         read_only_fields = ('id',)
 
 
 class PaintingSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
-    author = AuthorSerializer()
-    style = StyleSerializer()
+    author_name = serializers.ReadOnlyField(source='author.name')
+    style_name = serializers.ReadOnlyField(source='style.name')
 
     class Meta:
         model = Painting
-        fields = ('id', 'name', 'author', 'year', 'style', 'gallery', 'image')
+        fields = ('id', 'name', 'author_name', 'author', 'year', 'style_name', 'style', 'gallery', 'image')
         read_only_fields = ('id',)
+        extra_kwargs = {'author': {'write_only': True},
+                        'style': {'write_only': True}}
 
     def to_representation(self, instance):
         response = super(PaintingSerializer, self).to_representation(instance)
