@@ -18,6 +18,7 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
     firstName,
     lastName,
     avatar,
+    achievements,
     statistic: { winRate, winsTotal, gamesTotal }
   } = userData;
 
@@ -48,7 +49,23 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
 
         <section className="achievements">
           <h2>Your achievements</h2>
-          <div className="wrapper"></div>
+          <div className="wrapper">
+            {achievements.map(a => (
+              <div
+                key={"ach-wrapper" + a.id}
+                title={`${a.name}\nYou've got ${a.progress} out of ${a.max_score}`}
+              >
+                <img
+                  key={"achievement" + a.id}
+                  src={a.image}
+                  alt="achievement"
+                  className={
+                    "achievement" + (a.progress >= a.max_score ? " done" : "")
+                  }
+                />
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="statistics">

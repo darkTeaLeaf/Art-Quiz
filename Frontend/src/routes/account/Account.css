@@ -69,6 +69,10 @@
   margin-bottom: 115px;
 }
 
+#Account .user-data .achievements .wrapper {
+  display: flex;
+}
+
 #Account .user-data .statistics .wrapper {
   font-family: Raleway;
   font-style: normal;
@@ -88,4 +92,14 @@
 #Account .user-data .statistics .stat {
   font-weight: bold;
   padding-left: 15px;
+}
+
+#Account .user-data .achievements .achievement {
+  margin-right: 30px;
+  width: 150px;
+  opacity: 0.4;
+}
+
+#Account .user-data .achievements .achievement.done {
+  opacity: 1;
 }
