@@ -18,11 +18,11 @@ class Author(models.Model):
     birth_date = models.PositiveIntegerField(
         validators=[
             MaxValueValidator(datetime.now().year)],
-        help_text="Use the following format: <YYYY>", null=True)
+        help_text="Use the following format: YYYY", null=True)
     dead_day = models.PositiveIntegerField(
         validators=[
             MaxValueValidator(datetime.now().year)],
-        help_text="Use the following format: <YYYY>", null=True)
+        help_text="Use the following format: YYYY", null=True)
 
     def __str__(self):
         return self.name
