@@ -91,4 +91,4 @@ class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
-        return Response({'id': token.user_id, 'token': token.key})
+        return Response({'id': token.user_id, 'token': token.key, 'is_staff': token.user.is_staff})
