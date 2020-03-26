@@ -6,23 +6,16 @@
 
 #Carousel img {
   background-color: black;
-  max-height: 70vh;
-  max-width: 60vw;
-  border: 1vw solid black;
-}
-
-#Carousel img::before {
-  content: "";
-  height: 100vh;
-  width: 2vw;
-  background-color: black;
+  max-height: 500px;
+  max-width: 900px;
+  border: 15px solid black;
 }
 
 #Carousel .rope {
   position: absolute;
   bottom: 100%;
   align-self: center;
-  width: 0.6vw;
+  width: 10px;
   height: 100vh;
   background-color: black;
 }

@@ -6,6 +6,13 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
 button {
   background-color: transparent;
   cursor: pointer;
@@ -18,5 +25,6 @@ img {
 
 .container {
   width: 95%;
+  max-width: 1800px;
   margin: auto;
 }

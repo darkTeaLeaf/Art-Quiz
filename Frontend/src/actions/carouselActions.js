@@ -2,7 +2,8 @@ import axios from "axios";
 import {
   SET_ANSWERS,
   SET_CORRECT_ANSWER,
-  SUBMIT_ANSWER,
+  SUBMIT_CORRECT_ANSWER,
+  SUBMIT_INCORRECT_ANSWER,
   SET_ANSWERED,
   SET_WINS_COUNTER
 } from "../constants";
@@ -22,10 +23,56 @@ export const setWinsCounter = winsCounter => ({
   payload: winsCounter
 });
 
-export const submitAnswer = answer => ({
-  type: SUBMIT_ANSWER,
-  payload: answer
+const submitCorrectAnswer = () => ({
+  type: SUBMIT_CORRECT_ANSWER,
+  payload: {}
 });
+
+const submitIncorrectAnswer = () => ({
+  type: SUBMIT_INCORRECT_ANSWER,
+  payload: {}
+});
+
+export const submitAnswer = answer => {
+  return (dispatch, getState) => {
+    const { id, isAuthenticated } = getState().account;
+    const { answered, correctAnswer } = getState().carousel;
+
+    if (!answered) {
+      if (answer === correctAnswer.answer) {
+        alert("CORRECT!");
+        dispatch(submitCorrectAnswer());
+
+        if (isAuthenticated) {
+          axios.patch(
+            `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/statistic/victory/`,
+            {},
+            {
+              headers: {
+                Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`
+              }
+            }
+          );
+        }
+      } else {
+        alert("WRONG!");
+        dispatch(submitIncorrectAnswer());
+
+        if (isAuthenticated) {
+          axios.patch(
+            `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/statistic/fail/`,
+            {},
+            {
+              headers: {
+                Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`
+              }
+            }
+          );
+        }
+      }
+    }
+  };
+};
 
 export const setAnswered = answered => ({
   type: SET_ANSWERED,

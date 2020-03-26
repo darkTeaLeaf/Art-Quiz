@@ -1,3 +1,33 @@
 #App {
-  height: 100vh;
+  height: 100%;
+}
+
+#App header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+#App header .container {
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#App header a {
+  color: black;
+  text-decoration: unset;
+}
+
+#App header .sign-out {
+  font-family: "Judson", serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+#App header .sign-out:hover {
+  text-decoration: underline;
 }

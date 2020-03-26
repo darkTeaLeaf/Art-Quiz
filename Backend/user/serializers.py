@@ -32,10 +32,11 @@ class ProgressSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField(source='achievement.id')
     name = serializers.ReadOnlyField(source='achievement.name')
     max_score = serializers.ReadOnlyField(source='achievement.max_score')
+    image = serializers.ImageField(source='achievement.image')
 
     class Meta:
         model = Progress
-        fields = ('id', 'name', 'max_score', 'progress', 'reached')
+        fields = ('id', 'name', 'max_score', 'progress', 'reached', 'image')
 
 
 # class ProfileSerializer(serializers.ModelSerializer):

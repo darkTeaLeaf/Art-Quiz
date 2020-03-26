@@ -1,16 +1,15 @@
 import random
 
-from rest_framework import viewsets, status, mixins
+from rest_framework import viewsets, status, mixins, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from quiz.models import Painting, Author, Style
+from quiz.permissions import QuizPermission
 from quiz.serializers import PaintingSerializer, AuthorSerializer, StyleSerializer
 
 
-class PaintingViewSet(mixins.ListModelMixin,
-                      mixins.RetrieveModelMixin,
-                      viewsets.GenericViewSet):
+class PaintingViewSet(viewsets.ModelViewSet):
     """
         retrieve:
         Return the painting specified by id.
@@ -18,11 +17,27 @@ class PaintingViewSet(mixins.ListModelMixin,
         list:
         Return a list of all the existing paintings.
 
+        create:
+        Create a new painting.
+
+        update:
+        Update of all painting fields. Request should contain all painting parameters.
+
+        partial_update:
+        Update of all or some of painting fields. There is no requirement to contain all the parameters.
+
+        delete:
+        Delete the painting specified by id.
+
     """
     queryset = Painting.objects.all()
     serializer_paint = PaintingSerializer
     serializer_author = AuthorSerializer
     serializer_style = StyleSerializer
+    permission_classes = (QuizPermission,)
+
+    search_fields = ['name']
+    filter_backends = (filters.SearchFilter,)
 
     def get_serializer_class(self):
         return self.serializer_paint
@@ -83,3 +98,67 @@ class PaintingViewSet(mixins.ListModelMixin,
             return Response(variants)
         else:
             return Response(self.serializer_paint.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AuthorViewSet(viewsets.ModelViewSet):
+    """
+        retrieve:
+        Return the author specified by id.
+
+        list:
+        Return a list of all the existing authors.
+
+        create:
+        Create a new author.
+
+        update:
+        Update of all author fields. Request should contain all author parameters.
+
+        partial_update:
+        Update of all or some of author fields. There is no requirement to contain all the parameters.
+
+        delete:
+        Delete the author specified by id.
+
+    """
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    permission_classes = (QuizPermission,)
+
+    search_fields = ['name']
+    filter_backends = (filters.SearchFilter,)
+
+    def get_serializer_class(self):
+        return self.serializer_class
+
+
+class StyleViewSet(viewsets.ModelViewSet):
+    """
+        retrieve:
+        Return the style specified by id.
+
+        list:
+        Return a list of all the existing style.
+
+        create:
+        Create a new style.
+
+        update:
+        Update of all style fields. Request should contain all style parameters.
+
+        partial_update:
+        Update of all or some of style fields. There is no requirement to contain all the parameters.
+
+        delete:
+        Delete the style specified by id.
+
+    """
+    queryset = Style.objects.all()
+    serializer_class = StyleSerializer
+    permission_classes = (QuizPermission,)
+
+    search_fields = ['name']
+    filter_backends = (filters.SearchFilter,)
+
+    def get_serializer_class(self):
+        return self.serializer_class
