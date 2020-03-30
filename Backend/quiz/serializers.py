@@ -54,6 +54,6 @@ class PaintingSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializ
 
     def to_representation(self, instance):
         response = super(PaintingSerializer, self).to_representation(instance)
-        if instance.image:
+        if instance.image and 'image' in response:
             response['image'] = instance.image.url
         return response

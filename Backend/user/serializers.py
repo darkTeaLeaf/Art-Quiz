@@ -57,6 +57,7 @@ class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
             'id', 'username', 'password', 'email', 'first_name', 'last_name', 'is_staff', 'avatar', 'achievements',
             'statistic')
         write_only_fields = ('password',)
+        extra_kwargs = {'password': {'write_only': True}}
         read_only_fields = ('id', 'statistic',)
 
     def create(self, validated_data):
