@@ -2,3 +2,6 @@ venv
 .idea
 /media
 /static
+
+__pycache__
+/Backend/__pycache__
