@@ -86,18 +86,18 @@ export const getAnswers = () => {
       `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/variants/?type=author`
     );
     const {
-      data: { author: correctAnswer }
+      data: { author_name }
     } = await axios.get(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/?fields=author`
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/?fields=author_name`
     );
 
     dispatch(
-      setCorrectAnswer({ id: correctAnswer.id, answer: correctAnswer.name })
+      setCorrectAnswer({ id: 99, answer: author_name })
     );
     dispatch(
       setAnswers([
         ...answers.map((ans, i) => ({ id: "0" + i, answer: ans })), // TO BE REMOVED
-        { id: correctAnswer.id, answer: correctAnswer.name }
+        { id: "03", answer: author_name }
       ])
     );
   };
