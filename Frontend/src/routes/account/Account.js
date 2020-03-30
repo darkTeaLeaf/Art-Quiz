@@ -18,6 +18,7 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
     firstName,
     lastName,
     avatar,
+    isModerator,
     achievements,
     statistic: { winRate, winsTotal, gamesTotal }
   } = userData;
@@ -25,6 +26,15 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
   return isAuthenticated ? (
     <div id="Account">
       <aside className="profile-info">
+        {isModerator && (
+          <div className="crown" title="You are a moderator!">
+            <img
+              src={`${process.env.PUBLIC_URL}/img/crown.png`}
+              alt="crown"
+            />
+          </div>
+        )}
+
         <Avatar
           className="user-pic"
           src={avatar}

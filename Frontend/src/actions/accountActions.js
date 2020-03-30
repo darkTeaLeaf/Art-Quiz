@@ -86,6 +86,7 @@ const updateUserData = ({
   first_name,
   last_name,
   avatar,
+  is_staff,
   achievements,
   statistic: { win_rate, games_total, wins_total }
 }) => ({
@@ -94,6 +95,7 @@ const updateUserData = ({
     username,
     email,
     avatar,
+    isModerator: is_staff,
     achievements,
     statistic: {
       winRate: win_rate.toFixed(4)*100,

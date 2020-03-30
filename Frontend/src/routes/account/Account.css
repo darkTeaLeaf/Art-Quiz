@@ -10,9 +10,20 @@
 }
 
 #Account .profile-info {
+  position: relative;
   margin-top: 100px;
   display: flex;
   flex-direction: column;
+}
+
+#Account .profile-info .crown {
+  position: absolute;
+  top: -40px;
+  right: calc(50% - 30px);
+  z-index: 99;
+}
+#Account .profile-info .crown img {
+  width: 60px;
 }
 
 #Account .profile-info .user-pic {
