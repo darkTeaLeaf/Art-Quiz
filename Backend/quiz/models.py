@@ -34,7 +34,7 @@ class Painting(models.Model):
     year = models.PositiveIntegerField(
         validators=[
             MaxValueValidator(datetime.now().year)],
-        help_text="Use the following format: <YYYY>")
+        help_text="Use the following format: YYYY")
     style = models.ForeignKey(Style, on_delete=models.CASCADE)
     gallery = models.CharField(max_length=500)
     image = models.ImageField(blank=False, null=False, upload_to="paintings/")

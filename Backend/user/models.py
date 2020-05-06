@@ -1,9 +1,13 @@
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.datetime_safe import datetime
 from rest_framework.authtoken.models import Token
+
+from quiz.models import Author, Style
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -109,3 +113,31 @@ class Statistic(models.Model):
         if self.games_total == 0:
             return 0
         return self.wins_total / self.games_total
+
+
+class Request(models.Model):
+    REJECTED = 0
+    ACCEPTED = 1
+    EDITED = 2
+    IN_PROGRESS = 3
+    STATUS_CHOICES = (
+        (REJECTED, 'Rejected'),
+        (ACCEPTED, 'Accepted'),
+        (EDITED, 'Edited and accepted'),
+        (IN_PROGRESS, 'In progress')
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    year = models.PositiveIntegerField(
+        validators=[
+            MaxValueValidator(datetime.now().year)],
+        help_text="Use the following format: YYYY")
+    style = models.ForeignKey(Style, on_delete=models.CASCADE)
+    gallery = models.CharField(max_length=500)
+    image = models.ImageField(blank=False, null=False, upload_to="requests/")
+    status = models.IntegerField(choices=STATUS_CHOICES, default=IN_PROGRESS)
+
+    def __str__(self):
+        return self.user.username + self.name

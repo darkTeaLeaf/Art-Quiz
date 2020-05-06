@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from user.models import Profile, Statistic, Progress
+from quiz.models import Author, Style
+from user.models import Statistic, Progress, Request
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -91,3 +92,9 @@ class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class RequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Request
+        fields = ('id', 'author', 'name', 'author', 'year', 'style', 'gallery', 'image', 'status')
