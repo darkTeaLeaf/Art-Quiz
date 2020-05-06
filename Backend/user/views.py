@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
+from quiz.models import Painting
 from user.models import Progress, Request
 from user.permissions import UserPermission, IsOwnerOrAdmin
 from user.serializers import StatisticSerializer, UserSerializer, RequestSerializer
@@ -101,6 +102,36 @@ class RequestViewSet(viewsets.ModelViewSet):
         else:
             if self.request.user.is_staff:
                 return Request.objects.all()
+
+    @action(detail=True, methods=['post'])
+    def accept(self, request, pk=None):
+        request = Request.objects.get(id=pk)
+        request.status = request.ACCEPTED
+        request.save()
+
+        painting = Painting.objects.create(name=request.name, author=request.author, year=request.year,
+                                           style=request.style, gallery=request.gallery, image=request.image)
+        painting.save()
+
+        return Response()
+
+    @action(detail=True, methods=['post'])
+    def decline(self, request, pk=None):
+        request = Request.objects.get(id=pk)
+        request.status = request.REJECTED
+        request.save()
+
+        return Response()
+
+    @action(detail=True, methods=['post'])
+    def edit(self, request, pk=None):
+        self.partial_update(request)
+        self.accept(request, pk)
+
+        request = Request.objects.get(id=pk)
+        request.status = request.EDITED
+        request.save()
+        return Response()
 
 
 class CustomObtainAuthToken(ObtainAuthToken):

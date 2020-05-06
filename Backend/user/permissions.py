@@ -39,7 +39,7 @@ class IsOwnerOrAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         if view.action in ['create', 'list', 'retrieve']:
             return True
-        elif view.action in ['update', 'partial_update', 'destroy']:
+        elif view.action in ['update', 'partial_update', 'destroy', 'accept', 'decline', 'edit']:
             return request.user.is_staff
         else:
             return False
