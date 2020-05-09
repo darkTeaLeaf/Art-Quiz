@@ -5,3 +5,6 @@ venv
 
 __pycache__
 /Backend/__pycache__
+
+/quiz/migrations
+/user/migrations
