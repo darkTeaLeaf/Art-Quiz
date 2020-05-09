@@ -1,15 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { Redirect, withRouter } from "react-router-dom";
 
 import { getUserData } from "../../actions/accountActions";
 
+import PaintingsManagementPanel from "../../components/PaintingsManagementPanel";
 import Avatar from "../../components/UI/Avatar";
 import Button from "../../components/UI/Button";
 import WelcomeMsg from "../../components/UI/Title";
 import Subtitle from "../../components/UI/Subtitle";
 import Tooltip from "../../components/UI/Tooltip";
+import Modal from "../../components/UI/Modal";
 
 const AccountWrapper = styled.div`
   display: flex;
@@ -129,7 +131,7 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
     if (isAuthenticated) {
       getUserData();
     }
-  }, []);
+  }, [isAuthenticated, getUserData]);
 
   const {
     username,
@@ -140,6 +142,15 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
     achievements,
     statistic: { winRate, winsTotal, gamesTotal },
   } = userData;
+
+  const [
+    paintingsManagementPanelActive,
+    setPaintingsManagementPanelActive,
+  ] = useState(false);
+
+  const togglePaintingsManagementPanel = () => {
+    setPaintingsManagementPanelActive(!paintingsManagementPanelActive);
+  };
 
   return isAuthenticated ? (
     <AccountWrapper>
@@ -169,7 +180,9 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
 
         <ButtonsWrapper>
           <Button>Edit account data</Button>
-          <Button link>Manage paintings</Button>
+          <Button link onClick={togglePaintingsManagementPanel}>
+            Manage paintings
+          </Button>
         </ButtonsWrapper>
       </ProfileInfo>
 
@@ -215,6 +228,13 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
           </StatisticsWrapper>
         </Statistics>
       </UserData>
+
+      <Modal
+        active={paintingsManagementPanelActive}
+        onClose={togglePaintingsManagementPanel}
+      >
+        <PaintingsManagementPanel />
+      </Modal>
     </AccountWrapper>
   ) : (
     <Redirect to="/" />
