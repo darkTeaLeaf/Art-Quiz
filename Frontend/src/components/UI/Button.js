@@ -11,7 +11,7 @@ const Button = styled.button`
   transition: box-shadow 0.3s ease;
   position: relative;
 
-  ${props =>
+  ${(props) =>
     props.inverse
       ? css`
           color: white;
@@ -32,7 +32,7 @@ const Button = styled.button`
           }
         `}
 
-  ${props =>
+  ${(props) =>
     props.answered &&
     css`
       cursor: default;
@@ -44,7 +44,7 @@ const Button = styled.button`
       ${!props.correct && "opacity: 0.5;"}
     `}
 
-  ${props =>
+  ${(props) =>
     props.pin &&
     css`
       &:before {
@@ -56,6 +56,18 @@ const Button = styled.button`
         width: 26px;
         height: 26px;
         top: -16px;
+      }
+    `}
+
+  ${(props) =>
+    props.link &&
+    css`
+      border: none;
+      font-weight: bold;
+
+      :hover {
+        box-shadow: none;
+        text-decoration: underline;
       }
     `}
 `;

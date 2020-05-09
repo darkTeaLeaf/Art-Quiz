@@ -38,10 +38,18 @@
   line-height: 50px;
 }
 
-#Account .profile-info button {
+#Account .profile-info .buttons-wrapper {
   margin-top: 35px;
-  cursor: not-allowed;
+
+  display: flex;
+  flex-direction: column;
 }
+
+#Account .profile-info .buttons-wrapper > *:not(:last-child) {
+  margin-bottom: 22px;
+}
+
+/* USER DATA */
 
 #Account .user-data {
   display: flex;

@@ -20,7 +20,7 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
     avatar,
     isModerator,
     achievements,
-    statistic: { winRate, winsTotal, gamesTotal }
+    statistic: { winRate, winsTotal, gamesTotal },
   } = userData;
 
   return isAuthenticated ? (
@@ -28,10 +28,7 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
       <aside className="profile-info">
         {isModerator && (
           <div className="crown" title="You are a moderator!">
-            <img
-              src={`${process.env.PUBLIC_URL}/img/crown.png`}
-              alt="crown"
-            />
+            <img src={`${process.env.PUBLIC_URL}/img/crown.png`} alt="crown" />
           </div>
         )}
 
@@ -47,7 +44,10 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
         <span className="first-name">{firstName}</span>
         <span className="last-name">{lastName}</span>
 
-        <Button>Edit account data</Button>
+        <div className="buttons-wrapper">
+          <Button>Edit account data</Button>
+          <Button link>Manage paintings</Button>
+        </div>
       </aside>
 
       <main className="user-data">
@@ -60,7 +60,7 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
         <section className="achievements">
           <h2>Your achievements</h2>
           <div className="wrapper">
-            {achievements.map(a => (
+            {achievements.map((a) => (
               <div
                 key={"ach-wrapper" + a.id}
                 title={`${a.name}\nYou've got ${a.progress} out of ${a.max_score}`}
@@ -98,13 +98,13 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
   );
 };
 
-const mapStateToProps = store => ({
+const mapStateToProps = (store) => ({
   userData: store.account.userData,
-  isAuthenticated: store.account.isAuthenticated
+  isAuthenticated: store.account.isAuthenticated,
 });
 
-const mapDispatchToProps = dispatch => ({
-  getUserData: () => dispatch(getUserData())
+const mapDispatchToProps = (dispatch) => ({
+  getUserData: () => dispatch(getUserData()),
 });
 
 export default withRouter(
