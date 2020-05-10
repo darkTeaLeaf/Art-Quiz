@@ -107,9 +107,9 @@ export const getPaintingsList = () => {
         },
       ];
 
-      getPaintingsListSuccess(data);
+      dispatch(getPaintingsListSuccess(data));
     } catch (error) {
-      getPaintingsListFailure("error");
+      dispatch(getPaintingsListFailure("error"));
     }
   };
 };
