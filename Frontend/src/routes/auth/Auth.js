@@ -54,7 +54,6 @@ const SignUp = ({ signUp }) => {
   const history = useHistory();
 
   const onSubmit = async (credentials) => {
-    console.log(credentials);
     const [first_name, last_name] = credentials.full_name.trim().split(/\s+/);
     credentials = {
       ...credentials,

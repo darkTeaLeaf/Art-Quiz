@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
+import UploadImage from "../components/UploadImage";
 import Container from "../components/UI/Container";
 import Title from "../components/UI/Title";
 import Input from "../components/UI/Input";
@@ -37,6 +38,13 @@ const PaintingEditPage = ({ data }) => {
         <Title bold>{data.name}</Title>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
+          <UploadImage register={register}>
+            <img
+              src={process.env.REACT_APP_BACKEND_ADDRESS + data.image}
+              alt="painting"
+            />
+          </UploadImage>
+
           <Input
             placeholder="Painting name"
             type="text"
