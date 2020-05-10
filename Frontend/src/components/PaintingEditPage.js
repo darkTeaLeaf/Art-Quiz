@@ -14,11 +14,22 @@ const Layout = styled.div`
 
 const Form = styled.form`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
 
   input {
     margin-bottom: 12px;
   }
+`;
+
+const FieldsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  margin-left: 40px;
+  background-color: white;
+  padding: 10px 20px;
 `;
 
 const UpdateButton = styled(Button)`
@@ -38,50 +49,52 @@ const PaintingEditPage = ({ data }) => {
         <Title bold>{data.name}</Title>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <UploadImage register={register}>
+          <UploadImage register={register} width="40%">
             <img
               src={process.env.REACT_APP_BACKEND_ADDRESS + data.image}
               alt="painting"
             />
           </UploadImage>
 
-          <Input
-            placeholder="Painting name"
-            type="text"
-            name="name"
-            defaultValue={data.name}
-            register={register}
-            borderless
-          />
+          <FieldsWrapper>
+            <Input
+              placeholder="Painting name"
+              type="text"
+              name="name"
+              defaultValue={data.name}
+              register={register}
+              borderless
+            />
 
-          <Input
-            placeholder="Author"
-            type="text"
-            name="author"
-            defaultValue={data.author}
-            register={register}
-            borderless
-          />
+            <Input
+              placeholder="Author"
+              type="text"
+              name="author"
+              defaultValue={data.author}
+              register={register}
+              borderless
+            />
 
-          <Input
-            placeholder="Year"
-            type="text"
-            name="year"
-            defaultValue={data.year}
-            register={register}
-            borderless
-          />
+            <Input
+              placeholder="Year"
+              type="text"
+              name="year"
+              defaultValue={data.year}
+              register={register}
+              borderless
+            />
 
-          <Input
-            placeholder="Style"
-            type="text"
-            name="style"
-            defaultValue={data.style}
-            register={register}
-            borderless
-          />
+            <Input
+              placeholder="Style"
+              type="text"
+              name="style"
+              defaultValue={data.style}
+              register={register}
+              borderless
+            />
 
-          <UpdateButton type="submit">Update</UpdateButton>
+            <UpdateButton type="submit">Update</UpdateButton>
+          </FieldsWrapper>
         </Form>
       </Container>
     </Layout>

@@ -15,8 +15,8 @@ const ModalWrapper = styled.div`
 
   transition: backdrop-filter 0.2s ease, background-color 0.2s ease;
 
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
   z-index: 999;
 `;
 
