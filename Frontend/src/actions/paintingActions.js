@@ -53,155 +53,27 @@ const getPaintingsListFailure = (error) => ({
 });
 
 export const getPaintingsList = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch({ type: GET_PAINTINGS_LIST });
 
     try {
-      const data = [
-        {
-          author: "Van Gogh",
-          gallery: "National gallery",
-          id: 2,
-          image: "/media/paintings/sunflowers.jpg",
-          name: "Sunflowers",
-          style: "Postimpressionism",
-          year: 1888,
-        },
-        {
-          author: "Irek Nazmiev",
-          gallery: "Kazan Mosque",
-          id: 3,
-          image: "/media/paintings/the_scream.jpg",
-          name: "The AAAAAA",
-          style: "Tatar style",
-          year: 1870,
-        },
-        {
-          author: "Van Gogh",
-          gallery: "National museum",
-          id: 1,
-          image:
-            "/media/paintings/starry-night-by-vincent-van-gogh-vincent-van-gogh.jpg",
-          name: "Starry Nigth",
-          style: "Postimpressionism",
-          year: 1889,
-        },
-        {
-          author: "Mikhail Mazzarenko",
-          gallery: "Italo-Russkoe",
-          id: 4,
-          image: "/media/paintings/smoke-digi-dee-gog.JPG",
-          name: "The dog lock",
-          style: "Gangnam",
-          year: 2019,
-        },
-        {
-          author: "Ariana Ferorozhnichenko",
-          gallery: "Nizhne-Chelninskoy Uchilishe imeni Gabdylli Tukaya",
-          id: 5,
-          image:
-            "/media/paintings/%D1%8F%D1%81%D1%82%D1%80%D0%B5%D0%B1%D1%91%D0%BD%D0%BE%D0%BA.jpg",
-          name: "The eyes",
-          style: "Postimpressionism",
-          year: 1560,
-        },
-        {
-          author: "Van Gogh",
-          gallery: "National gallery",
-          id: 2,
-          image: "/media/paintings/sunflowers.jpg",
-          name: "Sunflowers",
-          style: "Postimpressionism",
-          year: 1888,
-        },
-        {
-          author: "Irek Nazmiev",
-          gallery: "Kazan Mosque",
-          id: 3,
-          image: "/media/paintings/the_scream.jpg",
-          name: "The AAAAAA",
-          style: "Tatar style",
-          year: 1870,
-        },
-        {
-          author: "Van Gogh",
-          gallery: "National museum",
-          id: 1,
-          image:
-            "/media/paintings/starry-night-by-vincent-van-gogh-vincent-van-gogh.jpg",
-          name: "Starry Nigth",
-          style: "Postimpressionism",
-          year: 1889,
-        },
-        {
-          author: "Mikhail Mazzarenko",
-          gallery: "Italo-Russkoe",
-          id: 4,
-          image: "/media/paintings/smoke-digi-dee-gog.JPG",
-          name: "The dog lock",
-          style: "Gangnam",
-          year: 2019,
-        },
-        {
-          author: "Ariana Ferorozhnichenko",
-          gallery: "Nizhne-Chelninskoy Uchilishe imeni Gabdylli Tukaya",
-          id: 5,
-          image:
-            "/media/paintings/%D1%8F%D1%81%D1%82%D1%80%D0%B5%D0%B1%D1%91%D0%BD%D0%BE%D0%BA.jpg",
-          name: "The eyes",
-          style: "Postimpressionism",
-          year: 1560,
-        },
-        {
-          author: "Van Gogh",
-          gallery: "National gallery",
-          id: 2,
-          image: "/media/paintings/sunflowers.jpg",
-          name: "Sunflowers",
-          style: "Postimpressionism",
-          year: 1888,
-        },
-        {
-          author: "Irek Nazmiev",
-          gallery: "Kazan Mosque",
-          id: 3,
-          image: "/media/paintings/the_scream.jpg",
-          name: "The AAAAAA",
-          style: "Tatar style",
-          year: 1870,
-        },
-        {
-          author: "Van Gogh",
-          gallery: "National museum",
-          id: 1,
-          image:
-            "/media/paintings/starry-night-by-vincent-van-gogh-vincent-van-gogh.jpg",
-          name: "Starry Nigth",
-          style: "Postimpressionism",
-          year: 1889,
-        },
-        {
-          author: "Mikhail Mazzarenko",
-          gallery: "Italo-Russkoe",
-          id: 4,
-          image: "/media/paintings/smoke-digi-dee-gog.JPG",
-          name: "The dog lock",
-          style: "Gangnam",
-          year: 2019,
-        },
-        {
-          author: "Ariana Ferorozhnichenko",
-          gallery: "Nizhne-Chelninskoy Uchilishe imeni Gabdylli Tukaya",
-          id: 5,
-          image:
-            "/media/paintings/%D1%8F%D1%81%D1%82%D1%80%D0%B5%D0%B1%D1%91%D0%BD%D0%BE%D0%BA.jpg",
-          name: "The eyes",
-          style: "Postimpressionism",
-          year: 1560,
-        },
-      ];
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/`
+      );
 
-      dispatch(getPaintingsListSuccess(data));
+      const formattedData = data.map(
+        ({ id, author_name, gallery, image, name, style_name, year }) => ({
+          id,
+          gallery,
+          year,
+          name,
+          image,
+          author: author_name,
+          style: style_name,
+        })
+      );
+
+      dispatch(getPaintingsListSuccess(formattedData));
     } catch (error) {
       dispatch(getPaintingsListFailure("error"));
     }

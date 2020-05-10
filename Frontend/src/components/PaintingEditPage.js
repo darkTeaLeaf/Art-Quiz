@@ -93,6 +93,15 @@ const PaintingEditPage = ({ data }) => {
               borderless
             />
 
+            <Input
+              placeholder="Gallery"
+              type="text"
+              name="gallery"
+              defaultValue={data.gallery}
+              register={register}
+              borderless
+            />
+
             <UpdateButton type="submit">Update</UpdateButton>
           </FieldsWrapper>
         </Form>
