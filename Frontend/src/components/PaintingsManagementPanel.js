@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { FixedSizeList } from "react-window";
 
 import { getPaintingsList } from "../actions/paintingActions";
 
+import PaintingEditPage from "./PaintingEditPage";
 import Container from "../components/UI/Container";
 import Title from "../components/UI/Title";
+import Modal from "../components/UI/Modal";
 
 const Layout = styled.div`
   width: 100%;
@@ -35,7 +37,6 @@ const Row = styled.div`
   > div {
     box-sizing: border-box;
     overflow: hidden;
-    padding: 0 5px;
   }
 `;
 
@@ -81,10 +82,22 @@ const StyleCol = styled.div`
   width: 20%;
 `;
 
+const Link = styled.button`
+  font-family: inherit;
+  font-size: inherit;
+  transition: border 0.1s ease;
+
+  :hover {
+    border-bottom: 2px solid black;
+  }
+`;
+
 const PaintingsManagementPanel = ({ paintingsList, getPaintingsList }) => {
   useEffect(() => {
     getPaintingsList();
   }, [getPaintingsList]);
+
+  const [paintingIdx, setPaintingIdx] = useState(null);
 
   return (
     <Layout>
@@ -109,7 +122,15 @@ const PaintingsManagementPanel = ({ paintingsList, getPaintingsList }) => {
             >
               {({ index, style }) => (
                 <ListRow style={style}>
-                  <IDCol>{paintingsList[index].id}</IDCol>
+                  <IDCol>
+                    <Link
+                      onClick={() => {
+                        setPaintingIdx(index);
+                      }}
+                    >
+                      {paintingsList[index].id}
+                    </Link>
+                  </IDCol>
                   <NameCol>{paintingsList[index].name}</NameCol>
                   <AuthorCol>{paintingsList[index].author}</AuthorCol>
                   <YearCol>{paintingsList[index].year}</YearCol>
@@ -119,6 +140,17 @@ const PaintingsManagementPanel = ({ paintingsList, getPaintingsList }) => {
             </List>
           )}
         </PaintingsTable>
+
+        {paintingsList !== null && (
+          <Modal
+            active={paintingIdx !== null}
+            onClose={() => {
+              setPaintingIdx(null);
+            }}
+          >
+            <PaintingEditPage data={paintingsList[paintingIdx]} />
+          </Modal>
+        )}
       </Container>
     </Layout>
   );
