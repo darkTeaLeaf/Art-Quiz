@@ -28,3 +28,21 @@ class UserPermission(permissions.BasePermission):
             return request.user.is_staff
         else:
             return False
+
+
+class IsOwnerOrAdmin(permissions.BasePermission):
+    """
+    Permission to only allow authors of an request to view it,
+    and only admin accept and edit.
+    """
+
+    def has_permission(self, request, view):
+        if view.action in ['create', 'list', 'retrieve']:
+            return True
+        elif view.action in ['update', 'partial_update', 'destroy', 'accept', 'decline', 'edit']:
+            return request.user.is_staff
+        else:
+            return False
+
+    def has_object_permission(self, request, view, obj):
+        return obj.user == request.user or request.user.is_staff

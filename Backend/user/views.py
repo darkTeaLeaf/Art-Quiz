@@ -2,13 +2,15 @@ from django.contrib.auth.models import User
 from django.db.models import F
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
-from user.models import Progress
-from user.permissions import UserPermission
-from user.serializers import StatisticSerializer, UserSerializer
+from quiz.models import Painting
+from user.models import Progress, Request
+from user.permissions import UserPermission, IsOwnerOrAdmin
+from user.serializers import StatisticSerializer, UserSerializer, RequestSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -85,6 +87,51 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response()
         else:
             return Response(self.serializer_user.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RequestViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, IsOwnerOrAdmin)
+
+    def get_serializer_class(self):
+        return RequestSerializer
+
+    def get_queryset(self):
+        if 'user_id' in self.kwargs:
+            if User.objects.get(id=self.kwargs['user_id']) == self.request.user:
+                return Request.objects.filter(user_id=self.request.user.id)
+        else:
+            if self.request.user.is_staff:
+                return Request.objects.all()
+
+    @action(detail=True, methods=['post'])
+    def accept(self, request, pk=None):
+        request = Request.objects.get(id=pk)
+        request.status = request.ACCEPTED
+        request.save()
+
+        painting = Painting.objects.create(name=request.name, author=request.author, year=request.year,
+                                           style=request.style, gallery=request.gallery, image=request.image)
+        painting.save()
+
+        return Response()
+
+    @action(detail=True, methods=['post'])
+    def decline(self, request, pk=None):
+        request = Request.objects.get(id=pk)
+        request.status = request.REJECTED
+        request.save()
+
+        return Response()
+
+    @action(detail=True, methods=['post'])
+    def edit(self, request, pk=None):
+        self.partial_update(request)
+        self.accept(request, pk)
+
+        request = Request.objects.get(id=pk)
+        request.status = request.EDITED
+        request.save()
+        return Response()
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
