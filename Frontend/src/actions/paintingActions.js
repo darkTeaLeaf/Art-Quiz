@@ -153,24 +153,31 @@ const updatePaintingFailure = (error) => ({
 });
 
 export const updatePainting = (data, id) => {
-  const { image, ...rest } = data;
+  return (dispatch, getState) => {
+    const { image, ...rest } = data;
+    const { authors, styles } = getState().painting;
 
-  const formattedData = {
-    id,
-    ...rest,
-    ...(image.length
-      ? {
-          image: URL.createObjectURL(image[0]),
-        }
-      : {}),
-  };
+    const formattedData = {
+      id,
+      ...rest,
+      ...(image.length
+        ? {
+            image: URL.createObjectURL(image[0]),
+          }
+        : {}),
+      author: authors.data.filter(
+        (author) => author.id.toString() === data.author
+      )[0].name,
+      style: styles.data.filter(
+        (style) => style.id.toString() === data.style
+      )[0].name,
+    };
 
-  const formData = toFormData({
-    ...rest,
-    ...(image.length ? { image: image[0] } : {}),
-  });
+    const formData = toFormData({
+      ...rest,
+      ...(image.length ? { image: image[0] } : {}),
+    });
 
-  return (dispatch) => {
     dispatch({
       type: UPDATE_PAINTING,
     });

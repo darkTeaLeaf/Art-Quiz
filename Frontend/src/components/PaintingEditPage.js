@@ -10,6 +10,7 @@ import Container from "../components/UI/Container";
 import Title from "../components/UI/Title";
 import Input from "../components/UI/Input";
 import Button from "../components/UI/Button";
+import Select from "../components/UI/Select";
 
 const Layout = styled.div`
   width: 100%;
@@ -39,7 +40,7 @@ const UpdateButton = styled(Button)`
   margin-top: 30px;
 `;
 
-const PaintingEditPage = ({ data, updatePainting }) => {
+const PaintingEditPage = ({ data, authors, styles, updatePainting }) => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (updData) => {
@@ -66,13 +67,17 @@ const PaintingEditPage = ({ data, updatePainting }) => {
               borderless
             />
 
-            <Input
-              placeholder="Author"
-              type="text"
+            <Select
+              options={authors.map((author) => ({
+                key: author.id,
+                value: author.id,
+                text: author.name,
+              }))}
               name="author"
-              defaultValue={data.author}
               register={register}
-              borderless
+              defaultValue={
+                authors.filter((author) => author.name === data.author)[0].id
+              }
             />
 
             <Input
@@ -84,13 +89,17 @@ const PaintingEditPage = ({ data, updatePainting }) => {
               borderless
             />
 
-            <Input
-              placeholder="Style"
-              type="text"
+            <Select
+              options={styles.map((style) => ({
+                key: style.id,
+                value: style.id,
+                text: style.name,
+              }))}
               name="style"
-              defaultValue={data.style}
               register={register}
-              borderless
+              defaultValue={
+                styles.filter((style) => style.name === data.style)[0].id
+              }
             />
 
             <Input
@@ -110,8 +119,13 @@ const PaintingEditPage = ({ data, updatePainting }) => {
   );
 };
 
+const mapStateToProps = (store) => ({
+  authors: store.painting.authors.data,
+  styles: store.painting.styles.data,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   updatePainting: (data, id) => dispatch(updatePainting(data, id)),
 });
 
-export default connect(null, mapDispatchToProps)(PaintingEditPage);
+export default connect(mapStateToProps, mapDispatchToProps)(PaintingEditPage);
