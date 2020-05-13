@@ -3,7 +3,11 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { FixedSizeList } from "react-window";
 
-import { getPaintingsList } from "../actions/paintingActions";
+import {
+  getPaintings,
+  getAuthors,
+  getStyles,
+} from "../actions/paintingActions";
 
 import PaintingEditPage from "./PaintingEditPage";
 import Container from "../components/UI/Container";
@@ -92,10 +96,17 @@ const Link = styled.button`
   }
 `;
 
-const PaintingsManagementPanel = ({ paintingsList, getPaintingsList }) => {
+const PaintingsManagementPanel = ({
+  paintings,
+  getPaintings,
+  getAuthors,
+  getStyles,
+}) => {
   useEffect(() => {
-    getPaintingsList();
-  }, [getPaintingsList]);
+    getPaintings();
+    getAuthors();
+    getStyles();
+  }, [getPaintings, getAuthors, getStyles]);
 
   const [paintingIdx, setPaintingIdx] = useState(null);
 
@@ -113,10 +124,10 @@ const PaintingsManagementPanel = ({ paintingsList, getPaintingsList }) => {
             <StyleCol>Style</StyleCol>
           </TitleRow>
 
-          {paintingsList !== null && (
+          {paintings !== null && (
             <List
               height={500}
-              itemCount={paintingsList.length}
+              itemCount={paintings.length}
               itemSize={70}
               width="100%"
             >
@@ -128,27 +139,27 @@ const PaintingsManagementPanel = ({ paintingsList, getPaintingsList }) => {
                         setPaintingIdx(index);
                       }}
                     >
-                      {paintingsList[index].id}
+                      {paintings[index].id}
                     </Link>
                   </IDCol>
-                  <NameCol>{paintingsList[index].name}</NameCol>
-                  <AuthorCol>{paintingsList[index].author}</AuthorCol>
-                  <YearCol>{paintingsList[index].year}</YearCol>
-                  <StyleCol>{paintingsList[index].style}</StyleCol>
+                  <NameCol>{paintings[index].name}</NameCol>
+                  <AuthorCol>{paintings[index].author}</AuthorCol>
+                  <YearCol>{paintings[index].year}</YearCol>
+                  <StyleCol>{paintings[index].style}</StyleCol>
                 </ListRow>
               )}
             </List>
           )}
         </PaintingsTable>
 
-        {paintingsList !== null && (
+        {paintings !== null && (
           <Modal
             active={paintingIdx !== null}
             onClose={() => {
               setPaintingIdx(null);
             }}
           >
-            <PaintingEditPage data={paintingsList[paintingIdx]} />
+            <PaintingEditPage data={paintings[paintingIdx]} />
           </Modal>
         )}
       </Container>
@@ -157,11 +168,13 @@ const PaintingsManagementPanel = ({ paintingsList, getPaintingsList }) => {
 };
 
 const mapStateToProps = (store) => ({
-  paintingsList: store.painting.paintingsList.data,
+  paintings: store.painting.paintings.data,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getPaintingsList: () => dispatch(getPaintingsList()),
+  getPaintings: () => dispatch(getPaintings()),
+  getAuthors: () => dispatch(getAuthors()),
+  getStyles: () => dispatch(getStyles()),
 });
 
 export default connect(

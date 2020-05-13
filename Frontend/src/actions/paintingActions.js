@@ -2,12 +2,18 @@ import axios from "axios";
 import {
   SET_PAINTING,
   SET_PAINTING_FAIL,
-  GET_PAINTINGS_LIST,
-  GET_PAINTINGS_LIST_SUCCESS,
-  GET_PAINTINGS_LIST_FAILURE,
+  GET_PAINTINGS,
+  GET_PAINTINGS_SUCCESS,
+  GET_PAINTINGS_FAILURE,
+  GET_AUTHORS,
+  GET_AUTHORS_SUCCESS,
+  GET_AUTHORS_FAILURE,
+  GET_STYLES,
+  GET_STYLES_SUCCESS,
+  GET_STYLES_FAILURE,
+  UPDATE_PAINTING,
   UPDATE_PAINTING_SUCCESS,
   UPDATE_PAINTING_FAILURE,
-  UPDATE_PAINTING,
 } from "../constants";
 import { toFormData } from "../helpers";
 import { getAnswers, setAnswered } from "./carouselActions";
@@ -46,19 +52,19 @@ const getRandomPainting = () => {
   };
 };
 
-const getPaintingsListSuccess = (data) => ({
-  type: GET_PAINTINGS_LIST_SUCCESS,
+const getPaintingsSuccess = (data) => ({
+  type: GET_PAINTINGS_SUCCESS,
   data,
 });
 
-const getPaintingsListFailure = (error) => ({
-  type: GET_PAINTINGS_LIST_FAILURE,
+const getPaintingsFailure = (error) => ({
+  type: GET_PAINTINGS_FAILURE,
   error,
 });
 
-export const getPaintingsList = () => {
+export const getPaintings = () => {
   return async (dispatch) => {
-    dispatch({ type: GET_PAINTINGS_LIST });
+    dispatch({ type: GET_PAINTINGS });
 
     try {
       const { data } = await axios.get(
@@ -77,9 +83,61 @@ export const getPaintingsList = () => {
         })
       );
 
-      dispatch(getPaintingsListSuccess(formattedData));
+      dispatch(getPaintingsSuccess(formattedData));
     } catch (error) {
-      dispatch(getPaintingsListFailure("error"));
+      dispatch(getPaintingsFailure("error"));
+    }
+  };
+};
+
+const getAuthorsSuccess = (data) => ({
+  type: GET_AUTHORS_SUCCESS,
+  data,
+});
+
+const getAuthorsFailure = (error) => ({
+  type: GET_AUTHORS_FAILURE,
+  error,
+});
+
+export const getAuthors = () => {
+  return async (dispatch) => {
+    dispatch({ type: GET_AUTHORS });
+
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/authors/`
+      );
+
+      dispatch(getAuthorsSuccess(data));
+    } catch (error) {
+      dispatch(getAuthorsFailure("error"));
+    }
+  };
+};
+
+const getStylesSuccess = (data) => ({
+  type: GET_STYLES_SUCCESS,
+  data,
+});
+
+const getStylesFailure = (error) => ({
+  type: GET_STYLES_FAILURE,
+  error,
+});
+
+export const getStyles = () => {
+  return async (dispatch) => {
+    dispatch({ type: GET_STYLES });
+
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/styles/`
+      );
+
+      dispatch(getStylesSuccess(data));
+    } catch (error) {
+      dispatch(getStylesFailure("error"));
     }
   };
 };
@@ -95,7 +153,7 @@ const updatePaintingFailure = (error) => ({
 });
 
 export const updatePainting = (data, id) => {
-  const {image, ...rest } = data;
+  const { image, ...rest } = data;
 
   const formattedData = {
     id,

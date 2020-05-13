@@ -1,9 +1,15 @@
 import {
   SET_PAINTING,
   SET_PAINTING_FAIL,
-  GET_PAINTINGS_LIST,
-  GET_PAINTINGS_LIST_SUCCESS,
-  GET_PAINTINGS_LIST_FAILURE,
+  GET_PAINTINGS,
+  GET_PAINTINGS_SUCCESS,
+  GET_PAINTINGS_FAILURE,
+  GET_AUTHORS,
+  GET_AUTHORS_SUCCESS,
+  GET_AUTHORS_FAILURE,
+  GET_STYLES,
+  GET_STYLES_SUCCESS,
+  GET_STYLES_FAILURE,
   UPDATE_PAINTING,
   UPDATE_PAINTING_SUCCESS,
   UPDATE_PAINTING_FAILURE,
@@ -12,7 +18,17 @@ import {
 const initialState = {
   id: null,
   url: "",
-  paintingsList: {
+  paintings: {
+    data: null,
+    error: "",
+    loaded: false,
+  },
+  authors: {
+    data: null,
+    error: "",
+    loaded: false,
+  },
+  styles: {
     data: null,
     error: "",
     loaded: false,
@@ -39,22 +55,22 @@ export function paintingReducer(state = initialState, action) {
       return state;
     }
 
-    case GET_PAINTINGS_LIST: {
+    case GET_PAINTINGS: {
       return {
         ...state,
-        paintingsList: {
-          ...state.paintingsList,
+        paintings: {
+          ...state.paintings,
           loaded: false,
           error: "",
         },
       };
     }
 
-    case GET_PAINTINGS_LIST_SUCCESS: {
+    case GET_PAINTINGS_SUCCESS: {
       return {
         ...state,
-        paintingsList: {
-          ...state.paintingsList,
+        paintings: {
+          ...state.paintings,
           data: action.data,
           error: "",
           loaded: true,
@@ -62,11 +78,79 @@ export function paintingReducer(state = initialState, action) {
       };
     }
 
-    case GET_PAINTINGS_LIST_FAILURE: {
+    case GET_PAINTINGS_FAILURE: {
       return {
         ...state,
-        paintingsList: {
-          ...state.paintingsList,
+        paintings: {
+          ...state.paintings,
+          error: action.error,
+          loaded: false,
+        },
+      };
+    }
+
+    case GET_AUTHORS: {
+      return {
+        ...state,
+        authors: {
+          ...state.authors,
+          loaded: false,
+          error: "",
+        },
+      };
+    }
+
+    case GET_AUTHORS_SUCCESS: {
+      return {
+        ...state,
+        authors: {
+          ...state.authors,
+          data: action.data,
+          error: "",
+          loaded: true,
+        },
+      };
+    }
+
+    case GET_AUTHORS_FAILURE: {
+      return {
+        ...state,
+        authors: {
+          ...state.authors,
+          error: action.error,
+          loaded: false,
+        },
+      };
+    }
+
+    case GET_STYLES: {
+      return {
+        ...state,
+        styles: {
+          ...state.styles,
+          loaded: false,
+          error: "",
+        },
+      };
+    }
+
+    case GET_STYLES_SUCCESS: {
+      return {
+        ...state,
+        styles: {
+          ...state.styles,
+          data: action.data,
+          error: "",
+          loaded: true,
+        },
+      };
+    }
+
+    case GET_STYLES_FAILURE: {
+      return {
+        ...state,
+        styles: {
+          ...state.styles,
           error: action.error,
           loaded: false,
         },
@@ -90,9 +174,9 @@ export function paintingReducer(state = initialState, action) {
           ...state.paintingUpdate,
           loaded: true,
         },
-        paintingsList: {
-          ...state.paintingsList,
-          data: state.paintingsList.data.map((painting) =>
+        paintings: {
+          ...state.paintings,
+          data: state.paintings.data.map((painting) =>
             painting.id === action.data.id
               ? { ...painting, ...action.data }
               : painting
