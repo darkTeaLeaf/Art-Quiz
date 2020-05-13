@@ -1,6 +1,9 @@
 import React from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+
+import { updatePainting } from "../actions/paintingActions";
 
 import UploadImage from "../components/UploadImage";
 import Container from "../components/UI/Container";
@@ -36,11 +39,11 @@ const UpdateButton = styled(Button)`
   margin-top: 30px;
 `;
 
-const PaintingEditPage = ({ data }) => {
+const PaintingEditPage = ({ data, updatePainting }) => {
   const { register, handleSubmit } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = (updData) => {
+    updatePainting(updData, data.id);
   };
 
   return (
@@ -50,10 +53,7 @@ const PaintingEditPage = ({ data }) => {
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <UploadImage register={register} width="40%">
-            <img
-              src={process.env.REACT_APP_BACKEND_ADDRESS + data.image}
-              alt="painting"
-            />
+            <img src={data.image} alt="painting" />
           </UploadImage>
 
           <FieldsWrapper>
@@ -110,4 +110,8 @@ const PaintingEditPage = ({ data }) => {
   );
 };
 
-export default PaintingEditPage;
+const mapDispatchToProps = (dispatch) => ({
+  updatePainting: (data, id) => dispatch(updatePainting(data, id)),
+});
+
+export default connect(null, mapDispatchToProps)(PaintingEditPage);

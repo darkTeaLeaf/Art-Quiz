@@ -4,6 +4,9 @@ import {
   GET_PAINTINGS_LIST,
   GET_PAINTINGS_LIST_SUCCESS,
   GET_PAINTINGS_LIST_FAILURE,
+  UPDATE_PAINTING,
+  UPDATE_PAINTING_SUCCESS,
+  UPDATE_PAINTING_FAILURE,
 } from "../constants";
 
 const initialState = {
@@ -13,6 +16,10 @@ const initialState = {
     data: null,
     error: "",
     loaded: false,
+  },
+  paintingUpdate: {
+    loaded: true,
+    error: "",
   },
 };
 
@@ -62,6 +69,45 @@ export function paintingReducer(state = initialState, action) {
           ...state.paintingsList,
           error: action.error,
           loaded: false,
+        },
+      };
+    }
+
+    case UPDATE_PAINTING: {
+      return {
+        ...state,
+        paintingUpdate: {
+          ...state.paintingUpdate,
+          loaded: false,
+        },
+      };
+    }
+
+    case UPDATE_PAINTING_SUCCESS: {
+      return {
+        ...state,
+        paintingUpdate: {
+          ...state.paintingUpdate,
+          loaded: true,
+        },
+        paintingsList: {
+          ...state.paintingsList,
+          data: state.paintingsList.data.map((painting) =>
+            painting.id === action.data.id
+              ? { ...painting, ...action.data }
+              : painting
+          ),
+        },
+      };
+    }
+
+    case UPDATE_PAINTING_FAILURE: {
+      return {
+        ...state,
+        paintingUpdate: {
+          ...state.paintingUpdate,
+          loaded: false,
+          error: action.error,
         },
       };
     }
