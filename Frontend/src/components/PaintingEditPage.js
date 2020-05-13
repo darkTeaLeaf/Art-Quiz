@@ -22,7 +22,8 @@ const Form = styled.form`
   align-items: flex-start;
   justify-content: center;
 
-  input {
+  input,
+  select {
     margin-bottom: 12px;
   }
 `;

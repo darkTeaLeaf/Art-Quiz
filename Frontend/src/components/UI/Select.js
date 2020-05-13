@@ -1,7 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-const Select = styled.select``;
+const Select = styled.select`
+  padding: 10px;
+  padding-left: 6px;
+
+  font-family: Raleway;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 20px;
+  color: black;
+`;
 
 const Option = styled.option``;
 
