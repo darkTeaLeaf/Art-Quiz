@@ -179,10 +179,12 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
         </Name>
 
         <ButtonsWrapper>
-          <Button>Edit account data</Button>
-          <Button link onClick={togglePaintingsManagementPanel}>
-            Manage paintings
-          </Button>
+          {/* <Button>Edit account data</Button> */}
+          {isModerator && (
+            <Button link onClick={togglePaintingsManagementPanel}>
+              Manage paintings
+            </Button>
+          )}
         </ButtonsWrapper>
       </ProfileInfo>
 
