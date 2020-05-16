@@ -9,6 +9,7 @@ import {
   getStyles,
 } from "../actions/paintingActions";
 
+import SearchBar from "./SearchBar";
 import PaintingEditPage from "./PaintingEditPage";
 import Container from "../components/UI/Container";
 import Title from "../components/UI/Title";
@@ -21,7 +22,6 @@ const Layout = styled.div`
 const PaintingsTable = styled.div`
   background-color: black;
   border: 10px solid black;
-  max-width: 850px;
   width: 100%;
 `;
 
@@ -112,8 +112,10 @@ const PaintingsManagementPanel = ({
 
   return (
     <Layout>
-      <Container>
+      <Container maxWidth={850}>
         <Title bold>Manage paintings</Title>
+
+        <SearchBar/>
 
         <PaintingsTable>
           <TitleRow>
@@ -126,7 +128,7 @@ const PaintingsManagementPanel = ({
 
           {paintings !== null && (
             <List
-              height={500}
+              height={430}
               itemCount={paintings.length}
               itemSize={70}
               width="100%"
