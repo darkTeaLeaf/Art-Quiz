@@ -38,7 +38,12 @@ const SearchBar = ({ list, onUpdate }) => {
   const filter = (query) => {
     const listFiltered = list.filter((item) =>
       Object.values(item).reduce(
-        (prev, curr) => prev || curr.toString().indexOf(query) !== -1,
+        (prev, curr) =>
+          prev ||
+          curr
+            .toString()
+            .toLowerCase()
+            .indexOf(query.toLowerCase()) !== -1,
         false
       )
     );
