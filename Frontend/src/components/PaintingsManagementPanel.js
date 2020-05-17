@@ -9,6 +9,7 @@ import {
   getStyles,
 } from "../actions/paintingActions";
 
+import SearchBar from "./SearchBar";
 import PaintingEditPage from "./PaintingEditPage";
 import Container from "../components/UI/Container";
 import Title from "../components/UI/Title";
@@ -21,7 +22,6 @@ const Layout = styled.div`
 const PaintingsTable = styled.div`
   background-color: black;
   border: 10px solid black;
-  max-width: 850px;
   width: 100%;
 `;
 
@@ -108,59 +108,75 @@ const PaintingsManagementPanel = ({
     getStyles();
   }, [getPaintings, getAuthors, getStyles]);
 
-  const [paintingIdx, setPaintingIdx] = useState(null);
+  useEffect(() => {
+    setPaintingsFiltered(paintings);
+  }, [paintings]);
+
+  const [paintingIndex, setPaintingIndex] = useState(null);
+  const [paintingsFiltered, setPaintingsFiltered] = useState(null);
+
+  const onPaintingsFilter = (pFiltered) => {
+    setPaintingsFiltered(
+      paintings.filter((p) => pFiltered.map((pF) => pF.id).includes(p.id))
+    );
+  };
 
   return (
     <Layout>
-      <Container>
+      <Container maxWidth={850}>
         <Title bold>Manage paintings</Title>
 
-        <PaintingsTable>
-          <TitleRow>
-            <IDCol>Id</IDCol>
-            <NameCol>Name</NameCol>
-            <AuthorCol>Author</AuthorCol>
-            <YearCol>Year</YearCol>
-            <StyleCol>Style</StyleCol>
-          </TitleRow>
+        {paintingsFiltered !== null && (
+          <>
+            <SearchBar
+              list={paintings.map(({ image, ...rest }) => rest)}
+              onUpdate={onPaintingsFilter}
+            />
 
-          {paintings !== null && (
-            <List
-              height={500}
-              itemCount={paintings.length}
-              itemSize={70}
-              width="100%"
+            <PaintingsTable>
+              <TitleRow>
+                <IDCol>Id</IDCol>
+                <NameCol>Name</NameCol>
+                <AuthorCol>Author</AuthorCol>
+                <YearCol>Year</YearCol>
+                <StyleCol>Style</StyleCol>
+              </TitleRow>
+
+              <List
+                height={430}
+                itemCount={paintingsFiltered.length}
+                itemSize={70}
+                width="100%"
+              >
+                {({ index, style }) => (
+                  <ListRow style={style}>
+                    <IDCol>
+                      <Link
+                        onClick={() => {
+                          setPaintingIndex(index);
+                        }}
+                      >
+                        {paintingsFiltered[index].id}
+                      </Link>
+                    </IDCol>
+                    <NameCol>{paintingsFiltered[index].name}</NameCol>
+                    <AuthorCol>{paintingsFiltered[index].author}</AuthorCol>
+                    <YearCol>{paintingsFiltered[index].year}</YearCol>
+                    <StyleCol>{paintingsFiltered[index].style}</StyleCol>
+                  </ListRow>
+                )}
+              </List>
+            </PaintingsTable>
+
+            <Modal
+              active={paintingIndex !== null}
+              onClose={() => {
+                setPaintingIndex(null);
+              }}
             >
-              {({ index, style }) => (
-                <ListRow style={style}>
-                  <IDCol>
-                    <Link
-                      onClick={() => {
-                        setPaintingIdx(index);
-                      }}
-                    >
-                      {paintings[index].id}
-                    </Link>
-                  </IDCol>
-                  <NameCol>{paintings[index].name}</NameCol>
-                  <AuthorCol>{paintings[index].author}</AuthorCol>
-                  <YearCol>{paintings[index].year}</YearCol>
-                  <StyleCol>{paintings[index].style}</StyleCol>
-                </ListRow>
-              )}
-            </List>
-          )}
-        </PaintingsTable>
-
-        {paintings !== null && (
-          <Modal
-            active={paintingIdx !== null}
-            onClose={() => {
-              setPaintingIdx(null);
-            }}
-          >
-            <PaintingEditPage data={paintings[paintingIdx]} />
-          </Modal>
+              <PaintingEditPage data={paintingsFiltered[paintingIndex]} />
+            </Modal>
+          </>
         )}
       </Container>
     </Layout>

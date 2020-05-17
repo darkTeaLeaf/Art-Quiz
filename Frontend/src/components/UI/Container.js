@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   width: 85%;
-  max-width: 1200px;
+  max-width: ${(props) => props.maxWidth || 1200}px;
   margin: auto;
 
   display: flex;
