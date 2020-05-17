@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
+import debounce from "lodash.debounce";
 
 const Wrapper = styled.form`
   width: 100%;
   border: 5px solid black;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  > * {
+    display: flex;
+  }
 `;
 
 const SearchField = styled.input`
@@ -16,30 +23,46 @@ const SearchField = styled.input`
   text-align: left;
 `;
 
-const Button = styled.button``;
+const Button = styled.button`
+  width: 50px;
+  height: 50px;
+  font-size: 25px;
+  flex-shrink: 0;
+  justify-content: center;
+`;
 
 const SearchBar = ({ list, onUpdate }) => {
-  const { register, handleSubmit } = useForm();
+  const [query, setQuery] = useState("");
+  const filterDebounced = useRef(debounce((q) => filter(q), 300)).current;
 
-  const onSubmit = ({ query }) => {
+  const filter = (query) => {
     const listFiltered = list.filter((item) =>
       Object.values(item).reduce(
         (prev, curr) => prev || curr.toString().indexOf(query) !== -1,
         false
       )
     );
-
     onUpdate(listFiltered);
   };
 
+  const handleChange = (query) => {
+    setQuery(query);
+    filterDebounced(query, 300);
+  };
+
   return (
-    <Wrapper onSubmit={handleSubmit(onSubmit)}>
+    <Wrapper
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
       <SearchField
-        ref={register}
         name="query"
         placeholder="Start typing here..."
+        value={query}
+        onChange={({ target: { value } }) => handleChange(value)}
       />
-      <Button />
+      {query && <Button onClick={() => handleChange("")}>✕</Button>}
     </Wrapper>
   );
 };
