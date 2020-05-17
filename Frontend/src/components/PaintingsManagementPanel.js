@@ -129,7 +129,7 @@ const PaintingsManagementPanel = ({
         {paintingsFiltered !== null && (
           <>
             <SearchBar
-              list={paintingsFiltered.map(({ image, ...rest }) => rest)}
+              list={paintings.map(({ image, ...rest }) => rest)}
               onUpdate={onPaintingsFilter}
             />
 
