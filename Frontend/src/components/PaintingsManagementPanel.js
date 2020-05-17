@@ -108,14 +108,19 @@ const PaintingsManagementPanel = ({
     getStyles();
   }, [getPaintings, getAuthors, getStyles]);
 
+  useEffect(() => {
+    setPaintingsFiltered(paintings);
+  }, [paintings]);
+
   const [paintingIdx, setPaintingIdx] = useState(null);
+  const [paintingsFiltered, setPaintingsFiltered] = useState(null);
 
   return (
     <Layout>
       <Container maxWidth={850}>
         <Title bold>Manage paintings</Title>
 
-        <SearchBar/>
+        <SearchBar paintings={paintingsFiltered} onUpdate={setPaintingsFiltered} />
 
         <PaintingsTable>
           <TitleRow>
@@ -126,10 +131,10 @@ const PaintingsManagementPanel = ({
             <StyleCol>Style</StyleCol>
           </TitleRow>
 
-          {paintings !== null && (
+          {paintingsFiltered !== null && (
             <List
               height={430}
-              itemCount={paintings.length}
+              itemCount={paintingsFiltered.length}
               itemSize={70}
               width="100%"
             >
@@ -141,27 +146,27 @@ const PaintingsManagementPanel = ({
                         setPaintingIdx(index);
                       }}
                     >
-                      {paintings[index].id}
+                      {paintingsFiltered[index].id}
                     </Link>
                   </IDCol>
-                  <NameCol>{paintings[index].name}</NameCol>
-                  <AuthorCol>{paintings[index].author}</AuthorCol>
-                  <YearCol>{paintings[index].year}</YearCol>
-                  <StyleCol>{paintings[index].style}</StyleCol>
+                  <NameCol>{paintingsFiltered[index].name}</NameCol>
+                  <AuthorCol>{paintingsFiltered[index].author}</AuthorCol>
+                  <YearCol>{paintingsFiltered[index].year}</YearCol>
+                  <StyleCol>{paintingsFiltered[index].style}</StyleCol>
                 </ListRow>
               )}
             </List>
           )}
         </PaintingsTable>
 
-        {paintings !== null && (
+        {paintingsFiltered !== null && (
           <Modal
             active={paintingIdx !== null}
             onClose={() => {
               setPaintingIdx(null);
             }}
           >
-            <PaintingEditPage data={paintings[paintingIdx]} />
+            <PaintingEditPage data={paintingsFiltered[paintingIdx]} />
           </Modal>
         )}
       </Container>

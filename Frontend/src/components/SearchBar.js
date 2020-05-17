@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
 
 const Wrapper = styled.form`
   width: 100%;
@@ -8,7 +9,7 @@ const Wrapper = styled.form`
 `;
 
 const SearchField = styled.input`
-width: 100%;
+  width: 100%;
   padding: 15px;
   font-size: 20px;
   font-family: Raleway;
@@ -17,10 +18,20 @@ width: 100%;
 
 const Button = styled.button``;
 
-const SearchBar = () => {
+const SearchBar = ({ paintings, onUpdate }) => {
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = ({ query }) => {
+    console.log(query);
+  };
+
   return (
-    <Wrapper>
-      <SearchField placeholder="Start typing here..." />
+    <Wrapper onSubmit={handleSubmit(onSubmit)}>
+      <SearchField
+        ref={register}
+        name="query"
+        placeholder="Start typing here..."
+      />
       <Button />
     </Wrapper>
   );
