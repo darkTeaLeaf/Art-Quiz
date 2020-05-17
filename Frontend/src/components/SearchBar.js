@@ -18,11 +18,18 @@ const SearchField = styled.input`
 
 const Button = styled.button``;
 
-const SearchBar = ({ paintings, onUpdate }) => {
+const SearchBar = ({ list, onUpdate }) => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = ({ query }) => {
-    console.log(query);
+    const listFiltered = list.filter((item) =>
+      Object.values(item).reduce(
+        (prev, curr) => prev || curr.toString().indexOf(query) !== -1,
+        false
+      )
+    );
+
+    onUpdate(listFiltered);
   };
 
   return (
