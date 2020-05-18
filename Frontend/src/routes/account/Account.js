@@ -6,6 +6,7 @@ import { Redirect, withRouter } from "react-router-dom";
 import { getUserData } from "../../actions/accountActions";
 
 import PaintingsManagementPanel from "../../components/PaintingsManagementPanel";
+import PaintingSuggestPage from "../../components/PaintingSuggestPage";
 import Avatar from "../../components/UI/Avatar";
 import Button from "../../components/UI/Button";
 import WelcomeMsg from "../../components/UI/Title";
@@ -143,13 +144,16 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
     statistic: { winRate, winsTotal, gamesTotal },
   } = userData;
 
-  const [
-    paintingsManagementPanelActive,
-    setPaintingsManagementPanelActive,
-  ] = useState(false);
+  const [paintManagModalActive, setPaintManagModalActive] = useState(false);
 
-  const togglePaintingsManagementPanel = () => {
-    setPaintingsManagementPanelActive(!paintingsManagementPanelActive);
+  const [paintSuggestModalActive, setPaintSuggestModalActive] = useState(false);
+
+  const togglePaintManagModal = () => {
+    setPaintManagModalActive(!paintManagModalActive);
+  };
+
+  const togglePaintSuggestModal = () => {
+    setPaintSuggestModalActive(!paintSuggestModalActive);
   };
 
   return isAuthenticated ? (
@@ -180,9 +184,13 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
 
         <ButtonsWrapper>
           {/* <Button>Edit account data</Button> */}
-          {isModerator && (
-            <Button link onClick={togglePaintingsManagementPanel}>
+          {isModerator ? (
+            <Button link onClick={togglePaintManagModal}>
               Manage paintings
+            </Button>
+          ) : (
+            <Button link onClick={togglePaintSuggestModal}>
+              Suggest painting
             </Button>
           )}
         </ButtonsWrapper>
@@ -231,11 +239,12 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
         </Statistics>
       </UserData>
 
-      <Modal
-        active={paintingsManagementPanelActive}
-        onClose={togglePaintingsManagementPanel}
-      >
+      <Modal active={paintManagModalActive} onClose={togglePaintManagModal}>
         <PaintingsManagementPanel />
+      </Modal>
+
+      <Modal active={paintSuggestModalActive} onClose={togglePaintSuggestModal}>
+        <PaintingSuggestPage />
       </Modal>
     </AccountWrapper>
   ) : (

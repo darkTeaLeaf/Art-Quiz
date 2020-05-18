@@ -25,10 +25,10 @@ export default ({
   type,
   name,
   defaultValue,
-  required = false,
   register,
-  borderless,
+  rules,
   errors,
+  borderless,
 }) => {
   return (
     <Input className="input-wrapper" borderless={borderless}>
@@ -36,7 +36,7 @@ export default ({
         type={type}
         name={name}
         defaultValue={defaultValue}
-        ref={register({ required })}
+        ref={register(rules)}
         placeholder={placeholder}
       />
       {errors && errors[name] && <div className="error">* Required</div>}

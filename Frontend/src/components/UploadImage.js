@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-const CameraPlaceholder = styled.div`
+const ImgOnHover = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -25,10 +25,29 @@ const CameraPlaceholder = styled.div`
   }
 `;
 
-const Wrapper = styled.label`
+const ImgPlaceholder = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 40px;
+    height: 100%;
+  }
+`;
+
+const Uploader = styled.label`
+  display: flex;
   position: relative;
   cursor: pointer;
-  width: ${(props) => props.width};
+  border: ${(props) => (props.outlined ? 8 : 0)}px solid black;
+
+  ${(props) =>
+    props.noImage &&
+    css`
+      height: 200px;
+      width: 200px;
+    `}
 
   input {
     display: none;
@@ -38,32 +57,58 @@ const Wrapper = styled.label`
     width: 100%;
   }
 
-  :hover ${CameraPlaceholder} {
+  :hover ${ImgOnHover} {
     visibility: visible;
     opacity: 1;
   }
 `;
 
-const UploadImage = ({ children, register, width }) => {
+const Wrapper = styled.div``;
+
+const UploadImage = ({
+  children,
+  register,
+  rules,
+  errors,
+  outlined = false,
+  style,
+}) => {
   const [url, setUrl] = useState(null);
 
   return (
-    <Wrapper width={width}>
-      <CameraPlaceholder>
-        <img src={`${process.env.PUBLIC_URL}/img/camera.svg`} alt="camera" />
-      </CameraPlaceholder>
+    <Wrapper style={style}>
+      <Uploader
+        outlined={outlined}
+        noImage={children === undefined && url === null}
+      >
+        <ImgOnHover>
+          <img src={`${process.env.PUBLIC_URL}/img/camera.svg`} alt="camera" />
+        </ImgOnHover>
 
-      {url === null ? children : <img src={url} alt="avatar" />}
+        {url === null ? (
+          children || (
+            <ImgPlaceholder>
+              <img
+                src={`${process.env.PUBLIC_URL}/img/camera.svg`}
+                alt="camera"
+              />
+            </ImgPlaceholder>
+          )
+        ) : (
+          <img src={url} alt="avatar" />
+        )}
 
-      <input
-        type="file"
-        name="image"
-        accept="image/png, image/jpeg, image/jpg"
-        ref={register({ required: false })}
-        onChange={(e) => {
-          setUrl(URL.createObjectURL(e.target.files[0]));
-        }}
-      />
+        <input
+          type="file"
+          name="image"
+          accept="image/png, image/jpeg, image/jpg"
+          ref={register(rules)}
+          onChange={(e) => {
+            setUrl(URL.createObjectURL(e.target.files[0]));
+          }}
+        />
+      </Uploader>
+      {errors && errors.image && <div className="error">* Required</div>}
     </Wrapper>
   );
 };

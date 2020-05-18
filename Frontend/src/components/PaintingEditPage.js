@@ -54,7 +54,7 @@ const PaintingEditPage = ({ data, authors, styles, updatePainting }) => {
         <Title bold>{data.name}</Title>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <UploadImage register={register} width="40%">
+          <UploadImage register={register} style={{ maxWidth: "40%" }}>
             <img src={data.image} alt="painting" />
           </UploadImage>
 
