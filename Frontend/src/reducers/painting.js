@@ -13,6 +13,9 @@ import {
   UPDATE_PAINTING,
   UPDATE_PAINTING_SUCCESS,
   UPDATE_PAINTING_FAILURE,
+  SUGGEST_PAINTING,
+  SUGGEST_PAINTING_SUCCESS,
+  SUGGEST_PAINTING_FAILURE,
 } from "../constants";
 
 const initialState = {
@@ -34,6 +37,10 @@ const initialState = {
     loaded: false,
   },
   paintingUpdate: {
+    loaded: true,
+    error: "",
+  },
+  paintingSuggestStatus: {
     loaded: true,
     error: "",
   },
@@ -190,6 +197,39 @@ export function paintingReducer(state = initialState, action) {
         ...state,
         paintingUpdate: {
           ...state.paintingUpdate,
+          loaded: false,
+          error: action.error,
+        },
+      };
+    }
+
+    case SUGGEST_PAINTING: {
+      return {
+        ...state,
+        paintingSuggestStatus: {
+          ...state.paintingSuggestStatus,
+          loaded: false,
+          error: "",
+        },
+      };
+    }
+
+    case SUGGEST_PAINTING_SUCCESS: {
+      return {
+        ...state,
+        paintingSuggestStatus: {
+          ...state.paintingSuggestStatus,
+          loaded: true,
+          error: "",
+        },
+      };
+    }
+
+    case SUGGEST_PAINTING_FAILURE: {
+      return {
+        ...state,
+        paintingSuggestStatus: {
+          ...state.paintingSuggestStatus,
           loaded: false,
           error: action.error,
         },
