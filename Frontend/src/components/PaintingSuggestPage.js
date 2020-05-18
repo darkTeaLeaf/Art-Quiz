@@ -3,7 +3,12 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
-import { getAuthors, getStyles } from "../actions/paintingActions";
+import {
+  getAuthors,
+  getStyles,
+  suggestPainting,
+} from "../actions/paintingActions";
+import { toFormData } from "../helpers";
 
 import UploadImage from "../components/UploadImage";
 import Container from "../components/UI/Container";
@@ -40,7 +45,13 @@ const UpdateButton = styled(Button)`
   margin-top: 30px;
 `;
 
-const PaintingSuggestPage = ({ authors, styles, getAuthors, getStyles }) => {
+const PaintingSuggestPage = ({
+  authors,
+  styles,
+  getAuthors,
+  getStyles,
+  suggestPainting,
+}) => {
   useEffect(() => {
     getAuthors();
     getStyles();
@@ -48,8 +59,8 @@ const PaintingSuggestPage = ({ authors, styles, getAuthors, getStyles }) => {
 
   const { register, handleSubmit, errors } = useForm();
 
-  const onSubmit = (updData) => {
-    console.log(updData);
+  const onSubmit = (pData) => {
+    suggestPainting(toFormData({ ...pData, image: pData.image[0] }));
   };
 
   return (
@@ -138,6 +149,7 @@ const mapStateToProps = (store) => ({
 const mapDispatchToProps = (dispatch) => ({
   getAuthors: () => dispatch(getAuthors()),
   getStyles: () => dispatch(getStyles()),
+  suggestPainting: (pData) => dispatch(suggestPainting(pData)),
 });
 
 export default connect(

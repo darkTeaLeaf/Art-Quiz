@@ -217,11 +217,17 @@ const suggestPaintingFailure = (error) => ({
 export const suggestPainting = (data) => {
   return async (dispatch) => {
     dispatch({ type: SUGGEST_PAINTING });
+    const userId = localStorage.getItem("id");
 
     try {
-      await axios.get(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/`,
-        data
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}/requests/`,
+        data,
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+          },
+        }
       );
 
       dispatch(suggestPaintingSuccess(data));
