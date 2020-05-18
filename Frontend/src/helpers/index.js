@@ -9,3 +9,11 @@ export const shuffle = array => {
 
   return array;
 };
+
+export const toFormData = (data) => {
+  let formData = new FormData();
+  for (let key in data) {
+    formData.append(key, data[key]);
+  }
+  return formData;
+}

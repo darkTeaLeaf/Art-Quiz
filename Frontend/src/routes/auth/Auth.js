@@ -13,7 +13,7 @@ const SignIn = ({ signIn }) => {
   const { register, handleSubmit, errors } = useForm();
   const history = useHistory();
 
-  const onSubmit = async credentials => {
+  const onSubmit = async (credentials) => {
     const status = await signIn(credentials);
     if (status === "success") {
       history.push("/account");
@@ -53,14 +53,13 @@ const SignUp = ({ signUp }) => {
   const { register, handleSubmit, errors } = useForm();
   const history = useHistory();
 
-  const onSubmit = async credentials => {
-    console.log(credentials);
+  const onSubmit = async (credentials) => {
     const [first_name, last_name] = credentials.full_name.trim().split(/\s+/);
     credentials = {
       ...credentials,
       first_name: first_name || "",
       last_name: last_name || "",
-      avatar: credentials.avatar[0]
+      avatar: credentials.avatar[0],
     };
     delete credentials.full_name;
     if (!credentials.avatar) delete credentials.avatar;
@@ -94,7 +93,7 @@ const SignUp = ({ signUp }) => {
             type="file"
             name="avatar"
             ref={register({ required: false })}
-            onChange={e => {
+            onChange={(e) => {
               setUrl(URL.createObjectURL(e.target.files[0]));
             }}
           />
@@ -143,13 +142,13 @@ const SignUp = ({ signUp }) => {
 const BackPanel = styled.div`
   padding: 0 50px;
   display: flex;
-  flex-direction: ${props => (props.formState ? "row" : "row-reverse")};
+  flex-direction: ${(props) => (props.formState ? "row" : "row-reverse")};
   align-items: center;
   justify-content: space-between;
   height: 400px;
   width: 850px;
   background-color: black;
-}`;
+`;
 
 const AuthForm = ({ isAuthenticated, signIn, signUp }) => {
   const [formState, toggleFormState] = useState(true);
@@ -190,13 +189,13 @@ const AuthForm = ({ isAuthenticated, signIn, signUp }) => {
   );
 };
 
-const mapStateToProps = store => ({
-  isAuthenticated: store.account.isAuthenticated
+const mapStateToProps = (store) => ({
+  isAuthenticated: store.account.isAuthenticated,
 });
 
-const mapDispatchToProps = dispatch => ({
-  signIn: credentials => dispatch(signIn(credentials)),
-  signUp: credentials => dispatch(signUp(credentials))
+const mapDispatchToProps = (dispatch) => ({
+  signIn: (credentials) => dispatch(signIn(credentials)),
+  signUp: (credentials) => dispatch(signUp(credentials)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthForm);

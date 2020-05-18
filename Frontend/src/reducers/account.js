@@ -16,6 +16,7 @@ const initialState = {
     lastName: "",
     avatar: "",
     achievements: [],
+    isModerator: false,
     statistic: {
       winRate: 0,
       gamesTotal: 0,

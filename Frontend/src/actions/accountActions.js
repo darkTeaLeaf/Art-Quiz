@@ -6,27 +6,27 @@ import {
   SIGN_UP_FAILURE,
   UPDATE_USER_DATA,
   GET_USER_DATA_FAILURE,
-  SIGN_OUT
+  SIGN_OUT,
 } from "../constants";
 
-const signInSuccess = id => ({
+const signInSuccess = (id) => ({
   type: SIGN_IN_SUCCESS,
   payload: {
     id,
-    isAuthenticated: true
-  }
+    isAuthenticated: true,
+  },
 });
 
 const signInFailure = () => ({
   type: SIGN_IN_FAILURE,
-  payload: {}
+  payload: {},
 });
 
-export const signIn = credentials => {
-  return async dispatch => {
+export const signIn = (credentials) => {
+  return async (dispatch) => {
     try {
       const {
-        data: { token, id }
+        data: { token, id },
       } = await axios.post(
         `${process.env.REACT_APP_BACKEND_ADDRESS}/api-token-auth/`,
         credentials
@@ -44,24 +44,24 @@ export const signIn = credentials => {
   };
 };
 
-const signUpSuccess = id => ({
+const signUpSuccess = (id) => ({
   type: SIGN_UP_SUCCESS,
   payload: {
     id,
-    isAuthenticated: true
-  }
+    isAuthenticated: true,
+  },
 });
 
 const signUpFailure = () => ({
   type: SIGN_UP_FAILURE,
-  payload: {}
+  payload: {},
 });
 
-export const signUp = credentials => {
-  return async dispatch => {
+export const signUp = (credentials) => {
+  return async (dispatch) => {
     try {
       const {
-        data: { token, id }
+        data: { token, id },
       } = await axios.post(
         `${process.env.REACT_APP_BACKEND_ADDRESS}/users/`,
         credentials,
@@ -86,28 +86,30 @@ const updateUserData = ({
   first_name,
   last_name,
   avatar,
+  is_staff,
   achievements,
-  statistic: { win_rate, games_total, wins_total }
+  statistic: { win_rate, games_total, wins_total },
 }) => ({
   type: UPDATE_USER_DATA,
   payload: {
     username,
     email,
     avatar,
+    isModerator: is_staff,
     achievements,
     statistic: {
-      winRate: win_rate.toFixed(4)*100,
+      winRate: (win_rate * 100).toFixed(2),
       gamesTotal: games_total,
-      winsTotal: wins_total
+      winsTotal: wins_total,
     },
     firstName: first_name,
-    lastName: last_name
-  }
+    lastName: last_name,
+  },
 });
 
 const getUserDataFailure = () => ({
   type: GET_USER_DATA_FAILURE,
-  payload: {}
+  payload: {},
 });
 
 export const getUserData = () => {
@@ -119,8 +121,8 @@ export const getUserData = () => {
         `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${id}/`,
         {
           headers: {
-            Authorization: `Token ${token}`
-          }
+            Authorization: `Token ${token}`,
+          },
         }
       );
 
