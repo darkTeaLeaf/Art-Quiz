@@ -158,6 +158,7 @@ const getRequestsFailure = (error) => ({
 export const getRequests = () => {
   return async (dispatch) => {
     const userId = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
 
     dispatch({ type: GET_REQUESTS });
 
@@ -166,7 +167,7 @@ export const getRequests = () => {
         `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}/requests/`,
         {
           headers: {
-            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+            Authorization: `Token ${token}`,
           },
         }
       );
