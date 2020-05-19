@@ -14,9 +14,6 @@ import {
   UPDATE_PAINTING,
   UPDATE_PAINTING_SUCCESS,
   UPDATE_PAINTING_FAILURE,
-  SUGGEST_PAINTING,
-  SUGGEST_PAINTING_SUCCESS,
-  SUGGEST_PAINTING_FAILURE,
 } from "../constants";
 import { toFormData } from "../helpers";
 import { getAnswers, setAnswered } from "./carouselActions";
@@ -200,39 +197,6 @@ export const updatePainting = (data, id) => {
       dispatch(updatePaintingSuccess(formattedData));
     } catch (error) {
       dispatch(updatePaintingFailure("error"));
-    }
-  };
-};
-
-const suggestPaintingSuccess = (data) => ({
-  type: SUGGEST_PAINTING_SUCCESS,
-  data,
-});
-
-const suggestPaintingFailure = (error) => ({
-  type: SUGGEST_PAINTING_FAILURE,
-  error,
-});
-
-export const suggestPainting = (data) => {
-  return async (dispatch) => {
-    dispatch({ type: SUGGEST_PAINTING });
-    const userId = localStorage.getItem("id");
-
-    try {
-      await axios.post(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}/requests/`,
-        data,
-        {
-          headers: {
-            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
-          },
-        }
-      );
-
-      dispatch(suggestPaintingSuccess(data));
-    } catch (error) {
-      dispatch(suggestPaintingFailure("error"));
     }
   };
 };

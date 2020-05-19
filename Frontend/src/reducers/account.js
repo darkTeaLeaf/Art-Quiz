@@ -4,6 +4,9 @@ import {
   UPDATE_USER_DATA,
   GET_USER_DATA_FAILURE,
   SIGN_OUT,
+  SUGGEST_PAINTING,
+  SUGGEST_PAINTING_SUCCESS,
+  SUGGEST_PAINTING_FAILURE,
   GET_REQUESTS,
   GET_REQUESTS_SUCCESS,
   GET_REQUESTS_FAILURE,
@@ -25,6 +28,10 @@ const initialState = {
       gamesTotal: 0,
       winsTotal: 0,
     },
+  },
+  paintingSuggestStatus: {
+    loaded: true,
+    error: "",
   },
   requests: {
     data: null,
@@ -65,6 +72,39 @@ export function accountReducer(state = initialState, action) {
 
     case GET_USER_DATA_FAILURE: {
       return { ...state };
+    }
+
+    case SUGGEST_PAINTING: {
+      return {
+        ...state,
+        paintingSuggestStatus: {
+          ...state.paintingSuggestStatus,
+          loaded: false,
+          error: "",
+        },
+      };
+    }
+
+    case SUGGEST_PAINTING_SUCCESS: {
+      return {
+        ...state,
+        paintingSuggestStatus: {
+          ...state.paintingSuggestStatus,
+          loaded: true,
+          error: "",
+        },
+      };
+    }
+
+    case SUGGEST_PAINTING_FAILURE: {
+      return {
+        ...state,
+        paintingSuggestStatus: {
+          ...state.paintingSuggestStatus,
+          loaded: false,
+          error: action.error,
+        },
+      };
     }
 
     case GET_REQUESTS: {

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
-import { suggestPainting } from "../actions/paintingActions";
+import { suggestPainting } from "../actions/accountActions";
 import { getRequests } from "../actions/accountActions";
 import { toFormData } from "../helpers";
 
