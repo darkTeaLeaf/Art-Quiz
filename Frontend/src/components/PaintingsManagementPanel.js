@@ -15,10 +15,6 @@ import Container from "../components/UI/Container";
 import Title from "../components/UI/Title";
 import Modal from "../components/UI/Modal";
 
-const Layout = styled.div`
-  width: 100%;
-`;
-
 const PaintingsTable = styled.div`
   background-color: black;
   border: 10px solid black;
@@ -122,64 +118,62 @@ const PaintingsManagementPanel = ({
   };
 
   return (
-    <Layout>
-      <Container maxWidth={850}>
-        <Title bold>Manage paintings</Title>
+    <Container maxWidth={850}>
+      <Title bold>Manage paintings</Title>
 
-        {paintingsFiltered !== null && (
-          <>
-            <SearchBar
-              list={paintings.map(({ image, ...rest }) => rest)}
-              onUpdate={onPaintingsFilter}
-            />
+      {paintingsFiltered !== null && (
+        <>
+          <SearchBar
+            list={paintings.map(({ image, ...rest }) => rest)}
+            onUpdate={onPaintingsFilter}
+          />
 
-            <PaintingsTable>
-              <TitleRow>
-                <IDCol>Id</IDCol>
-                <NameCol>Name</NameCol>
-                <AuthorCol>Author</AuthorCol>
-                <YearCol>Year</YearCol>
-                <StyleCol>Style</StyleCol>
-              </TitleRow>
+          <PaintingsTable>
+            <TitleRow>
+              <IDCol>Id</IDCol>
+              <NameCol>Name</NameCol>
+              <AuthorCol>Author</AuthorCol>
+              <YearCol>Year</YearCol>
+              <StyleCol>Style</StyleCol>
+            </TitleRow>
 
-              <List
-                height={430}
-                itemCount={paintingsFiltered.length}
-                itemSize={70}
-                width="100%"
-              >
-                {({ index, style }) => (
-                  <ListRow style={style}>
-                    <IDCol>
-                      <Link
-                        onClick={() => {
-                          setPaintingIndex(index);
-                        }}
-                      >
-                        {paintingsFiltered[index].id}
-                      </Link>
-                    </IDCol>
-                    <NameCol>{paintingsFiltered[index].name}</NameCol>
-                    <AuthorCol>{paintingsFiltered[index].author}</AuthorCol>
-                    <YearCol>{paintingsFiltered[index].year}</YearCol>
-                    <StyleCol>{paintingsFiltered[index].style}</StyleCol>
-                  </ListRow>
-                )}
-              </List>
-            </PaintingsTable>
-
-            <Modal
-              active={paintingIndex !== null}
-              onClose={() => {
-                setPaintingIndex(null);
-              }}
+            <List
+              height={430}
+              itemCount={paintingsFiltered.length}
+              itemSize={70}
+              width="100%"
             >
-              <PaintingEditPage data={paintingsFiltered[paintingIndex]} />
-            </Modal>
-          </>
-        )}
-      </Container>
-    </Layout>
+              {({ index, style }) => (
+                <ListRow style={style}>
+                  <IDCol>
+                    <Link
+                      onClick={() => {
+                        setPaintingIndex(index);
+                      }}
+                    >
+                      {paintingsFiltered[index].id}
+                    </Link>
+                  </IDCol>
+                  <NameCol>{paintingsFiltered[index].name}</NameCol>
+                  <AuthorCol>{paintingsFiltered[index].author}</AuthorCol>
+                  <YearCol>{paintingsFiltered[index].year}</YearCol>
+                  <StyleCol>{paintingsFiltered[index].style}</StyleCol>
+                </ListRow>
+              )}
+            </List>
+          </PaintingsTable>
+
+          <Modal
+            active={paintingIndex !== null}
+            onClose={() => {
+              setPaintingIndex(null);
+            }}
+          >
+            <PaintingEditPage data={paintingsFiltered[paintingIndex]} />
+          </Modal>
+        </>
+      )}
+    </Container>
   );
 };
 
