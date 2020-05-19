@@ -7,6 +7,7 @@ import { getRequests } from "../actions/accountActions";
 import { toFormData } from "../helpers";
 
 import PaintingForm from "./PaintingForm";
+import PaintingSearch from "./PaintingSearch";
 import RequestsList from "./RequestsList";
 import Title from "./UI/Title";
 import Container from "./UI/Container";
@@ -16,7 +17,10 @@ const Panel = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 50px;
+
+  &:not(:last-child) {
+    margin-bottom: 100px;
+  }
 `;
 
 const PaintingSuggestPage = ({ requests, suggestPainting, getRequests }) => {
@@ -30,6 +34,11 @@ const PaintingSuggestPage = ({ requests, suggestPainting, getRequests }) => {
 
   return (
     <Container>
+      <Panel>
+        <Title bold>Check for duplicates</Title>
+        <PaintingSearch />
+      </Panel>
+
       <Panel>
         <Title bold>Suggest painting</Title>
         <PaintingForm required onSubmit={onSubmit} buttonName="Contribute" />
