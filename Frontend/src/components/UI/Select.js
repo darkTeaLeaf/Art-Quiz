@@ -4,6 +4,7 @@ import styled from "styled-components";
 const SelectWrapper = styled.div``;
 
 const Select = styled.select`
+  width: 100%;
   padding: 10px;
   padding-left: 6px;
 

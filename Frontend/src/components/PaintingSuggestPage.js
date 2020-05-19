@@ -1,64 +1,26 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
 
-import {
-  getAuthors,
-  getStyles,
-  suggestPainting,
-} from "../actions/paintingActions";
+import { suggestPainting } from "../actions/paintingActions";
 import { toFormData } from "../helpers";
 
-import UploadImage from "../components/UploadImage";
-import Container from "../components/UI/Container";
-import Title from "../components/UI/Title";
-import Input from "../components/UI/Input";
-import Button from "../components/UI/Button";
-import Select from "../components/UI/Select";
+import PaintingForm from "./PaintingForm";
+import Container from "./UI/Container";
+import Title from "./UI/Title";
 
 const Layout = styled.div`
   width: 100%;
 `;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-`;
-
-const FieldsWrapper = styled.div`
+const Panel = styled.div`
   display: flex;
   flex-direction: column;
-
-  margin-left: 40px;
-  background-color: white;
-  padding: 10px 20px;
-
-  > * {
-    margin-bottom: 15px;
-  }
+  align-items: center;
+  margin-bottom: 50px;
 `;
 
-const UpdateButton = styled(Button)`
-  margin-top: 30px;
-`;
-
-const PaintingSuggestPage = ({
-  authors,
-  styles,
-  getAuthors,
-  getStyles,
-  suggestPainting,
-}) => {
-  useEffect(() => {
-    getAuthors();
-    getStyles();
-  }, [getAuthors, getStyles]);
-
-  const { register, handleSubmit, errors } = useForm();
-
+const PaintingSuggestPage = ({ suggestPainting }) => {
   const onSubmit = (pData) => {
     suggestPainting(toFormData({ ...pData, image: pData.image[0] }));
   };
@@ -66,93 +28,21 @@ const PaintingSuggestPage = ({
   return (
     <Layout>
       <Container>
-        <Title bold>Suggest painting</Title>
+        <Panel>
+          <Title bold>Suggest painting</Title>
+          <PaintingForm required onSubmit={onSubmit} />
+        </Panel>
 
-        {authors && styles && (
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <UploadImage
-              register={register}
-              rules={{ required: true }}
-              errors={errors}
-              style={{ maxWidth: "40%" }}
-            />
-
-            <FieldsWrapper>
-              <Input
-                placeholder="Painting name"
-                type="text"
-                name="name"
-                register={register}
-                rules={{ required: true }}
-                errors={errors}
-                borderless
-              />
-
-              <Select
-                options={authors.map((author) => ({
-                  key: author.id,
-                  value: author.id,
-                  text: author.name,
-                }))}
-                name="author"
-                register={register}
-                rules={{ required: true }}
-                errors={errors}
-              />
-
-              <Input
-                placeholder="Year"
-                type="text"
-                name="year"
-                register={register}
-                rules={{ required: true }}
-                errors={errors}
-                borderless
-              />
-
-              <Select
-                options={styles.map((style) => ({
-                  key: style.id,
-                  value: style.id,
-                  text: style.name,
-                }))}
-                name="style"
-                register={register}
-                rules={{ required: true }}
-                errors={errors}
-              />
-
-              <Input
-                placeholder="Gallery"
-                type="text"
-                name="gallery"
-                register={register}
-                rules={{ required: true }}
-                errors={errors}
-                borderless
-              />
-
-              <UpdateButton type="submit">Contribute</UpdateButton>
-            </FieldsWrapper>
-          </Form>
-        )}
+        <Panel>
+          <Title bold>Your requests</Title>
+        </Panel>
       </Container>
     </Layout>
   );
 };
 
-const mapStateToProps = (store) => ({
-  authors: store.painting.authors.data,
-  styles: store.painting.styles.data,
-});
-
 const mapDispatchToProps = (dispatch) => ({
-  getAuthors: () => dispatch(getAuthors()),
-  getStyles: () => dispatch(getStyles()),
   suggestPainting: (pData) => dispatch(suggestPainting(pData)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PaintingSuggestPage);
+export default connect(null, mapDispatchToProps)(PaintingSuggestPage);
