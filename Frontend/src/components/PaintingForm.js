@@ -38,6 +38,7 @@ const PaintingForm = ({
   children,
   defaultValues,
   required = false,
+  buttonName = "Update",
   onSubmit,
   authors,
   styles,
@@ -49,16 +50,22 @@ const PaintingForm = ({
     getStyles();
   }, [getAuthors, getStyles]);
 
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, reset } = useForm();
 
   return (
     authors &&
     styles && (
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form
+        onSubmit={handleSubmit((data) => {
+          onSubmit(data);
+          reset();
+        })}
+      >
         <UploadImage
           register={register}
           rules={{ required }}
           errors={errors}
+          reset={reset}
           style={{ maxWidth: "40%" }}
         >
           {children}
@@ -132,7 +139,7 @@ const PaintingForm = ({
             borderless
           />
 
-          <SubmitButton type="submit">Contribute</SubmitButton>
+          <SubmitButton type="submit">{buttonName}</SubmitButton>
         </FieldsWrapper>
       </Form>
     )

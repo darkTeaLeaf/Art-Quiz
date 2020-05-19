@@ -30,7 +30,7 @@ const PaintingSuggestPage = ({ suggestPainting }) => {
       <Container>
         <Panel>
           <Title bold>Suggest painting</Title>
-          <PaintingForm required onSubmit={onSubmit} />
+          <PaintingForm required onSubmit={onSubmit} buttonName="Contribute" />
         </Panel>
 
         <Panel>

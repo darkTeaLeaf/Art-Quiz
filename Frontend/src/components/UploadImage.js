@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 
 const ImgOnHover = styled.div`
@@ -74,6 +74,9 @@ const UploadImage = ({
   style,
 }) => {
   const [url, setUrl] = useState(null);
+  useEffect(() => {
+    setUrl(null);
+  }, [register]);
 
   return (
     <Wrapper style={style}>
