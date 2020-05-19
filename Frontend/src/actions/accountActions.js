@@ -158,15 +158,15 @@ const suggestPaintingFailure = (error) => ({
   error,
 });
 
-export const suggestPainting = (data) => {
+export const suggestPainting = (pData) => {
   return async (dispatch) => {
     dispatch({ type: SUGGEST_PAINTING });
     const userId = localStorage.getItem("id");
 
     try {
-      await axios.post(
+      const { data } = await axios.post(
         `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}/requests/`,
-        data,
+        pData,
         {
           headers: {
             Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
@@ -195,12 +195,6 @@ export const getRequests = () => {
   return async (dispatch) => {
     const userId = localStorage.getItem("id");
     const token = localStorage.getItem("token");
-    const statuses = [
-      "Rejected",
-      "Accepted",
-      "Edited and accepted",
-      "In progress",
-    ];
 
     dispatch({ type: GET_REQUESTS });
 
@@ -214,11 +208,7 @@ export const getRequests = () => {
         }
       );
 
-      dispatch(
-        getRequestsSuccess(
-          data.map((req) => ({ ...req, status: statuses[req.status] }))
-        )
-      );
+      dispatch(getRequestsSuccess(data));
     } catch (error) {
       dispatch(getRequestsFailure("error"));
     }

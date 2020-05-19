@@ -93,6 +93,10 @@ export function accountReducer(state = initialState, action) {
           loaded: true,
           error: "",
         },
+        requests: {
+          ...state.requests,
+          data: [...state.requests.data, action.data],
+        },
       };
     }
 
