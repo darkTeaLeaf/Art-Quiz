@@ -7,6 +7,9 @@ import {
   UPDATE_USER_DATA,
   GET_USER_DATA_FAILURE,
   SIGN_OUT,
+  GET_REQUESTS,
+  GET_REQUESTS_SUCCESS,
+  GET_REQUESTS_FAILURE,
 } from "../constants";
 
 const signInSuccess = (id) => ({
@@ -140,4 +143,37 @@ export const signOut = () => {
   localStorage.removeItem("id");
 
   return { type: SIGN_OUT, payload: { id: null, isAuthenticated: false } };
+};
+
+const getRequestsSuccess = (data) => ({
+  type: GET_REQUESTS_SUCCESS,
+  data,
+});
+
+const getRequestsFailure = (error) => ({
+  type: GET_REQUESTS_FAILURE,
+  error,
+});
+
+export const getRequests = () => {
+  return async (dispatch) => {
+    const userId = localStorage.getItem("id");
+
+    dispatch({ type: GET_REQUESTS });
+
+    try {
+      const { result } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}/requests/`,
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+          },
+        }
+      );
+
+      dispatch(getRequestsSuccess(result));
+    } catch (error) {
+      dispatch(getRequestsFailure("error"));
+    }
+  };
 };

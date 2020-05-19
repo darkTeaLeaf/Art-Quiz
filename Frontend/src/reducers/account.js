@@ -3,7 +3,10 @@ import {
   SIGN_UP_SUCCESS,
   UPDATE_USER_DATA,
   GET_USER_DATA_FAILURE,
-  SIGN_OUT
+  SIGN_OUT,
+  GET_REQUESTS,
+  GET_REQUESTS_SUCCESS,
+  GET_REQUESTS_FAILURE,
 } from "../constants";
 
 const initialState = {
@@ -20,9 +23,14 @@ const initialState = {
     statistic: {
       winRate: 0,
       gamesTotal: 0,
-      winsTotal: 0
-    }
-  }
+      winsTotal: 0,
+    },
+  },
+  requests: {
+    data: null,
+    loaded: false,
+    error: "",
+  },
 };
 
 export function accountReducer(state = initialState, action) {
@@ -30,33 +38,67 @@ export function accountReducer(state = initialState, action) {
     case SIGN_IN_SUCCESS: {
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     }
 
     case SIGN_UP_SUCCESS: {
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     }
 
     case SIGN_OUT: {
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     }
 
     case UPDATE_USER_DATA: {
       return {
         ...state,
-        userData: { ...state.userData, ...action.payload }
+        userData: { ...state.userData, ...action.payload },
       };
     }
 
     case GET_USER_DATA_FAILURE: {
       return { ...state };
+    }
+
+    case GET_REQUESTS: {
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          loaded: false,
+          error: "",
+        },
+      };
+    }
+
+    case GET_REQUESTS_SUCCESS: {
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          loaded: true,
+          data: action.data,
+          error: "",
+        },
+      };
+    }
+
+    case GET_REQUESTS_FAILURE: {
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          loaded: false,
+          error: action.error,
+        },
+      };
     }
 
     default:
