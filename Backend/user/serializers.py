@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from quiz.models import Author, Style
 from user.models import Statistic, Progress, Request
 
 
@@ -95,6 +94,24 @@ class UserSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
 
 
 class RequestSerializer(serializers.ModelSerializer):
+    status = serializers.ReadOnlyField()
+
     class Meta:
         model = Request
-        fields = ('id', 'author', 'name', 'author', 'year', 'style', 'gallery', 'image', 'status')
+        fields = ('id', 'user_id', 'name', 'author', 'year', 'style', 'gallery', 'image', 'status')
+        read_only_fields = ('status', 'user')
+
+    def create(self, validated_data):
+        request = Request.objects.create(
+            user_id=self.context['view'].kwargs.get('user_id'),
+            name=validated_data['name'],
+            author=validated_data['author'],
+            year=validated_data['year'],
+            style=validated_data['style'],
+            gallery=validated_data['gallery'],
+            image=validated_data['image']
+        )
+
+        request.save()
+
+        return request
