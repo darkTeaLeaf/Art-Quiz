@@ -30,8 +30,8 @@ const SignIn = ({ signIn }) => {
           type="text"
           name="username"
           register={register}
+          rules={{ required: true }}
           errors={errors}
-          required
         />
 
         <Input
@@ -39,8 +39,8 @@ const SignIn = ({ signIn }) => {
           type="password"
           name="password"
           register={register}
+          rules={{ required: true }}
           errors={errors}
-          required
         />
 
         <Button type="submit">Sign in</Button>
@@ -104,7 +104,6 @@ const SignUp = ({ signUp }) => {
           type="text"
           name="full_name"
           register={register}
-          errors={errors}
         />
 
         <Input
@@ -112,8 +111,8 @@ const SignUp = ({ signUp }) => {
           type="text"
           name="username"
           register={register}
+          rules={{ required: true }}
           errors={errors}
-          required
         />
 
         <Input
@@ -121,7 +120,6 @@ const SignUp = ({ signUp }) => {
           type="email"
           name="email"
           register={register}
-          errors={errors}
         />
 
         <Input
@@ -129,8 +127,8 @@ const SignUp = ({ signUp }) => {
           type="password"
           name="password"
           register={register}
+          rules={{ required: true }}
           errors={errors}
-          required
         />
 
         <Button type="submit">Sign up</Button>
