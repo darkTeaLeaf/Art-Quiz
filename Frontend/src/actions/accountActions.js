@@ -7,6 +7,12 @@ import {
   UPDATE_USER_DATA,
   GET_USER_DATA_FAILURE,
   SIGN_OUT,
+  SUGGEST_PAINTING,
+  SUGGEST_PAINTING_SUCCESS,
+  SUGGEST_PAINTING_FAILURE,
+  GET_REQUESTS,
+  GET_REQUESTS_SUCCESS,
+  GET_REQUESTS_FAILURE,
 } from "../constants";
 
 const signInSuccess = (id) => ({
@@ -140,4 +146,71 @@ export const signOut = () => {
   localStorage.removeItem("id");
 
   return { type: SIGN_OUT, payload: { id: null, isAuthenticated: false } };
+};
+
+const suggestPaintingSuccess = (data) => ({
+  type: SUGGEST_PAINTING_SUCCESS,
+  data,
+});
+
+const suggestPaintingFailure = (error) => ({
+  type: SUGGEST_PAINTING_FAILURE,
+  error,
+});
+
+export const suggestPainting = (pData) => {
+  return async (dispatch) => {
+    dispatch({ type: SUGGEST_PAINTING });
+    const userId = localStorage.getItem("id");
+
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}/requests/`,
+        pData,
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+          },
+        }
+      );
+
+      dispatch(suggestPaintingSuccess(data));
+    } catch (error) {
+      dispatch(suggestPaintingFailure("error"));
+    }
+  };
+};
+
+const getRequestsSuccess = (data) => ({
+  type: GET_REQUESTS_SUCCESS,
+  data,
+});
+
+const getRequestsFailure = (error) => ({
+  type: GET_REQUESTS_FAILURE,
+  error,
+});
+
+export const getRequests = () => {
+  return async (dispatch) => {
+    const userId = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
+
+    dispatch({ type: GET_REQUESTS });
+
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}/requests/`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+
+      dispatch(getRequestsSuccess(data));
+    } catch (error) {
+      dispatch(getRequestsFailure("error"));
+    }
+  };
 };
