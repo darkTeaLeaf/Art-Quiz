@@ -7,6 +7,7 @@ import { getRequests } from "../actions/accountActions";
 import { toFormData } from "../helpers";
 
 import PaintingForm from "./PaintingForm";
+import RequestsList from "./RequestsList";
 import Title from "./UI/Title";
 import Container from "./UI/Container";
 
@@ -17,10 +18,10 @@ const Panel = styled.div`
   margin-bottom: 50px;
 `;
 
-const PaintingSuggestPage = ({ suggestPainting, getRequests }) => {
+const PaintingSuggestPage = ({ requests, suggestPainting, getRequests }) => {
   useEffect(() => {
     getRequests();
-  }, []);
+  }, [getRequests]);
 
   const onSubmit = (pData) => {
     suggestPainting(toFormData({ ...pData, image: pData.image[0] }));
@@ -35,14 +36,22 @@ const PaintingSuggestPage = ({ suggestPainting, getRequests }) => {
 
       <Panel>
         <Title bold>Your requests</Title>
+        <RequestsList requests={requests && requests.data} />
       </Panel>
     </Container>
   );
 };
+
+const mapStateToProps = (store) => ({
+  requests: store.account.requests,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   suggestPainting: (pData) => dispatch(suggestPainting(pData)),
   getRequests: (pData) => dispatch(getRequests(pData)),
 });
 
-export default connect(null, mapDispatchToProps)(PaintingSuggestPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PaintingSuggestPage);

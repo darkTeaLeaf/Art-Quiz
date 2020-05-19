@@ -159,11 +159,17 @@ export const getRequests = () => {
   return async (dispatch) => {
     const userId = localStorage.getItem("id");
     const token = localStorage.getItem("token");
+    const statuses = [
+      "Rejected",
+      "Accepted",
+      "Edited and accepted",
+      "In progress",
+    ];
 
     dispatch({ type: GET_REQUESTS });
 
     try {
-      const { result } = await axios.get(
+      const { data } = await axios.get(
         `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}/requests/`,
         {
           headers: {
@@ -172,7 +178,11 @@ export const getRequests = () => {
         }
       );
 
-      dispatch(getRequestsSuccess(result));
+      dispatch(
+        getRequestsSuccess(
+          data.map((req) => ({ ...req, status: statuses[req.status] }))
+        )
+      );
     } catch (error) {
       dispatch(getRequestsFailure("error"));
     }
