@@ -18,6 +18,8 @@ import {
   ACCEPT_REQUEST_FAILURE,
 } from "../constants";
 
+import { toFormData } from "../helpers";
+
 const signInSuccess = (id) => ({
   type: SIGN_IN_SUCCESS,
   payload: {
@@ -169,7 +171,7 @@ export const suggestPainting = (pData) => {
     try {
       const { data } = await axios.post(
         `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}/requests/`,
-        pData,
+        toFormData({ ...pData, image: pData.image[0] }),
         {
           headers: {
             Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,

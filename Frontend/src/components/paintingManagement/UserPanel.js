@@ -8,7 +8,7 @@ import { getRequests } from "../../actions/accountActions";
 import Form from "../Form";
 import Section from "../UI/Section";
 // import PaintingSearch from "../PaintingSearch";
-// import RequestsList from "../RequestsList";
+import RequestsList from "../RequestsList";
 import Title from "../UI/Title";
 import Container from "../UI/Container";
 import { getAuthors, getStyles } from "../../actions/paintingActions";
@@ -120,17 +120,17 @@ const UserPanel = ({
               {
                 key: "contribute",
                 name: "Contribute",
-                action: console.log,
+                action: suggestPainting,
               },
             ]}
           />
         )}
       </Section>
 
-      {/* <Panel>
+      <Section>
         <Title bold>Your requests</Title>
-        <RequestsList requests={requests && requests.data} />
-      </Panel> */}
+        <RequestsList requests={requests.data} />
+      </Section>
     </Container>
   );
 };

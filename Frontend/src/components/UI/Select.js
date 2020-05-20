@@ -61,7 +61,7 @@ export default ({
       </Option>
 
       {options.map((option) => (
-        <Option key={option.key} defaultValue={option.value}>
+        <Option key={option.key} value={option.value}>
           {option.text}
         </Option>
       ))}

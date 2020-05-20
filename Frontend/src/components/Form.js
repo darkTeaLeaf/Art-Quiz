@@ -93,7 +93,10 @@ const Form = ({ fields, buttons }) => {
             {buttons.map((b) => (
               <Button
                 key={b.key}
-                onClick={handleSubmit((data) => b.action(data))}
+                onClick={handleSubmit((data) => {
+                  b.action(data);
+                  reset();
+                })}
               >
                 {b.name}
               </Button>

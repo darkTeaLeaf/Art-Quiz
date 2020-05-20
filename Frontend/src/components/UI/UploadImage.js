@@ -29,6 +29,7 @@ const ImgPlaceholder = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 
   img {
     width: 40px;
@@ -54,7 +55,7 @@ const Uploader = styled.label`
   }
 
   > * {
-    width: 100%;
+    max-height: 80vh;
   }
 
   :hover ${ImgOnHover} {
