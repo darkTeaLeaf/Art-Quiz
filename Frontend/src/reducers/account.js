@@ -10,6 +10,9 @@ import {
   GET_REQUESTS,
   GET_REQUESTS_SUCCESS,
   GET_REQUESTS_FAILURE,
+  ACCEPT_REQUEST,
+  ACCEPT_REQUEST_SUCCESS,
+  ACCEPT_REQUEST_FAILURE,
 } from "../constants";
 
 const initialState = {
@@ -135,6 +138,40 @@ export function accountReducer(state = initialState, action) {
     }
 
     case GET_REQUESTS_FAILURE: {
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          loaded: false,
+          error: action.error,
+        },
+      };
+    }
+
+    case ACCEPT_REQUEST: {
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          loaded: false,
+          error: "",
+        },
+      };
+    }
+
+    case ACCEPT_REQUEST_SUCCESS: {
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          loaded: true,
+          data: action.data,
+          error: "",
+        },
+      };
+    }
+
+    case ACCEPT_REQUEST_FAILURE: {
       return {
         ...state,
         requests: {

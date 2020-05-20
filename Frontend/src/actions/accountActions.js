@@ -13,6 +13,9 @@ import {
   GET_REQUESTS,
   GET_REQUESTS_SUCCESS,
   GET_REQUESTS_FAILURE,
+  ACCEPT_REQUEST,
+  ACCEPT_REQUEST_SUCCESS,
+  ACCEPT_REQUEST_FAILURE,
 } from "../constants";
 
 const signInSuccess = (id) => ({
@@ -232,6 +235,64 @@ export const getRequestsAll = () => {
       dispatch(getRequestsSuccess(data));
     } catch (error) {
       dispatch(getRequestsFailure("error"));
+    }
+  };
+};
+
+const acceptRequestSuccess = (id) => ({
+  type: ACCEPT_REQUEST_SUCCESS,
+  id,
+});
+
+const acceptRequestFailure = (error) => ({
+  type: ACCEPT_REQUEST_FAILURE,
+  error,
+});
+
+export const acceptRequest = (pData) => {
+  return async (dispatch) => {
+    dispatch({ type: ACCEPT_REQUEST });
+
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/${pData.get(
+          "id"
+        )}/accept/`,
+        pData,
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+          },
+        }
+      );
+
+      dispatch(acceptRequestSuccess(data));
+    } catch (error) {
+      dispatch(acceptRequestFailure("error"));
+    }
+  };
+};
+
+export const declineRequest = (pData) => {
+  return async (dispatch) => {
+    dispatch({ type: ACCEPT_REQUEST });
+
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/${pData.get(
+          "id"
+        )}/decline/`,
+        pData,
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+          },
+        }
+      );
+
+      dispatch(acceptRequestSuccess(data));
+    } catch (error) {
+      dispatch(acceptRequestFailure("error"));
     }
   };
 };

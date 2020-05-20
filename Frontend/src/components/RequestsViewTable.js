@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import { FixedSizeList } from "react-window";
 
@@ -9,6 +10,7 @@ import Modal from "../components/UI/Modal";
 import Container from "../components/UI/Container";
 
 import { toFormData } from "../helpers";
+import { acceptRequest, declineRequest } from "../actions/accountActions";
 
 const PaintingsTable = styled.div`
   background-color: black;
@@ -87,7 +89,12 @@ const Link = styled.button`
   }
 `;
 
-const RequestsViewTable = ({ requests, editable }) => {
+const RequestsViewTable = ({
+  requests,
+  editable,
+  acceptRequest,
+  declineRequest,
+}) => {
   useEffect(() => {
     setPaintingsFiltered(requests);
   }, [requests]);
@@ -102,13 +109,29 @@ const RequestsViewTable = ({ requests, editable }) => {
   };
 
   const onSubmit = (pData) => {
-    // acceptPainting(toFormData({ ...pData, image: pData.image[0] }));
+    console.log(pData);
+    acceptRequest(
+      toFormData({
+        ...pData,
+        image: pData.image[0],
+        id: paintingsFiltered[paintingIndex].id,
+      })
+    );
   };
 
-  const onDecline = () => {};
+  const onDecline = (pData) => {
+    declineRequest(
+      toFormData({
+        ...pData,
+        image: pData.image[0],
+        id: paintingsFiltered[paintingIndex].id,
+      })
+    );
+  };
 
   return (
-    paintingsFiltered !== null && (
+    paintingsFiltered !== null &&
+    requests && (
       <Container maxWidth={850}>
         <SearchBar
           list={requests.map(({ image, ...rest }) => rest)}
@@ -182,4 +205,9 @@ const RequestsViewTable = ({ requests, editable }) => {
   );
 };
 
-export default RequestsViewTable;
+const mapDispatchToProps = (dispatch) => ({
+  acceptRequest: (data) => dispatch(acceptRequest(data)),
+  declineRequest: (data) => dispatch(declineRequest(data)),
+});
+
+export default connect(null, mapDispatchToProps)(RequestsViewTable);
