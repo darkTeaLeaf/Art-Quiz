@@ -3,9 +3,12 @@ import styled from "styled-components";
 import { FixedSizeList } from "react-window";
 
 import SearchBar from "./SearchBar";
-import PaintingEditPage from "./PaintingEditPage";
+import PaintingForm from "./PaintingForm";
+import Title from "../components/UI/Title";
 import Modal from "../components/UI/Modal";
 import Container from "../components/UI/Container";
+
+import { toFormData } from "../helpers";
 
 const PaintingsTable = styled.div`
   background-color: black;
@@ -98,6 +101,12 @@ const RequestsViewTable = ({ requests, editable }) => {
     );
   };
 
+  const onSubmit = (pData) => {
+    // acceptPainting(toFormData({ ...pData, image: pData.image[0] }));
+  };
+
+  const onDecline = () => {};
+
   return (
     paintingsFiltered !== null && (
       <Container maxWidth={850}>
@@ -145,14 +154,27 @@ const RequestsViewTable = ({ requests, editable }) => {
           </List>
         </PaintingsTable>
 
-        {editable && (
+        {editable && paintingIndex !== null && (
           <Modal
             active={paintingIndex !== null}
             onClose={() => {
               setPaintingIndex(null);
             }}
           >
-            <PaintingEditPage data={paintingsFiltered[paintingIndex]} />
+            <Container>
+              <Title bold>{paintingsFiltered[paintingIndex].name}</Title>
+              <PaintingForm
+                onSubmit={onSubmit}
+                onDecline={onDecline}
+                buttonName="Accept"
+                defaultValues={paintingsFiltered[paintingIndex]}
+              >
+                <img
+                  src={paintingsFiltered[paintingIndex].image}
+                  alt="painting"
+                />
+              </PaintingForm>
+            </Container>
           </Modal>
         )}
       </Container>

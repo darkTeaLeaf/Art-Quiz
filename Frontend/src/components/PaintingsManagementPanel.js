@@ -47,6 +47,8 @@ const PaintingsManagementPanel = ({
           editable
           requests={
             requests &&
+            authors &&
+            styles &&
             requests.map((req) => ({
               ...req,
               author: authors.filter((a) => a.id === req.author)[0].name,

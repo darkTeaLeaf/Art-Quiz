@@ -40,6 +40,7 @@ const PaintingForm = ({
   required = false,
   buttonName = "Update",
   onSubmit,
+  onDecline,
   authors,
   styles,
   getAuthors,
@@ -140,6 +141,10 @@ const PaintingForm = ({
           />
 
           <SubmitButton type="submit">{buttonName}</SubmitButton>
+
+          {onDecline && (
+            <SubmitButton onClick={onDecline}>Decline</SubmitButton>
+          )}
         </FieldsWrapper>
       </Form>
     )
