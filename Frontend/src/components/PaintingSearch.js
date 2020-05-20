@@ -9,7 +9,7 @@ import {
   getStyles,
 } from "../actions/paintingActions";
 
-import SearchBar from "./SearchBar";
+import SearchBar from "./UI/SearchBar";
 import PaintingEditPage from "./PaintingEditPage";
 import Modal from "../components/UI/Modal";
 import Container from "../components/UI/Container";

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { FixedSizeList } from "react-window";
 
-import SearchBar from "./SearchBar";
+import SearchBar from "./UI/SearchBar";
 import PaintingForm from "./PaintingForm";
 import Title from "../components/UI/Title";
 import Modal from "../components/UI/Modal";

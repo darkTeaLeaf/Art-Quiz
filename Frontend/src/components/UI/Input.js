@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const Input = styled.div`
   font-family: Judson;
@@ -11,12 +11,20 @@ const Input = styled.div`
   & input {
     width: 100%;
     padding: 10px;
-    border: ${(props) => (props.borderless ? 0 : 5)}px solid black;
+    border: 0px solid black;
+    background-color: transparent;
     font-family: Raleway;
     font-style: normal;
     font-weight: normal;
     font-size: 20px;
     line-height: 20px;
+
+    ${(props) =>
+      props.outlined &&
+      css`
+        border: 5px solid black;
+        background-color: white;
+      `}
   }
 `;
 
@@ -28,10 +36,10 @@ export default ({
   register,
   rules,
   errors,
-  borderless,
+  outlined = true,
 }) => {
   return (
-    <Input className="input-wrapper" borderless={borderless}>
+    <Input className="input-wrapper" outlined={outlined}>
       <input
         type={type}
         name={name}
@@ -39,7 +47,7 @@ export default ({
         ref={register(rules)}
         placeholder={placeholder}
       />
-      {errors && errors[name] && <div className="error">* Required</div>}
+      {errors && errors[name] && <b>* Required</b>}
     </Input>
   );
 };

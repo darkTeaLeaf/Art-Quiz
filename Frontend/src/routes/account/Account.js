@@ -5,8 +5,8 @@ import { Redirect, withRouter } from "react-router-dom";
 
 import { getUserData } from "../../actions/accountActions";
 
-import PaintingsManagementPanel from "../../components/PaintingsManagementPanel";
-import PaintingSuggestPage from "../../components/PaintingSuggestPage";
+import ModeratorPanel from "../../components/paintingManagement/ModeratorPanel";
+import UserPanel from "../../components/paintingManagement/UserPanel";
 import Avatar from "../../components/UI/Avatar";
 import Button from "../../components/UI/Button";
 import WelcomeMsg from "../../components/UI/Title";
@@ -144,17 +144,11 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
     statistic: { winRate, winsTotal, gamesTotal },
   } = userData;
 
-  const [paintManagModalActive, setPaintManagModalActive] = useState(false);
+  const [modPanelActive, setModPanelActive] = useState(false);
+  const [usrPanelActive, setUsrPanelActive] = useState(false);
 
-  const [paintSuggestModalActive, setPaintSuggestModalActive] = useState(false);
-
-  const togglePaintManagModal = () => {
-    setPaintManagModalActive(!paintManagModalActive);
-  };
-
-  const togglePaintSuggestModal = () => {
-    setPaintSuggestModalActive(!paintSuggestModalActive);
-  };
+  const toggleModPanel = () => setModPanelActive(!modPanelActive);
+  const toggleUsrPanel = () => setUsrPanelActive(!usrPanelActive);
 
   return isAuthenticated ? (
     <AccountWrapper>
@@ -185,11 +179,11 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
         <ButtonsWrapper>
           {/* <Button>Edit account data</Button> */}
           {isModerator ? (
-            <Button link onClick={togglePaintManagModal}>
+            <Button link onClick={toggleModPanel}>
               Manage paintings
             </Button>
           ) : (
-            <Button link onClick={togglePaintSuggestModal}>
+            <Button link onClick={toggleUsrPanel}>
               Suggest painting
             </Button>
           )}
@@ -239,12 +233,12 @@ const Account = ({ isAuthenticated, userData, getUserData }) => {
         </Statistics>
       </UserData>
 
-      <Modal active={paintManagModalActive} onClose={togglePaintManagModal}>
-        <PaintingsManagementPanel />
+      <Modal active={modPanelActive} onClose={toggleModPanel}>
+        <ModeratorPanel />
       </Modal>
 
-      <Modal active={paintSuggestModalActive} onClose={togglePaintSuggestModal}>
-        <PaintingSuggestPage />
+      <Modal active={usrPanelActive} onClose={toggleUsrPanel}>
+        <UserPanel />
       </Modal>
     </AccountWrapper>
   ) : (

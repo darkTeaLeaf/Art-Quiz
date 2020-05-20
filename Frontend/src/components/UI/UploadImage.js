@@ -63,7 +63,11 @@ const Uploader = styled.label`
   }
 `;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const UploadImage = ({
   children,
@@ -111,7 +115,7 @@ const UploadImage = ({
           }}
         />
       </Uploader>
-      {errors && errors.image && <div className="error">* Required</div>}
+      {errors && errors.image && <b>* Required</b>}
     </Wrapper>
   );
 };
