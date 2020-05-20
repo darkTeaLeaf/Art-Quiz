@@ -36,6 +36,7 @@ export default ({
   register,
   rules,
   errors,
+  readonly,
   outlined = true,
 }) => {
   return (
@@ -46,6 +47,7 @@ export default ({
         defaultValue={defaultValue}
         ref={register(rules)}
         placeholder={placeholder}
+        readOnly={readonly}
       />
       {errors && errors[name] && <b>* Required</b>}
     </Input>

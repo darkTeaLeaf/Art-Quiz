@@ -213,7 +213,7 @@ export const getRequests = () => {
         }
       );
 
-      dispatch(getRequestsSuccess(data));
+      dispatch(getRequestsSuccess(data.reverse().slice(0, 20)));
     } catch (error) {
       dispatch(getRequestsFailure("error"));
     }

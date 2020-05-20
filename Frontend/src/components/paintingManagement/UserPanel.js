@@ -35,7 +35,7 @@ const UserPanel = ({
         <PaintingSearch />
       </Panel> */}
 
-      <Section>
+      <Section style={{ minHeight: "100vh" }}>
         <Title bold>Suggest painting</Title>
 
         {authors.loaded && styles.loaded && requests.loaded && (

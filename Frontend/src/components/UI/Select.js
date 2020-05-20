@@ -47,6 +47,7 @@ export default ({
   defaultValue,
   placeholder,
   outlined = true,
+  readonly,
 }) => (
   <SelectWrapper>
     <Select
@@ -55,6 +56,7 @@ export default ({
       defaultValue={defaultValue || ""}
       outlined={outlined}
       required={rules.required}
+      disabled={readonly}
     >
       <Option disabled value="" hidden>
         {placeholder}

@@ -40,7 +40,7 @@ const ImgPlaceholder = styled.div`
 const Uploader = styled.label`
   display: flex;
   position: relative;
-  cursor: pointer;
+  cursor: ${(props) => (props.readonly ? "default" : "pointer")};
   border: ${(props) => (props.outlined ? 8 : 0)}px solid black;
 
   ${(props) =>
@@ -75,6 +75,7 @@ const UploadImage = ({
   register,
   rules,
   errors,
+  readonly,
   outlined = false,
   style,
 }) => {
@@ -88,10 +89,16 @@ const UploadImage = ({
       <Uploader
         outlined={outlined}
         noImage={children === undefined && url === null}
+        readonly={readonly}
       >
-        <ImgOnHover>
-          <img src={`${process.env.PUBLIC_URL}/img/camera.svg`} alt="camera" />
-        </ImgOnHover>
+        {!readonly && (
+          <ImgOnHover>
+            <img
+              src={`${process.env.PUBLIC_URL}/img/camera.svg`}
+              alt="camera"
+            />
+          </ImgOnHover>
+        )}
 
         {url === null ? (
           children || (
@@ -106,15 +113,17 @@ const UploadImage = ({
           <img src={url} alt="avatar" />
         )}
 
-        <input
-          type="file"
-          name="image"
-          accept="image/png, image/jpeg, image/jpg"
-          ref={register(rules)}
-          onChange={(e) => {
-            setUrl(URL.createObjectURL(e.target.files[0]));
-          }}
-        />
+        {!readonly && (
+          <input
+            type="file"
+            name="image"
+            accept="image/png, image/jpeg, image/jpg"
+            ref={register(rules)}
+            onChange={(e) => {
+              setUrl(URL.createObjectURL(e.target.files[0]));
+            }}
+          />
+        )}
       </Uploader>
       {errors && errors.image && <b>* Required</b>}
     </Wrapper>

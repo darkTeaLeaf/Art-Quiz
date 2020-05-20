@@ -37,7 +37,7 @@ const ButtonsWrapper = styled.div`
   }
 `;
 
-const Form = ({ fields, buttons }) => {
+const Form = ({ fields, buttons, readonly }) => {
   const { register, handleSubmit, errors, reset } = useForm();
 
   return (
@@ -55,6 +55,7 @@ const Form = ({ fields, buttons }) => {
                       rules={{ required: f.required }}
                       errors={errors}
                       reset={reset}
+                      readonly={readonly}
                       {...f.props}
                     />
                   );
@@ -66,6 +67,7 @@ const Form = ({ fields, buttons }) => {
                       register={register}
                       rules={{ required: f.required }}
                       errors={errors}
+                      readonly={readonly}
                       {...f.props}
                     />
                   );
@@ -77,6 +79,7 @@ const Form = ({ fields, buttons }) => {
                       register={register}
                       rules={{ required: f.required }}
                       errors={errors}
+                      readonly={readonly}
                       {...f.props}
                     />
                   );
@@ -88,7 +91,7 @@ const Form = ({ fields, buttons }) => {
           </FieldsWrapper>
         )}
 
-        {buttons && (
+        {buttons && !readonly && (
           <ButtonsWrapper>
             {buttons.map((b) => (
               <Button
