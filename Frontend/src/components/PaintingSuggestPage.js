@@ -58,7 +58,7 @@ const mapStateToProps = (store) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   suggestPainting: (pData) => dispatch(suggestPainting(pData)),
-  getRequests: (pData) => dispatch(getRequests(pData)),
+  getRequests: () => dispatch(getRequests()),
 });
 
 export default connect(

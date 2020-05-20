@@ -38,23 +38,21 @@ const RequestsList = ({ requests }) => {
     "In progress",
   ];
 
-  return (
-    requests && (
-      <Container maxWidth="850">
-        {requests.map((req) => (
-          <Request key={req.id}>
-            <Label>
-              Painting name: <Value>{req.name}</Value>
-            </Label>
+  return requests ? (
+    <Container maxWidth="850">
+      {requests.map((req) => (
+        <Request key={req.id}>
+          <Label>
+            Painting name: <Value>{req.name}</Value>
+          </Label>
 
-            <Label>
-              Status: <Value>{statuses[req.status]}</Value>
-            </Label>
-          </Request>
-        ))}
-      </Container>
-    )
-  );
+          <Label>
+            Status: <Value>{statuses[req.status]}</Value>
+          </Label>
+        </Request>
+      ))}
+    </Container>
+  ) : null;
 };
 
 export default RequestsList;

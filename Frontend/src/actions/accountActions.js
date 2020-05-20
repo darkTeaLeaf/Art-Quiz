@@ -214,3 +214,24 @@ export const getRequests = () => {
     }
   };
 };
+
+export const getRequestsAll = () => {
+  return async (dispatch) => {
+    dispatch({ type: GET_REQUESTS });
+
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/`,
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+          },
+        }
+      );
+
+      dispatch(getRequestsSuccess(data));
+    } catch (error) {
+      dispatch(getRequestsFailure("error"));
+    }
+  };
+};
