@@ -284,7 +284,7 @@ export const acceptRequest = (pData, id) => {
 
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/${id}/accept/`,
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/${id}/edit/`,
         formData,
         {
           headers: {
