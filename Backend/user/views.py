@@ -131,7 +131,10 @@ class RequestViewSet(viewsets.ModelViewSet):
         request = Request.objects.get(id=pk)
         request.status = request.EDITED
         request.save()
-        return Response()
+
+        serializer = self.get_serializer(request)
+
+        return Response(serializer.data)
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
