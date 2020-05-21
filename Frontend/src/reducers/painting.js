@@ -16,6 +16,9 @@ import {
   ADD_PAINTING,
   ADD_PAINTING_SUCCESS,
   ADD_PAINTING_FAILURE,
+  DELETE_PAINTING,
+  DELETE_PAINTING_SUCCESS,
+  DELETE_PAINTING_FAILURE,
 } from "../constants";
 
 const initialState = {
@@ -41,6 +44,10 @@ const initialState = {
     error: "",
   },
   paintingAdd: {
+    loaded: true,
+    error: "",
+  },
+  paintingDelete: {
     loaded: true,
     error: "",
   },
@@ -214,6 +221,8 @@ export function paintingReducer(state = initialState, action) {
     }
 
     case ADD_PAINTING_SUCCESS: {
+      console.log(state.paintings.data);
+      console.log(action.data);
       return {
         ...state,
         paintingAdd: {
@@ -222,7 +231,7 @@ export function paintingReducer(state = initialState, action) {
         },
         paintings: {
           ...state.paintings,
-          data: [action.data, ...state.paintings],
+          data: [action.data, ...state.paintings.data],
         },
       };
     }
@@ -232,6 +241,41 @@ export function paintingReducer(state = initialState, action) {
         ...state,
         paintingAdd: {
           ...state.paintingAdd,
+          loaded: false,
+          error: action.error,
+        },
+      };
+    }
+
+    case DELETE_PAINTING: {
+      return {
+        ...state,
+        paintingDelete: {
+          ...state.paintingDelete,
+          loaded: false,
+        },
+      };
+    }
+
+    case DELETE_PAINTING_SUCCESS: {
+      return {
+        ...state,
+        paintingDelete: {
+          ...state.paintingDelete,
+          loaded: true,
+        },
+        paintings: {
+          ...state.paintings,
+          data: state.paintings.data.filter((p) => p.id !== action.id),
+        },
+      };
+    }
+
+    case DELETE_PAINTING_FAILURE: {
+      return {
+        ...state,
+        paintingDelete: {
+          ...state.paintingDelete,
           loaded: false,
           error: action.error,
         },

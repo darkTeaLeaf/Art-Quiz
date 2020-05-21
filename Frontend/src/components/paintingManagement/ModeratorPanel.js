@@ -6,6 +6,7 @@ import {
   getPaintings,
   addPainting,
   updatePainting,
+  deletePainting,
 } from "../../actions/paintingActions";
 import { getRequestsAll } from "../../actions/accountActions";
 
@@ -27,6 +28,7 @@ const ModeratorPanel = ({
   getRequestsAll,
   addPainting,
   updatePainting,
+  deletePainting,
 }) => {
   useEffect(() => {
     getAuthors();
@@ -259,6 +261,14 @@ const ModeratorPanel = ({
                     setPaintingModal(null);
                   },
                 },
+                {
+                  key: "delete",
+                  name: "Delete",
+                  action: (data) => {
+                    deletePainting(paintingModal.id);
+                    setPaintingModal(null);
+                  },
+                },
               ]}
             />
           )}
@@ -282,6 +292,7 @@ const mapDispatchToProps = (dispatch) => ({
   getRequestsAll: () => dispatch(getRequestsAll()),
   addPainting: (data) => dispatch(addPainting(data)),
   updatePainting: (data, id) => dispatch(updatePainting(data, id)),
+  deletePainting: (id) => dispatch(deletePainting(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModeratorPanel);
