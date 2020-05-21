@@ -16,6 +16,9 @@ import {
   ACCEPT_REQUEST,
   ACCEPT_REQUEST_SUCCESS,
   ACCEPT_REQUEST_FAILURE,
+  DECLINE_REQUEST,
+  DECLINE_REQUEST_SUCCESS,
+  DECLINE_REQUEST_FAILURE,
 } from "../constants";
 
 import { toFormData } from "../helpers";
@@ -181,7 +184,9 @@ export const suggestPainting = (pData) => {
         }
       );
 
-      dispatch(suggestPaintingSuccess(data));
+      dispatch(
+        suggestPaintingSuccess({ ...data, status: statuses[data.status] })
+      );
     } catch (error) {
       dispatch(suggestPaintingFailure("error"));
     }
@@ -254,9 +259,9 @@ export const getRequestsAll = () => {
   };
 };
 
-const acceptRequestSuccess = (id) => ({
+const acceptRequestSuccess = (data) => ({
   type: ACCEPT_REQUEST_SUCCESS,
-  id,
+  data,
 });
 
 const acceptRequestFailure = (error) => ({
@@ -264,19 +269,27 @@ const acceptRequestFailure = (error) => ({
   error,
 });
 
-export const acceptRequest = (pData) => {
+export const acceptRequest = (pData, id) => {
   return async (dispatch) => {
-    dispatch({ type: ACCEPT_REQUEST });
+    const { image, ...rest } = pData;
+
+    const formData = toFormData({
+      ...rest,
+      ...(image.length ? { image: image[0] } : {}),
+    });
+
+    dispatch({
+      type: ACCEPT_REQUEST,
+    });
 
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/${pData.get(
-          "id"
-        )}/accept/`,
-        pData,
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/${id}/accept/`,
+        formData,
         {
           headers: {
             Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -288,16 +301,20 @@ export const acceptRequest = (pData) => {
   };
 };
 
-export const declineRequest = (pData) => {
+const declineRequestSuccess = (id) => ({ type: DECLINE_REQUEST_SUCCESS, id });
+const declineRequestFailure = (error) => ({
+  type: DECLINE_REQUEST_FAILURE,
+  error,
+});
+
+export const declineRequest = (id) => {
   return async (dispatch) => {
-    dispatch({ type: ACCEPT_REQUEST });
+    dispatch({ type: DECLINE_REQUEST });
 
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/${pData.get(
-          "id"
-        )}/decline/`,
-        pData,
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/${id}/decline/`,
+        {},
         {
           headers: {
             Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
@@ -305,9 +322,9 @@ export const declineRequest = (pData) => {
         }
       );
 
-      dispatch(acceptRequestSuccess(data));
+      dispatch(declineRequestSuccess(id));
     } catch (error) {
-      dispatch(acceptRequestFailure("error"));
+      dispatch(declineRequestFailure("error"));
     }
   };
 };

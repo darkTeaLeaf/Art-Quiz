@@ -8,7 +8,11 @@ import {
   updatePainting,
   deletePainting,
 } from "../../actions/paintingActions";
-import { getRequestsAll } from "../../actions/accountActions";
+import {
+  getRequestsAll,
+  acceptRequest,
+  declineRequest,
+} from "../../actions/accountActions";
 
 import Form from "../Form";
 import Table from "../Table";
@@ -29,6 +33,8 @@ const ModeratorPanel = ({
   addPainting,
   updatePainting,
   deletePainting,
+  acceptRequest,
+  declineRequest,
 }) => {
   useEffect(() => {
     getAuthors();
@@ -38,13 +44,14 @@ const ModeratorPanel = ({
   }, [getAuthors, getStyles, getPaintings, getRequestsAll]);
 
   const [paintingModal, setPaintingModal] = useState(null);
+  const [requestsModal, setRequestsModal] = useState(null);
 
   return (
     <Container>
       <Section style={{ minHeight: "100vh" }}>
         <Title bold>Add painting</Title>
 
-        {authors.loaded && styles.loaded && requests.loaded && (
+        {authors.loaded && styles.loaded && (
           <Form
             fields={[
               {
@@ -166,7 +173,7 @@ const ModeratorPanel = ({
                 key: "name",
                 title: "Name",
                 size: 0.2,
-                action: (p) => setPaintingModal(p),
+                action: (r) => setRequestsModal(r),
               },
               { key: "author", title: "Author", size: 0.25 },
               { key: "style", title: "Style", size: 0.2 },
@@ -191,7 +198,7 @@ const ModeratorPanel = ({
       >
         <Section>
           <Title bold>{paintingModal && paintingModal.name}</Title>
-          {authors.loaded && styles.loaded && requests.loaded && (
+          {authors.loaded && styles.loaded && paintings.loaded && (
             <Form
               fields={[
                 {
@@ -299,6 +306,121 @@ const ModeratorPanel = ({
           )}
         </Section>
       </Modal>
+
+      <Modal
+        active={requestsModal !== null}
+        onClose={() => setRequestsModal(null)}
+      >
+        <Section>
+          <Title bold>{requestsModal && requestsModal.name}</Title>
+          {authors.loaded && styles.loaded && requests.loaded && (
+            <Form
+              fields={[
+                {
+                  key: "image",
+                  type: "image",
+                  props: {
+                    url: requestsModal && requestsModal.image,
+                    style: {
+                      width: "100%",
+                      margin: "30px 0 60px",
+                    },
+                  },
+                },
+                {
+                  key: "name",
+                  type: "input",
+                  props: {
+                    defaultValue: requestsModal && requestsModal.name,
+                    type: "text",
+                    placeholder: "Painting name",
+                    name: "name",
+                    outlined: false,
+                  },
+                },
+                {
+                  key: "author",
+                  type: "select",
+                  props: {
+                    defaultValue:
+                      requestsModal &&
+                      authors.data.filter(
+                        (a) => a.name === requestsModal.author
+                      )[0].id,
+                    name: "author",
+                    options: authors.data.map((a) => ({
+                      key: a.id,
+                      value: a.id,
+                      text: a.name,
+                    })),
+                    placeholder: "Author",
+                    outlined: false,
+                  },
+                },
+                {
+                  key: "style",
+                  type: "select",
+                  props: {
+                    defaultValue:
+                      requestsModal &&
+                      styles.data.filter(
+                        (s) => s.name === requestsModal.style
+                      )[0].id,
+                    name: "style",
+                    options: styles.data.map((s) => ({
+                      key: s.id,
+                      value: s.id,
+                      text: s.name,
+                    })),
+                    placeholder: "Style",
+                    outlined: false,
+                  },
+                },
+                {
+                  key: "year",
+                  type: "input",
+                  props: {
+                    defaultValue: requestsModal && requestsModal.year,
+                    type: "text",
+                    placeholder: "Year",
+                    name: "year",
+                    outlined: false,
+                  },
+                },
+                {
+                  key: "gallery",
+                  type: "input",
+                  props: {
+                    defaultValue: requestsModal && requestsModal.gallery,
+                    type: "text",
+                    placeholder: "Gallery",
+                    name: "gallery",
+                    outlined: false,
+                  },
+                },
+              ]}
+              buttons={[
+                {
+                  key: "accept",
+                  name: "Accept",
+                  action: (data) => {
+                    acceptRequest(data, requestsModal.id);
+                    setRequestsModal(null);
+                  },
+                },
+                {
+                  key: "decline",
+                  name: "Decline",
+                  action: (data) => {
+                    declineRequest(requestsModal.id);
+                    setRequestsModal(null);
+                  },
+                },
+              ]}
+            />
+          )}
+        </Section>
+      </Modal>
     </Container>
   );
 };
@@ -318,6 +440,8 @@ const mapDispatchToProps = (dispatch) => ({
   addPainting: (data) => dispatch(addPainting(data)),
   updatePainting: (data, id) => dispatch(updatePainting(data, id)),
   deletePainting: (id) => dispatch(deletePainting(id)),
+  acceptRequest: (data, id) => dispatch(acceptRequest(data, id)),
+  declineRequest: (id) => dispatch(declineRequest(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModeratorPanel);
