@@ -4,7 +4,7 @@ const Container = styled.div`
   padding: 0 30px;
   width: 100%;
   max-width: ${(props) => props.maxWidth || 1200}px;
-  margin: auto;
+  margin: 0 auto;
 
   display: flex;
   flex-direction: ${(props) => (props.horizontal ? "row" : "column")};
