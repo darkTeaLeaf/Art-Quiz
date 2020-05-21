@@ -14,6 +14,9 @@ import {
   UPDATE_PAINTING,
   UPDATE_PAINTING_SUCCESS,
   UPDATE_PAINTING_FAILURE,
+  ADD_PAINTING,
+  ADD_PAINTING_SUCCESS,
+  ADD_PAINTING_FAILURE,
 } from "../constants";
 import { toFormData } from "../helpers";
 import { getAnswers, setAnswered } from "./carouselActions";
@@ -197,6 +200,39 @@ export const updatePainting = (data, id) => {
       dispatch(updatePaintingSuccess(formattedData));
     } catch (error) {
       dispatch(updatePaintingFailure("error"));
+    }
+  };
+};
+
+const addPaintingSuccess = (data) => ({
+  type: ADD_PAINTING_SUCCESS,
+  data,
+});
+
+const addPaintingFailure = (error) => ({
+  type: ADD_PAINTING_FAILURE,
+  error,
+});
+
+export const addPainting = (pData) => {
+  return (dispatch) => {
+    dispatch({ type: ADD_PAINTING });
+
+    try {
+      const { data } = axios.post(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/`,
+        toFormData({ ...pData, image: pData.image[0] }),
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      dispatch(addPaintingSuccess(data));
+    } catch (error) {
+      dispatch(addPaintingFailure("error"));
     }
   };
 };
