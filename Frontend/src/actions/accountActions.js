@@ -294,7 +294,9 @@ export const acceptRequest = (pData, id) => {
         }
       );
 
-      dispatch(acceptRequestSuccess(data));
+      dispatch(
+        acceptRequestSuccess({ ...data, status: statuses[data.status] })
+      );
     } catch (error) {
       dispatch(acceptRequestFailure("error"));
     }
