@@ -34,9 +34,7 @@ const UserPanel = ({
     getRequests();
   }, [getPaintings, getAuthors, getStyles, getRequests]);
 
-  const [paintingModalActive, setPaintingModalActive] = useState(false);
-  const togglePaintingModal = () =>
-    setPaintingModalActive(!paintingModalActive);
+  const [paintingModal, setPaintingActive] = useState(null);
 
   return (
     <Container>
@@ -45,7 +43,12 @@ const UserPanel = ({
         {paintings.loaded && (
           <Table
             headers={[
-              { key: "name", title: "Name", size: 0.2 },
+              {
+                key: "name",
+                title: "Name",
+                size: 0.2,
+                action: (p) => setPaintingActive(p),
+              },
               { key: "author", title: "Author", size: 0.25 },
               { key: "style", title: "Style", size: 0.2 },
               { key: "year", title: "Year", size: 0.1 },
@@ -156,7 +159,10 @@ const UserPanel = ({
         <RequestsList requests={requests.data} />
       </Section>
 
-      <Modal active={paintingModalActive} onClose={togglePaintingModal}>
+      <Modal
+        active={paintingModal !== null}
+        onClose={() => setPaintingActive(null)}
+      >
         {authors.loaded && styles.loaded && requests.loaded && (
           <Form
             readonly
@@ -166,6 +172,7 @@ const UserPanel = ({
                 type: "image",
                 required: true,
                 props: {
+                  defaultValue: paintingModal && paintingModal.image,
                   style: {
                     width: "100%",
                     margin: "30px 0 60px",
@@ -177,6 +184,7 @@ const UserPanel = ({
                 type: "input",
                 required: true,
                 props: {
+                  defaultValue: paintingModal && paintingModal.name,
                   type: "text",
                   placeholder: "Painting name",
                   name: "name",
@@ -188,6 +196,11 @@ const UserPanel = ({
                 type: "select",
                 required: true,
                 props: {
+                  defaultValue:
+                    paintingModal &&
+                    authors.data.filter(
+                      (a) => a.name === paintingModal.author
+                    )[0].id,
                   name: "author",
                   options: authors.data.map((a) => ({
                     key: a.id,
@@ -203,6 +216,10 @@ const UserPanel = ({
                 type: "select",
                 required: true,
                 props: {
+                  defaultValue:
+                    paintingModal &&
+                    styles.data.filter((s) => s.name === paintingModal.style)[0]
+                      .id,
                   name: "style",
                   options: styles.data.map((s) => ({
                     key: s.id,
@@ -218,6 +235,7 @@ const UserPanel = ({
                 type: "input",
                 required: true,
                 props: {
+                  defaultValue: paintingModal && paintingModal.year,
                   type: "text",
                   placeholder: "Year",
                   name: "year",
@@ -229,6 +247,7 @@ const UserPanel = ({
                 type: "input",
                 required: true,
                 props: {
+                  defaultValue: paintingModal && paintingModal.gallery,
                   type: "text",
                   placeholder: "Gallery",
                   name: "gallery",

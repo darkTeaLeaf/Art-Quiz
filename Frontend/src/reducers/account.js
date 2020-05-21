@@ -98,7 +98,7 @@ export function accountReducer(state = initialState, action) {
         },
         requests: {
           ...state.requests,
-          data: [...state.requests.data, action.data],
+          data: [action.data, ...state.requests.data],
         },
       };
     }

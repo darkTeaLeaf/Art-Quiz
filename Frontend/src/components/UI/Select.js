@@ -20,6 +20,7 @@ const Select = styled.select`
     color: gray;
   }
 
+  &[disabled],
   option:not(:first-child) {
     color: black;
   }

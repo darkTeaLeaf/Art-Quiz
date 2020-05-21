@@ -55,6 +55,11 @@ const Cell = styled.div`
   text-align: ${(props) => props.align || "center"};
 `;
 
+const Link = styled.a`
+  cursor: pointer;
+  text-decoration: underline;
+`;
+
 const Table = ({
   headers = [],
   items = [],
@@ -63,7 +68,6 @@ const Table = ({
   itemSize = 70,
 }) => {
   useEffect(() => {
-    console.log(items);
     setItemsFiltered(items);
   }, [items]);
 
@@ -104,7 +108,13 @@ const Table = ({
               <ListRow style={style}>
                 {headers.map((h) => (
                   <Cell key={h.key} size={h.size} align={h.align}>
-                    {itemsFiltered[index][h.key]}
+                    {h.action ? (
+                      <Link onClick={() => h.action(itemsFiltered[index])}>
+                        {itemsFiltered[index][h.key]}
+                      </Link>
+                    ) : (
+                      itemsFiltered[index][h.key]
+                    )}
                   </Cell>
                 ))}
               </ListRow>
