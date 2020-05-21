@@ -5,11 +5,10 @@ const ModalWrapper = styled.div`
   padding: 0 !important;
   margin: 0 !important;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   position: fixed;
+  top: 0;
+  left: 0;
+
   height: 100vh;
   width: 100vw;
 
@@ -18,6 +17,13 @@ const ModalWrapper = styled.div`
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   z-index: 999;
+`;
+
+const ContentWrapper = styled.main`
+  padding: 100px 0 60px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
 `;
 
 const CloseButton = styled.button`
@@ -31,7 +37,7 @@ const Modal = ({ children, active, onClose }) =>
   active ? (
     <ModalWrapper>
       <CloseButton onClick={onClose}>✕</CloseButton>
-      {children}
+      <ContentWrapper>{children}</ContentWrapper>
     </ModalWrapper>
   ) : null;
 
