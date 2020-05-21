@@ -157,9 +157,34 @@ const ModeratorPanel = ({
         )}
       </Section>
 
-      {/* <Section>
+      <Section>
         <Title bold>User requests</Title>
-      </Section> */}
+        {authors.loaded && styles.loaded && requests.loaded && (
+          <Table
+            headers={[
+              {
+                key: "name",
+                title: "Name",
+                size: 0.2,
+                action: (p) => setPaintingModal(p),
+              },
+              { key: "author", title: "Author", size: 0.25 },
+              { key: "style", title: "Style", size: 0.2 },
+              { key: "year", title: "Year", size: 0.1 },
+              { key: "status", title: "Status", size: 0.25 },
+            ]}
+            items={requests.data.map((r) => ({
+              ...r,
+              author: authors.data.filter((a) => a.id === r.author)[0].name,
+              style: styles.data.filter((s) => s.id === r.style)[0].name,
+            }))}
+            height={430}
+            itemSize={70}
+            searchBar
+          />
+        )}
+      </Section>
+
       <Modal
         active={paintingModal !== null}
         onClose={() => setPaintingModal(null)}

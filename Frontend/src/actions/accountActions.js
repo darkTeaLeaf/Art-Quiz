@@ -243,7 +243,11 @@ export const getRequestsAll = () => {
         }
       );
 
-      dispatch(getRequestsSuccess(data));
+      dispatch(
+        getRequestsSuccess(
+          data.reverse().map((r) => ({ ...r, status: statuses[r.status] }))
+        )
+      );
     } catch (error) {
       dispatch(getRequestsFailure("error"));
     }
