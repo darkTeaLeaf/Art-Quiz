@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
 
 const ImgOnHover = styled.div`
@@ -71,7 +71,7 @@ const Wrapper = styled.div`
 `;
 
 const UploadImage = ({
-  children,
+  url = null,
   register,
   rules,
   errors,
@@ -79,16 +79,26 @@ const UploadImage = ({
   outlined = false,
   style,
 }) => {
-  const [url, setUrl] = useState(null);
+  const [image, setImage] = useState(null);
+  const firstRender = useRef(true);
+
   useEffect(() => {
-    setUrl(null);
+    setImage(url);
+  }, [url]);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+    } else {
+      setImage(null);
+    }
   }, [register]);
 
   return (
     <Wrapper style={style}>
       <Uploader
         outlined={outlined}
-        noImage={children === undefined && url === null}
+        noImage={image === null}
         readonly={readonly}
       >
         {!readonly && (
@@ -100,17 +110,15 @@ const UploadImage = ({
           </ImgOnHover>
         )}
 
-        {url === null ? (
-          children || (
-            <ImgPlaceholder>
-              <img
-                src={`${process.env.PUBLIC_URL}/img/camera.svg`}
-                alt="camera"
-              />
-            </ImgPlaceholder>
-          )
+        {image === null ? (
+          <ImgPlaceholder>
+            <img
+              src={`${process.env.PUBLIC_URL}/img/camera.svg`}
+              alt="camera"
+            />
+          </ImgPlaceholder>
         ) : (
-          <img src={url} alt="avatar" />
+          <img src={image} alt="avatar" />
         )}
 
         {!readonly && (
@@ -120,7 +128,7 @@ const UploadImage = ({
             accept="image/png, image/jpeg, image/jpg"
             ref={register(rules)}
             onChange={(e) => {
-              setUrl(URL.createObjectURL(e.target.files[0]));
+              setImage(URL.createObjectURL(e.target.files[0]));
             }}
           />
         )}

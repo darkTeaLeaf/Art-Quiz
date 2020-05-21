@@ -34,7 +34,8 @@ const UserPanel = ({
     getRequests();
   }, [getPaintings, getAuthors, getStyles, getRequests]);
 
-  const [paintingModal, setPaintingActive] = useState(null);
+  const [paintingModal, setPaintingModal] = useState(null);
+  const [requestModal, setRequestModal] = useState(null);
 
   return (
     <Container>
@@ -47,7 +48,7 @@ const UserPanel = ({
                 key: "name",
                 title: "Name",
                 size: 0.2,
-                action: (p) => setPaintingActive(p),
+                action: (p) => setPaintingModal(p),
               },
               { key: "author", title: "Author", size: 0.25 },
               { key: "style", title: "Style", size: 0.2 },
@@ -161,18 +162,134 @@ const UserPanel = ({
 
       <Modal
         active={paintingModal !== null}
-        onClose={() => setPaintingActive(null)}
+        onClose={() => setPaintingModal(null)}
+      >
+        <Section>
+          <Title bold>{paintingModal && paintingModal.name}</Title>
+          {authors.loaded && styles.loaded && requests.loaded && (
+            <Form
+              readonly
+              fields={[
+                {
+                  key: "image",
+                  type: "image",
+                  required: true,
+                  props: {
+                    url: paintingModal && paintingModal.image,
+                    style: {
+                      width: "100%",
+                      margin: "30px 0 60px",
+                    },
+                  },
+                },
+                {
+                  key: "name",
+                  type: "input",
+                  required: true,
+                  props: {
+                    defaultValue: paintingModal && paintingModal.name,
+                    type: "text",
+                    placeholder: "Painting name",
+                    name: "name",
+                    outlined: false,
+                  },
+                },
+                {
+                  key: "author",
+                  type: "select",
+                  required: true,
+                  props: {
+                    defaultValue:
+                      paintingModal &&
+                      authors.data.filter(
+                        (a) => a.name === paintingModal.author
+                      )[0].id,
+                    name: "author",
+                    options: authors.data.map((a) => ({
+                      key: a.id,
+                      value: a.id,
+                      text: a.name,
+                    })),
+                    placeholder: "Author",
+                    outlined: false,
+                  },
+                },
+                {
+                  key: "style",
+                  type: "select",
+                  required: true,
+                  props: {
+                    defaultValue:
+                      paintingModal &&
+                      styles.data.filter(
+                        (s) => s.name === paintingModal.style
+                      )[0].id,
+                    name: "style",
+                    options: styles.data.map((s) => ({
+                      key: s.id,
+                      value: s.id,
+                      text: s.name,
+                    })),
+                    placeholder: "Style",
+                    outlined: false,
+                  },
+                },
+                {
+                  key: "year",
+                  type: "input",
+                  required: true,
+                  props: {
+                    defaultValue: paintingModal && paintingModal.year,
+                    type: "text",
+                    placeholder: "Year",
+                    name: "year",
+                    outlined: false,
+                  },
+                },
+                {
+                  key: "gallery",
+                  type: "input",
+                  required: true,
+                  props: {
+                    defaultValue: paintingModal && paintingModal.gallery,
+                    type: "text",
+                    placeholder: "Gallery",
+                    name: "gallery",
+                    outlined: false,
+                  },
+                },
+              ]}
+            />
+          )}
+        </Section>
+      </Modal>
+
+      <Modal
+        active={requestModal !== null}
+        onClose={() => setRequestModal(null)}
       >
         {authors.loaded && styles.loaded && requests.loaded && (
           <Form
             readonly
             fields={[
               {
+                key: "status",
+                type: "input",
+                required: true,
+                props: {
+                  defaultValue: requestModal && requestModal.status,
+                  type: "text",
+                  placeholder: "Status",
+                  name: "status",
+                  outlined: false,
+                },
+              },
+              {
                 key: "image",
                 type: "image",
                 required: true,
                 props: {
-                  defaultValue: paintingModal && paintingModal.image,
+                  url: requestModal && requestModal.image,
                   style: {
                     width: "100%",
                     margin: "30px 0 60px",
@@ -184,7 +301,7 @@ const UserPanel = ({
                 type: "input",
                 required: true,
                 props: {
-                  defaultValue: paintingModal && paintingModal.name,
+                  defaultValue: requestModal && requestModal.name,
                   type: "text",
                   placeholder: "Painting name",
                   name: "name",
@@ -196,11 +313,7 @@ const UserPanel = ({
                 type: "select",
                 required: true,
                 props: {
-                  defaultValue:
-                    paintingModal &&
-                    authors.data.filter(
-                      (a) => a.name === paintingModal.author
-                    )[0].id,
+                  defaultValue: requestModal && requestModal.author,
                   name: "author",
                   options: authors.data.map((a) => ({
                     key: a.id,
@@ -216,10 +329,7 @@ const UserPanel = ({
                 type: "select",
                 required: true,
                 props: {
-                  defaultValue:
-                    paintingModal &&
-                    styles.data.filter((s) => s.name === paintingModal.style)[0]
-                      .id,
+                  defaultValue: requestModal && requestModal.style,
                   name: "style",
                   options: styles.data.map((s) => ({
                     key: s.id,
@@ -235,7 +345,7 @@ const UserPanel = ({
                 type: "input",
                 required: true,
                 props: {
-                  defaultValue: paintingModal && paintingModal.year,
+                  defaultValue: requestModal && requestModal.year,
                   type: "text",
                   placeholder: "Year",
                   name: "year",
@@ -247,7 +357,7 @@ const UserPanel = ({
                 type: "input",
                 required: true,
                 props: {
-                  defaultValue: paintingModal && paintingModal.gallery,
+                  defaultValue: requestModal && requestModal.gallery,
                   type: "text",
                   placeholder: "Gallery",
                   name: "gallery",

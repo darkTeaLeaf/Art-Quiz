@@ -1,7 +1,10 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
+import Label from "./FieldLabel";
+
 const Input = styled.div`
+  position: relative;
   font-family: Judson;
   font-weight: 700;
   font-size: ${(props) => props.fontSize};
@@ -41,6 +44,7 @@ export default ({
 }) => {
   return (
     <Input className="input-wrapper" outlined={outlined}>
+      {readonly && <Label>{placeholder}:</Label>}
       <input
         type={type}
         name={name}

@@ -1,7 +1,11 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-const SelectWrapper = styled.div``;
+import Label from "./FieldLabel";
+
+const SelectWrapper = styled.div`
+  position: relative;
+`;
 
 const Select = styled.select`
   width: 100%;
@@ -51,6 +55,7 @@ export default ({
   readonly,
 }) => (
   <SelectWrapper>
+    {readonly && <Label>{placeholder}:</Label>}
     <Select
       name={name}
       ref={register(rules)}
