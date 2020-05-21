@@ -30,31 +30,21 @@ const Value = styled.span`
   font-weight: bold;
 `;
 
-const RequestsList = ({ requests }) => {
-  const statuses = [
-    "Rejected",
-    "Accepted",
-    "Edited and accepted",
-    "In progress",
-  ];
+const RequestsList = ({ requests }) =>
+  requests ? (
+    <Container maxWidth="850">
+      {requests.map((req) => (
+        <Request key={req.id}>
+          <Label>
+            Painting name: <Value>{req.name}</Value>
+          </Label>
 
-  return (
-    requests && (
-      <Container maxWidth="850">
-        {requests.map((req) => (
-          <Request key={req.id}>
-            <Label>
-              Painting name: <Value>{req.name}</Value>
-            </Label>
-
-            <Label>
-              Status: <Value>{statuses[req.status]}</Value>
-            </Label>
-          </Request>
-        ))}
-      </Container>
-    )
-  );
-};
+          <Label>
+            Status: <Value>{req.status}</Value>
+          </Label>
+        </Request>
+      ))}
+    </Container>
+  ) : null;
 
 export default RequestsList;

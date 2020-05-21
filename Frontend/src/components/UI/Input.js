@@ -1,7 +1,10 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+
+import Label from "./FieldLabel";
 
 const Input = styled.div`
+  position: relative;
   font-family: Judson;
   font-weight: 700;
   font-size: ${(props) => props.fontSize};
@@ -11,12 +14,20 @@ const Input = styled.div`
   & input {
     width: 100%;
     padding: 10px;
-    border: ${(props) => (props.borderless ? 0 : 5)}px solid black;
+    border: 0px solid black;
+    background-color: transparent;
     font-family: Raleway;
     font-style: normal;
     font-weight: normal;
     font-size: 20px;
     line-height: 20px;
+
+    ${(props) =>
+      props.outlined &&
+      css`
+        border: 5px solid black;
+        background-color: white;
+      `}
   }
 `;
 
@@ -28,18 +39,21 @@ export default ({
   register,
   rules,
   errors,
-  borderless,
+  readonly,
+  outlined = true,
 }) => {
   return (
-    <Input className="input-wrapper" borderless={borderless}>
+    <Input className="input-wrapper" outlined={outlined}>
+      {readonly && <Label>{placeholder}:</Label>}
       <input
         type={type}
         name={name}
         defaultValue={defaultValue}
         ref={register(rules)}
         placeholder={placeholder}
+        readOnly={readonly}
       />
-      {errors && errors[name] && <div className="error">* Required</div>}
+      {errors && errors[name] && <b>* Required</b>}
     </Input>
   );
 };

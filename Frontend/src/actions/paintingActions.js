@@ -14,6 +14,12 @@ import {
   UPDATE_PAINTING,
   UPDATE_PAINTING_SUCCESS,
   UPDATE_PAINTING_FAILURE,
+  ADD_PAINTING,
+  ADD_PAINTING_SUCCESS,
+  ADD_PAINTING_FAILURE,
+  DELETE_PAINTING,
+  DELETE_PAINTING_SUCCESS,
+  DELETE_PAINTING_FAILURE,
 } from "../constants";
 import { toFormData } from "../helpers";
 import { getAnswers, setAnswered } from "./carouselActions";
@@ -197,6 +203,77 @@ export const updatePainting = (data, id) => {
       dispatch(updatePaintingSuccess(formattedData));
     } catch (error) {
       dispatch(updatePaintingFailure("error"));
+    }
+  };
+};
+
+const addPaintingSuccess = (data) => ({
+  type: ADD_PAINTING_SUCCESS,
+  data,
+});
+
+const addPaintingFailure = (error) => ({
+  type: ADD_PAINTING_FAILURE,
+  error,
+});
+
+export const addPainting = (pData) => {
+  return async (dispatch) => {
+    dispatch({ type: ADD_PAINTING });
+
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/`,
+        toFormData({ ...pData, image: pData.image[0] }),
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      dispatch(
+        addPaintingSuccess({
+          ...data,
+          author: data.author_name,
+          style: data.style_name,
+          image: process.env.REACT_APP_BACKEND_ADDRESS + data.image,
+        })
+      );
+    } catch (error) {
+      dispatch(addPaintingFailure("error"));
+    }
+  };
+};
+
+const deletePaintingSuccess = (id) => ({
+  type: DELETE_PAINTING_SUCCESS,
+  id,
+});
+
+const deletePaintingFailure = (error) => ({
+  type: DELETE_PAINTING_FAILURE,
+  error,
+});
+
+export const deletePainting = (id) => {
+  return (dispatch) => {
+    dispatch({ type: DELETE_PAINTING });
+
+    try {
+      axios.delete(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/paintings/${id}/`,
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+          },
+        }
+      );
+
+      dispatch(deletePaintingSuccess(id));
+    } catch (error) {
+      dispatch(deletePaintingFailure("error"));
     }
   };
 };

@@ -10,6 +10,8 @@ import {
   GET_REQUESTS,
   GET_REQUESTS_SUCCESS,
   GET_REQUESTS_FAILURE,
+  ACCEPT_REQUEST_SUCCESS,
+  DECLINE_REQUEST_SUCCESS,
 } from "../constants";
 
 const initialState = {
@@ -95,7 +97,7 @@ export function accountReducer(state = initialState, action) {
         },
         requests: {
           ...state.requests,
-          data: [...state.requests.data, action.data],
+          data: [action.data, ...state.requests.data],
         },
       };
     }
@@ -141,6 +143,34 @@ export function accountReducer(state = initialState, action) {
           ...state.requests,
           loaded: false,
           error: action.error,
+        },
+      };
+    }
+
+    case ACCEPT_REQUEST_SUCCESS: {
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          loaded: true,
+          data: state.requests.data.map((r) =>
+            r.id === action.data.id ? action.data : r
+          ),
+          error: "",
+        },
+      };
+    }
+
+    case DECLINE_REQUEST_SUCCESS: {
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          loaded: true,
+          data: state.requests.data.map((r) =>
+            r.id === action.id ? { ...r, status: "Rejected" } : r
+          ),
+          error: "",
         },
       };
     }

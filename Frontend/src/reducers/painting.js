@@ -13,6 +13,12 @@ import {
   UPDATE_PAINTING,
   UPDATE_PAINTING_SUCCESS,
   UPDATE_PAINTING_FAILURE,
+  ADD_PAINTING,
+  ADD_PAINTING_SUCCESS,
+  ADD_PAINTING_FAILURE,
+  DELETE_PAINTING,
+  DELETE_PAINTING_SUCCESS,
+  DELETE_PAINTING_FAILURE,
 } from "../constants";
 
 const initialState = {
@@ -34,6 +40,14 @@ const initialState = {
     loaded: false,
   },
   paintingUpdate: {
+    loaded: true,
+    error: "",
+  },
+  paintingAdd: {
+    loaded: true,
+    error: "",
+  },
+  paintingDelete: {
     loaded: true,
     error: "",
   },
@@ -190,6 +204,78 @@ export function paintingReducer(state = initialState, action) {
         ...state,
         paintingUpdate: {
           ...state.paintingUpdate,
+          loaded: false,
+          error: action.error,
+        },
+      };
+    }
+
+    case ADD_PAINTING: {
+      return {
+        ...state,
+        paintingAdd: {
+          ...state.paintingAdd,
+          loaded: false,
+        },
+      };
+    }
+
+    case ADD_PAINTING_SUCCESS: {
+      console.log(state.paintings.data);
+      console.log(action.data);
+      return {
+        ...state,
+        paintingAdd: {
+          ...state.paintingAdd,
+          loaded: true,
+        },
+        paintings: {
+          ...state.paintings,
+          data: [action.data, ...state.paintings.data],
+        },
+      };
+    }
+
+    case ADD_PAINTING_FAILURE: {
+      return {
+        ...state,
+        paintingAdd: {
+          ...state.paintingAdd,
+          loaded: false,
+          error: action.error,
+        },
+      };
+    }
+
+    case DELETE_PAINTING: {
+      return {
+        ...state,
+        paintingDelete: {
+          ...state.paintingDelete,
+          loaded: false,
+        },
+      };
+    }
+
+    case DELETE_PAINTING_SUCCESS: {
+      return {
+        ...state,
+        paintingDelete: {
+          ...state.paintingDelete,
+          loaded: true,
+        },
+        paintings: {
+          ...state.paintings,
+          data: state.paintings.data.filter((p) => p.id !== action.id),
+        },
+      };
+    }
+
+    case DELETE_PAINTING_FAILURE: {
+      return {
+        ...state,
+        paintingDelete: {
+          ...state.paintingDelete,
           loaded: false,
           error: action.error,
         },

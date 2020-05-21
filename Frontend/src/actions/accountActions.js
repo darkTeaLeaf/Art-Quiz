@@ -13,7 +13,17 @@ import {
   GET_REQUESTS,
   GET_REQUESTS_SUCCESS,
   GET_REQUESTS_FAILURE,
+  ACCEPT_REQUEST,
+  ACCEPT_REQUEST_SUCCESS,
+  ACCEPT_REQUEST_FAILURE,
+  DECLINE_REQUEST,
+  DECLINE_REQUEST_SUCCESS,
+  DECLINE_REQUEST_FAILURE,
 } from "../constants";
+
+import { toFormData } from "../helpers";
+
+const statuses = ["Rejected", "Accepted", "Edited and accepted", "In progress"];
 
 const signInSuccess = (id) => ({
   type: SIGN_IN_SUCCESS,
@@ -166,7 +176,7 @@ export const suggestPainting = (pData) => {
     try {
       const { data } = await axios.post(
         `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}/requests/`,
-        pData,
+        toFormData({ ...pData, image: pData.image[0] }),
         {
           headers: {
             Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
@@ -174,7 +184,9 @@ export const suggestPainting = (pData) => {
         }
       );
 
-      dispatch(suggestPaintingSuccess(data));
+      dispatch(
+        suggestPaintingSuccess({ ...data, status: statuses[data.status] })
+      );
     } catch (error) {
       dispatch(suggestPaintingFailure("error"));
     }
@@ -208,9 +220,113 @@ export const getRequests = () => {
         }
       );
 
-      dispatch(getRequestsSuccess(data));
+      dispatch(
+        getRequestsSuccess(
+          data
+            .reverse()
+            .slice(0, 20)
+            .map((r) => ({ ...r, status: statuses[r.status] }))
+        )
+      );
     } catch (error) {
       dispatch(getRequestsFailure("error"));
+    }
+  };
+};
+
+export const getRequestsAll = () => {
+  return async (dispatch) => {
+    dispatch({ type: GET_REQUESTS });
+
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/`,
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+          },
+        }
+      );
+
+      dispatch(
+        getRequestsSuccess(
+          data.reverse().map((r) => ({ ...r, status: statuses[r.status] }))
+        )
+      );
+    } catch (error) {
+      dispatch(getRequestsFailure("error"));
+    }
+  };
+};
+
+const acceptRequestSuccess = (data) => ({
+  type: ACCEPT_REQUEST_SUCCESS,
+  data,
+});
+
+const acceptRequestFailure = (error) => ({
+  type: ACCEPT_REQUEST_FAILURE,
+  error,
+});
+
+export const acceptRequest = (pData, id) => {
+  return async (dispatch) => {
+    const { image, ...rest } = pData;
+
+    const formData = toFormData({
+      ...rest,
+      ...(image.length ? { image: image[0] } : {}),
+    });
+
+    dispatch({
+      type: ACCEPT_REQUEST,
+    });
+
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/${id}/edit/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      dispatch(
+        acceptRequestSuccess({ ...data, status: statuses[data.status] })
+      );
+    } catch (error) {
+      dispatch(acceptRequestFailure("error"));
+    }
+  };
+};
+
+const declineRequestSuccess = (id) => ({ type: DECLINE_REQUEST_SUCCESS, id });
+const declineRequestFailure = (error) => ({
+  type: DECLINE_REQUEST_FAILURE,
+  error,
+});
+
+export const declineRequest = (id) => {
+  return async (dispatch) => {
+    dispatch({ type: DECLINE_REQUEST });
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/requests/${id}/decline/`,
+        {},
+        {
+          headers: {
+            Authorization: `Token ${process.env.REACT_APP_STAFF_TOKEN}`,
+          },
+        }
+      );
+
+      dispatch(declineRequestSuccess(id));
+    } catch (error) {
+      dispatch(declineRequestFailure("error"));
     }
   };
 };
