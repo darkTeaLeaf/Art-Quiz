@@ -20,6 +20,8 @@ import {
 
 import { toFormData } from "../helpers";
 
+const statuses = ["Rejected", "Accepted", "Edited and accepted", "In progress"];
+
 const signInSuccess = (id) => ({
   type: SIGN_IN_SUCCESS,
   payload: {
@@ -213,7 +215,14 @@ export const getRequests = () => {
         }
       );
 
-      dispatch(getRequestsSuccess(data.reverse().slice(0, 20)));
+      dispatch(
+        getRequestsSuccess(
+          data
+            .reverse()
+            .slice(0, 20)
+            .map((r) => ({ ...r, status: statuses[r.status] }))
+        )
+      );
     } catch (error) {
       dispatch(getRequestsFailure("error"));
     }

@@ -30,15 +30,8 @@ const Value = styled.span`
   font-weight: bold;
 `;
 
-const RequestsList = ({ requests }) => {
-  const statuses = [
-    "Rejected",
-    "Accepted",
-    "Edited and accepted",
-    "In progress",
-  ];
-
-  return requests ? (
+const RequestsList = ({ requests }) =>
+  requests ? (
     <Container maxWidth="850">
       {requests.map((req) => (
         <Request key={req.id}>
@@ -47,12 +40,11 @@ const RequestsList = ({ requests }) => {
           </Label>
 
           <Label>
-            Status: <Value>{statuses[req.status]}</Value>
+            Status: <Value>{req.status}</Value>
           </Label>
         </Request>
       ))}
     </Container>
   ) : null;
-};
 
 export default RequestsList;
